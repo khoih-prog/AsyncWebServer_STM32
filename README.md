@@ -1,74 +1,21 @@
-# AsyncWebServer_STM32
+# ESPAsyncWebServer 
+[![Build Status](https://travis-ci.org/me-no-dev/ESPAsyncWebServer.svg?branch=master)](https://travis-ci.org/me-no-dev/ESPAsyncWebServer) ![](https://github.com/me-no-dev/ESPAsyncWebServer/workflows/ESP%20Async%20Web%20Server%20CI/badge.svg) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/395dd42cfc674e6ca2e326af3af80ffc)](https://www.codacy.com/manual/me-no-dev/ESPAsyncWebServer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=me-no-dev/ESPAsyncWebServer&amp;utm_campaign=Badge_Grade)
 
-[![arduino-library-badge](https://www.ardu-badge.com/badge/AsyncWebServer_STM32.svg?)](https://www.ardu-badge.com/AsyncWebServer_STM32)
-[![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncWebServer_STM32.svg)](https://github.com/khoih-prog/AsyncWebServer_STM32/releases)
-[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/LICENSE)
-[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
-[![GitHub issues](https://img.shields.io/github/issues/khoih-prog/AsyncWebServer_STM32.svg)](http://github.com/khoih-prog/AsyncWebServer_STM32/issues)
+For help and support [![Join the chat at https://gitter.im/me-no-dev/ESPAsyncWebServer](https://badges.gitter.im/me-no-dev/ESPAsyncWebServer.svg)](https://gitter.im/me-no-dev/ESPAsyncWebServer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
----
----
+Async HTTP and WebSocket Server for ESP8266 Arduino
 
-### Initial Releases 1.2.3
+For ESP8266 it requires [ESPAsyncTCP](https://github.com/me-no-dev/ESPAsyncTCP)
+To use this library you might need to have the latest git versions of [ESP8266](https://github.com/esp8266/Arduino) Arduino Core
 
-1. Initial coding to port [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer) to STM32 boards using builtin LAN8742A Ethernet. More supports will be added gradually later, such as AsyncUDP, other Ethernet / WiFi shields.
-2. Add more examples.
-3. Add debugging features.
-4. Bump up to v1.2.3 to sync with [ESPAsyncWebServer v1.2.3](https://github.com/me-no-dev/ESPAsyncWebServer).
-
-#### Currently Supported Boards
-
-1. Nucleo-144 (F429ZI, F746ZG, F756ZG, F767ZI)
-2. Discovery STM32F746G-DISCOVERY
-3. Any STM32 boards with enough flash/memory and already configured to run LAN8742A Ethernet.
-
----
-
-### Async HTTP and WebSocket Server for STM32 boards using builtin LAN8742A Ethernet
-
-This library is based on, modified from:
-
-1. [Hristo Gochkov's ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer)
-
-to apply the better and faster **asynchronous** feature of the **powerful** [ESPAsyncWebServer Library](https://github.com/me-no-dev/ESPAsyncWebServer) into STM32 boards using builtin LAN8742A Ethernet.
-
----
----
-
-## Prerequisite
-
- 1. [`Arduino IDE 1.8.12+` for Arduino](https://www.arduino.cc/en/Main/Software)
- 2. [`Arduino Core for STM32 1.9.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32 (Use Arduino Board Manager)
- 3. [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in Ethernet on (Nucleo-144, Discovery)
- 4. [`LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP) for built-in Ethernet on (Nucleo-144, Discovery)
- 5. [`STM32AsyncTCP library v1.0.0+`](https://github.com/philbowles/STM32AsyncTCP) for built-in Ethernet on (Nucleo-144, Discovery)
- 
----
-
-## Installation
-
-### Use Arduino Library Manager
-The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncWebServer_STM32`, then select / install the latest version. You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/badge/AsyncWebServer_STM32.svg?)](https://www.ardu-badge.com/AsyncWebServer_STM32) for more detailed instructions.
-
-### Manual Install
-
-1. Navigate to [AsyncWebServer_STM32](https://github.com/khoih-prog/AsyncWebServer_STM32) page.
-2. Download the latest release `AsyncWebServer_STM32-master.zip`.
-3. Extract the zip file to `AsyncWebServer_STM32-master` directory 
-4. Copy the whole `AsyncWebServer_STM32-master` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
-
-### VS Code & PlatformIO:
-1. Install [VS Code](https://code.visualstudio.com/)
-2. Install [PlatformIO](https://platformio.org/platformio-ide)
-3. Install **AsyncWebServer_STM32** library by using [Library Manager](https://docs.platformio.org/en/latest/librarymanager/). Search for ***AsyncWebServer_STM32*** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
-4. Use included [platformio.ini](examples/platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically.
-
----
+For ESP32 it requires [AsyncTCP](https://github.com/me-no-dev/AsyncTCP) to work
+To use this library you might need to have the latest git versions of [ESP32](https://github.com/espressif/arduino-esp32) Arduino Core
 
 ## Table of contents
-
-- [AsyncWebServer_STM32](#espasyncwebserver)
+- [ESPAsyncWebServer](#espasyncwebserver)
   - [Table of contents](#table-of-contents)
+  - [Installation](#installation)
+    - [Using PlatformIO](#using-platformio)
   - [Why should you care](#why-should-you-care)
   - [Important things to remember](#important-things-to-remember)
   - [Principles of operation](#principles-of-operation)
@@ -78,10 +25,13 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncW
     - [Handlers and how do they work](#handlers-and-how-do-they-work)
     - [Responses and how do they work](#responses-and-how-do-they-work)
     - [Template processing](#template-processing)
+  - [Libraries and projects that use AsyncWebServer](#libraries-and-projects-that-use-asyncwebserver)
   - [Request Variables](#request-variables)
     - [Common Variables](#common-variables)
     - [Headers](#headers)
     - [GET, POST and FILE parameters](#get-post-and-file-parameters)
+    - [FILE Upload handling](#file-upload-handling)
+    - [Body data handling](#body-data-handling)
     - [JSON body handling with ArduinoJson](#json-body-handling-with-arduinojson)
   - [Responses](#responses)
     - [Redirect to another URL](#redirect-to-another-url)
@@ -89,10 +39,18 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncW
     - [Basic response with HTTP Code and extra headers](#basic-response-with-http-code-and-extra-headers)
     - [Basic response with string content](#basic-response-with-string-content)
     - [Basic response with string content and extra headers](#basic-response-with-string-content-and-extra-headers)
+    - [Send large webpage from PROGMEM](#send-large-webpage-from-progmem)
+    - [Send large webpage from PROGMEM and extra headers](#send-large-webpage-from-progmem-and-extra-headers)
+    - [Send large webpage from PROGMEM containing templates](#send-large-webpage-from-progmem-containing-templates)
+    - [Send large webpage from PROGMEM containing templates and extra headers](#send-large-webpage-from-progmem-containing-templates-and-extra-headers)
+    - [Send binary content from PROGMEM](#send-binary-content-from-progmem)
     - [Respond with content coming from a Stream](#respond-with-content-coming-from-a-stream)
     - [Respond with content coming from a Stream and extra headers](#respond-with-content-coming-from-a-stream-and-extra-headers)
     - [Respond with content coming from a Stream containing templates](#respond-with-content-coming-from-a-stream-containing-templates)
     - [Respond with content coming from a Stream containing templates and extra headers](#respond-with-content-coming-from-a-stream-containing-templates-and-extra-headers)
+    - [Respond with content coming from a File](#respond-with-content-coming-from-a-file)
+    - [Respond with content coming from a File and extra headers](#respond-with-content-coming-from-a-file-and-extra-headers)
+    - [Respond with content coming from a File containing templates](#respond-with-content-coming-from-a-file-containing-templates)
     - [Respond with content using a callback](#respond-with-content-using-a-callback)
     - [Respond with content using a callback and extra headers](#respond-with-content-using-a-callback-and-extra-headers)
     - [Respond with content using a callback containing templates](#respond-with-content-using-a-callback-containing-templates)
@@ -102,8 +60,19 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncW
     - [Print to response](#print-to-response)
     - [ArduinoJson Basic Response](#arduinojson-basic-response)
     - [ArduinoJson Advanced Response](#arduinojson-advanced-response)
+  - [Serving static files](#serving-static-files)
+    - [Serving specific file by name](#serving-specific-file-by-name)
+    - [Serving files in directory](#serving-files-in-directory)
+    - [Serving static files with authentication](#serving-static-files-with-authentication)
+    - [Specifying Cache-Control header](#specifying-cache-control-header)
+    - [Specifying Date-Modified header](#specifying-date-modified-header)
+    - [Specifying Template Processor callback](#specifying-template-processor-callback)
   - [Param Rewrite With Matching](#param-rewrite-with-matching)
   - [Using filters](#using-filters)
+    - [Serve different site files in AP mode](#serve-different-site-files-in-ap-mode)
+    - [Rewrite to different index on AP](#rewrite-to-different-index-on-ap)
+    - [Serving different hosts](#serving-different-hosts)
+    - [Determine interface inside callbacks](#determine-interface-inside-callbacks)
   - [Bad Responses](#bad-responses)
     - [Respond with content using a callback without content length to HTTP/1.0 clients](#respond-with-content-using-a-callback-without-content-length-to-http10-clients)
   - [Async WebSocket Plugin](#async-websocket-plugin)
@@ -114,6 +83,7 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncW
   - [Async Event Source Plugin](#async-event-source-plugin)
     - [Setup Event Source on the server](#setup-event-source-on-the-server)
     - [Setup Event Source in the browser](#setup-event-source-in-the-browser)
+  - [Scanning for available WiFi Networks](#scanning-for-available-wifi-networks)
   - [Remove handlers and rewrites](#remove-handlers-and-rewrites)
   - [Setting up the server](#setting-up-the-server)
     - [Setup global and class functions as request handlers](#setup-global-and-class-functions-as-request-handlers)
@@ -121,17 +91,41 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncW
     - [Adding Default Headers](#adding-default-headers)
     - [Path variable](#path-variable)
 
----
----
+## Installation
+
+### Using PlatformIO
+
+[PlatformIO](http://platformio.org) is an open source ecosystem for IoT development with cross platform build system, library manager and full support for Espressif ESP8266/ESP32 development. It works on the popular host OS: Mac OS X, Windows, Linux 32/64, Linux ARM (like Raspberry Pi, BeagleBone, CubieBoard).
+
+1. Install [PlatformIO IDE](http://platformio.org/platformio-ide)
+2. Create new project using "PlatformIO Home > New Project"
+3. Update dev/platform to staging version:
+   - [Instruction for Espressif 8266](http://docs.platformio.org/en/latest/platforms/espressif8266.html#using-arduino-framework-with-staging-version)
+   - [Instruction for Espressif 32](http://docs.platformio.org/en/latest/platforms/espressif32.html#using-arduino-framework-with-staging-version)
+ 4. Add "ESP Async WebServer" to project using [Project Configuration File `platformio.ini`](http://docs.platformio.org/page/projectconf.html) and [lib_deps](http://docs.platformio.org/page/projectconf/section_env_library.html#lib-deps) option:
+
+```ini
+[env:myboard]
+platform = espressif...
+board = ...
+framework = arduino
+
+# using the latest stable version
+lib_deps = ESP Async WebServer
+
+# or using GIT Url (the latest development version)
+lib_deps = https://github.com/me-no-dev/ESPAsyncWebServer.git
+```
+ 5. Happy coding with PlatformIO!
 
 ## Why should you care
-
-- Using asynchronous network means that you can handle **more than one connection at the same time**
+- Using asynchronous network means that you can handle more than one connection at the same time
 - You are called once the request is ready and parsed
-- When you send the response, you are **immediately ready** to handle other connections while the server is taking care of sending the response in the background
-- **Speed is OMG**
-- **Easy to use API, HTTP Basic and Digest MD5 Authentication (default), ChunkedResponse**
-- Easily extensible to handle **any type of content**
+- When you send the response, you are immediately ready to handle other connections
+  while the server is taking care of sending the response in the background
+- Speed is OMG
+- Easy to use API, HTTP Basic and Digest MD5 Authentication (default), ChunkedResponse
+- Easily extendible to handle any type of content
 - Supports Continue 100
 - Async WebSocket plugin offering different locations without extra servers or ports
 - Async EventSource (Server-Sent Events) plugin to send events to the browser
@@ -139,21 +133,15 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncW
 - ServeStatic plugin that supports cache, Last-Modified, default index and more
 - Simple template processing engine to handle templates
 
----
-
 ## Important things to remember
-
 - This is fully asynchronous server and as such does not run on the loop thread.
-- You can not use yield() or delay() or any function that uses them inside the callbacks
+- You can not use yield or delay or any function that uses them inside the callbacks
 - The server is smart enough to know when to close the connection and free resources
 - You can not send more than one response to a single request
-
----
 
 ## Principles of operation
 
 ### The Async Web server
-
 - Listens for connections
 - Wraps the new clients into ```Request```
 - Keeps track of clients and cleans memory
@@ -161,7 +149,6 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncW
 - Manages ```Handlers``` and attaches them to Requests
 
 ### Request Life Cycle
-
 - TCP connection is received by the server
 - The connection is wrapped inside ```Request``` object
 - When the request head is received (type, url, get params, http version and host),
@@ -174,7 +161,6 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncW
 - When the ```Response``` is sent, the client is closed and freed from the memory
 
 ### Rewrites and how do they work
-
 - The ```Rewrites``` are used to rewrite the request url and/or inject get parameters for a specific request url path.
 - All ```Rewrites``` are evaluated on the request in the order they have been added to the server.
 - The ```Rewrite``` will change the request url only if the request url (excluding get parameters) is fully match
@@ -186,7 +172,6 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncW
 - The ```Rewrite``` can specify a target url with optional get parameters, e.g. ```/to-url?with=params```
 
 ### Handlers and how do they work
-
 - The ```Handlers``` are used for executing specific actions to particular requests
 - One ```Handler``` instance can be attached to any request and lives together with the server
 - Setting a ```Filter``` to the ```Handler``` enables to control when to apply the handler, decision can be based on
@@ -204,7 +189,6 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncW
 - The first ```Handler``` that can handle the request is selected, not further ```Filter``` and ```canHandle``` are called.
 
 ### Responses and how do they work
-
 - The ```Response``` objects are used to send the response data back to the client
 - The ```Response``` object lives with the ```Request``` and is freed on end or disconnect
 - Different techniques are used depending on the response type to send the data in packets
@@ -214,8 +198,7 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncW
 - Many different options exist for the user to make responding a background task
 
 ### Template processing
-
-- AsyncWebserver_STM32 contains simple template processing engine.
+- ESPAsyncWebserver contains simple template processing engine.
 - Template processing can be added to most response types.
 - Currently it supports only replacing template placeholders with actual values. No conditional processing, cycles, etc.
 - Placeholders are delimited with ```%``` symbols. Like this: ```%TEMPLATE_PLACEHOLDER%```.
@@ -223,12 +206,18 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncW
 - Since it's user provided function, it is possible for library users to implement conditional processing and cycles themselves.
 - Since it's impossible to know the actual response size after template processing step in advance (and, therefore, to include it in response headers), the response becomes [chunked](#chunked-response).
 
----
+## Libraries and projects that use AsyncWebServer
+- [WebSocketToSerial](https://github.com/hallard/WebSocketToSerial) - Debug serial devices through the web browser
+- [Sattrack](https://github.com/Hopperpop/Sattrack) - Track the ISS with ESP8266
+- [ESP Radio](https://github.com/Edzelf/Esp-radio) - Icecast radio based on ESP8266 and VS1053
+- [VZero](https://github.com/andig/vzero) - the Wireless zero-config controller for volkszaehler.org
+- [ESPurna](https://bitbucket.org/xoseperez/espurna) - ESPurna ("spark" in Catalan) is a custom C firmware for ESP8266 based smart switches. It was originally developed with the ITead Sonoff in mind.
+- [fauxmoESP](https://bitbucket.org/xoseperez/fauxmoesp) - Belkin WeMo emulator library for ESP8266.
+- [ESP-RFID](https://github.com/omersiar/esp-rfid) - MFRC522 RFID Access Control Management project for ESP8266.
 
 ## Request Variables
 
 ### Common Variables
-
 ```cpp
 request->version();       // uint8_t: 0 = HTTP/1.0, 1 = HTTP/1.1
 request->method();        // enum:    HTTP_GET, HTTP_POST, HTTP_DELETE, HTTP_PUT, HTTP_PATCH, HTTP_HEAD, HTTP_OPTIONS
@@ -240,21 +229,17 @@ request->multipart();     // bool:    True if the request has content type "mult
 ```
 
 ### Headers
-
 ```cpp
 //List all collected headers
 int headers = request->headers();
 int i;
-
-for(i=0;i<headers;i++)
-{
+for(i=0;i<headers;i++){
   AsyncWebHeader* h = request->getHeader(i);
   Serial.printf("HEADER[%s]: %s\n", h->name().c_str(), h->value().c_str());
 }
 
 //get specific header by name
-if(request->hasHeader("MyHeader"))
-{
+if(request->hasHeader("MyHeader")){
   AsyncWebHeader* h = request->getHeader("MyHeader");
   Serial.printf("MyHeader: %s\n", h->value().c_str());
 }
@@ -262,40 +247,27 @@ if(request->hasHeader("MyHeader"))
 //List all collected headers (Compatibility)
 int headers = request->headers();
 int i;
-
-for(i=0;i<headers;i++)
-{
+for(i=0;i<headers;i++){
   Serial.printf("HEADER[%s]: %s\n", request->headerName(i).c_str(), request->header(i).c_str());
 }
 
 //get specific header by name (Compatibility)
-if(request->hasHeader("MyHeader"))
-{
+if(request->hasHeader("MyHeader")){
   Serial.printf("MyHeader: %s\n", request->header("MyHeader").c_str());
 }
 ```
 
 ### GET, POST and FILE parameters
-
 ```cpp
 //List all parameters
 int params = request->params();
-
-for(int i=0;i<params;i++)
-{
+for(int i=0;i<params;i++){
   AsyncWebParameter* p = request->getParam(i);
-  
-  if(p->isFile())
-  { 
-    //p->isPost() is also true
+  if(p->isFile()){ //p->isPost() is also true
     Serial.printf("FILE[%s]: %s, size: %u\n", p->name().c_str(), p->value().c_str(), p->size());
-  } 
-  else if(p->isPost())
-  {
+  } else if(p->isPost()){
     Serial.printf("POST[%s]: %s\n", p->name().c_str(), p->value().c_str());
-  } 
-  else 
-  {
+  } else {
     Serial.printf("GET[%s]: %s\n", p->name().c_str(), p->value().c_str());
   }
 }
@@ -314,9 +286,7 @@ if(request->hasParam("download", true, true))
 
 //List all parameters (Compatibility)
 int args = request->args();
-
-for(int i=0;i<args;i++)
-{
+for(int i=0;i<args;i++){
   Serial.printf("ARG[%s]: %s\n", request->argName(i).c_str(), request->arg(i).c_str());
 }
 
@@ -325,28 +295,52 @@ if(request->hasArg("download"))
   String arg = request->arg("download");
 ```
 
+### FILE Upload handling
+```cpp
+void handleUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final){
+  if(!index){
+    Serial.printf("UploadStart: %s\n", filename.c_str());
+  }
+  for(size_t i=0; i<len; i++){
+    Serial.write(data[i]);
+  }
+  if(final){
+    Serial.printf("UploadEnd: %s, %u B\n", filename.c_str(), index+len);
+  }
+}
+```
+
+### Body data handling
+```cpp
+void handleBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
+  if(!index){
+    Serial.printf("BodyStart: %u B\n", total);
+  }
+  for(size_t i=0; i<len; i++){
+    Serial.write(data[i]);
+  }
+  if(index + len == total){
+    Serial.printf("BodyEnd: %u B\n", total);
+  }
+}
+```
+If needed, the `_tempObject` field on the request can be used to store a pointer to temporary data (e.g. from the body) associated with the request. If assigned, the pointer will automatically be freed along with the request.
+
 ### JSON body handling with ArduinoJson
-
 Endpoints which consume JSON can use a special handler to get ready to use JSON data in the request callback:
-
 ```cpp
 #include "AsyncJson.h"
 #include "ArduinoJson.h"
 
-AsyncCallbackJsonWebHandler* handler = new AsyncCallbackJsonWebHandler("/rest/endpoint", [](AsyncWebServerRequest *request, JsonVariant &json) 
-{
+AsyncCallbackJsonWebHandler* handler = new AsyncCallbackJsonWebHandler("/rest/endpoint", [](AsyncWebServerRequest *request, JsonVariant &json) {
   JsonObject& jsonObj = json.as<JsonObject>();
   // ...
 });
-
 server.addHandler(handler);
 ```
----
 
 ## Responses
-
 ### Redirect to another URL
-
 ```cpp
 //to local url
 request->redirect("/login");
@@ -356,57 +350,154 @@ request->redirect("http://esp8266.com");
 ```
 
 ### Basic response with HTTP Code
-
 ```cpp
 request->send(404); //Sends 404 File Not Found
 ```
 
 ### Basic response with HTTP Code and extra headers
-
 ```cpp
 AsyncWebServerResponse *response = request->beginResponse(404); //Sends 404 File Not Found
-response->addHeader("Server","AsyncWebServer_STM32");
+response->addHeader("Server","ESP Async Web Server");
 request->send(response);
 ```
 
 ### Basic response with string content
-
 ```cpp
 request->send(200, "text/plain", "Hello World!");
 ```
 
 ### Basic response with string content and extra headers
-
 ```cpp
 AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "Hello World!");
-response->addHeader("Server","AsyncWebServer");
+response->addHeader("Server","ESP Async Web Server");
+request->send(response);
+```
+
+### Send large webpage from PROGMEM
+```cpp
+const char index_html[] PROGMEM = "..."; // large char array, tested with 14k
+request->send_P(200, "text/html", index_html);
+```
+
+### Send large webpage from PROGMEM and extra headers
+```cpp
+const char index_html[] PROGMEM = "..."; // large char array, tested with 14k
+AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", index_html);
+response->addHeader("Server","ESP Async Web Server");
+request->send(response);
+```
+
+### Send large webpage from PROGMEM containing templates
+```cpp
+String processor(const String& var)
+{
+  if(var == "HELLO_FROM_TEMPLATE")
+    return F("Hello world!");
+  return String();
+}
+
+// ...
+
+const char index_html[] PROGMEM = "..."; // large char array, tested with 14k
+request->send_P(200, "text/html", index_html, processor);
+```
+
+### Send large webpage from PROGMEM containing templates and extra headers
+```cpp
+String processor(const String& var)
+{
+  if(var == "HELLO_FROM_TEMPLATE")
+    return F("Hello world!");
+  return String();
+}
+
+// ...
+
+const char index_html[] PROGMEM = "..."; // large char array, tested with 14k
+AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", index_html, processor);
+response->addHeader("Server","ESP Async Web Server");
+request->send(response);
+```
+
+### Send binary content from PROGMEM
+```cpp
+
+//File: favicon.ico.gz, Size: 726
+#define favicon_ico_gz_len 726
+const uint8_t favicon_ico_gz[] PROGMEM = {
+ 0x1F, 0x8B, 0x08, 0x08, 0x0B, 0x87, 0x90, 0x57, 0x00, 0x03, 0x66, 0x61, 0x76, 0x69, 0x63, 0x6F,
+ 0x6E, 0x2E, 0x69, 0x63, 0x6F, 0x00, 0xCD, 0x53, 0x5F, 0x48, 0x9A, 0x51, 0x14, 0xBF, 0x62, 0x6D,
+ 0x86, 0x96, 0xA9, 0x64, 0xD3, 0xFE, 0xA8, 0x99, 0x65, 0x1A, 0xB4, 0x8A, 0xA8, 0x51, 0x54, 0x23,
+ 0xA8, 0x11, 0x49, 0x51, 0x8A, 0x34, 0x62, 0x93, 0x85, 0x31, 0x58, 0x44, 0x12, 0x45, 0x2D, 0x58,
+ 0xF5, 0x52, 0x41, 0x10, 0x23, 0x82, 0xA0, 0x20, 0x98, 0x2F, 0xC1, 0x26, 0xED, 0xA1, 0x20, 0x89,
+ 0x04, 0xD7, 0x83, 0x58, 0x20, 0x28, 0x04, 0xAB, 0xD1, 0x9B, 0x8C, 0xE5, 0xC3, 0x60, 0x32, 0x64,
+ 0x0E, 0x56, 0xBF, 0x9D, 0xEF, 0xF6, 0x30, 0x82, 0xED, 0xAD, 0x87, 0xDD, 0x8F, 0xF3, 0xDD, 0x8F,
+ 0x73, 0xCF, 0xEF, 0x9C, 0xDF, 0x39, 0xBF, 0xFB, 0x31, 0x26, 0xA2, 0x27, 0x37, 0x97, 0xD1, 0x5B,
+ 0xCF, 0x9E, 0x67, 0x30, 0xA6, 0x66, 0x8C, 0x99, 0xC9, 0xC8, 0x45, 0x9E, 0x6B, 0x3F, 0x5F, 0x74,
+ 0xA6, 0x94, 0x5E, 0xDB, 0xFF, 0xB2, 0xE6, 0xE7, 0xE7, 0xF9, 0xDE, 0xD6, 0xD6, 0x96, 0xDB, 0xD8,
+ 0xD8, 0x78, 0xBF, 0xA1, 0xA1, 0xC1, 0xDA, 0xDC, 0xDC, 0x2C, 0xEB, 0xED, 0xED, 0x15, 0x9B, 0xCD,
+ 0xE6, 0x4A, 0x83, 0xC1, 0xE0, 0x2E, 0x29, 0x29, 0x99, 0xD6, 0x6A, 0xB5, 0x4F, 0x75, 0x3A, 0x9D,
+ 0x61, 0x75, 0x75, 0x95, 0xB5, 0xB7, 0xB7, 0xDF, 0xC8, 0xD1, 0xD4, 0xD4, 0xF4, 0xB0, 0xBA, 0xBA,
+ 0xFA, 0x83, 0xD5, 0x6A, 0xFD, 0x5A, 0x5E, 0x5E, 0x9E, 0x28, 0x2D, 0x2D, 0x0D, 0x10, 0xC6, 0x4B,
+ 0x98, 0x78, 0x5E, 0x5E, 0xDE, 0x95, 0x42, 0xA1, 0x40, 0x4E, 0x4E, 0xCE, 0x65, 0x76, 0x76, 0xF6,
+ 0x47, 0xB5, 0x5A, 0x6D, 0x4F, 0x26, 0x93, 0xA2, 0xD6, 0xD6, 0x56, 0x8E, 0x6D, 0x69, 0x69, 0xD1,
+ 0x11, 0x36, 0x62, 0xB1, 0x58, 0x60, 0x32, 0x99, 0xA0, 0xD7, 0xEB, 0x51, 0x58, 0x58, 0x88, 0xFC,
+ 0xFC, 0x7C, 0x10, 0x16, 0x02, 0x56, 0x2E, 0x97, 0x43, 0x2A, 0x95, 0x42, 0x2C, 0x16, 0x23, 0x33,
+ 0x33, 0x33, 0xAE, 0x52, 0xA9, 0x1E, 0x64, 0x65, 0x65, 0x71, 0x7C, 0x7D, 0x7D, 0xBD, 0x93, 0xEA,
+ 0xFE, 0x30, 0x1A, 0x8D, 0xE8, 0xEC, 0xEC, 0xC4, 0xE2, 0xE2, 0x22, 0x6A, 0x6A, 0x6A, 0x40, 0x39,
+ 0x41, 0xB5, 0x38, 0x4E, 0xC8, 0x33, 0x3C, 0x3C, 0x0C, 0x87, 0xC3, 0xC1, 0x6B, 0x54, 0x54, 0x54,
+ 0xBC, 0xE9, 0xEB, 0xEB, 0x93, 0x5F, 0x5C, 0x5C, 0x30, 0x8A, 0x9D, 0x2E, 0x2B, 0x2B, 0xBB, 0xA2,
+ 0x3E, 0x41, 0xBD, 0x21, 0x1E, 0x8F, 0x63, 0x6A, 0x6A, 0x0A, 0x81, 0x40, 0x00, 0x94, 0x1B, 0x3D,
+ 0x3D, 0x3D, 0x42, 0x3C, 0x96, 0x96, 0x96, 0x70, 0x7E, 0x7E, 0x8E, 0xE3, 0xE3, 0x63, 0xF8, 0xFD,
+ 0xFE, 0xB4, 0xD7, 0xEB, 0xF5, 0x8F, 0x8F, 0x8F, 0x5B, 0x68, 0x5E, 0x6F, 0x05, 0xCE, 0xB4, 0xE3,
+ 0xE8, 0xE8, 0x08, 0x27, 0x27, 0x27, 0xD8, 0xDF, 0xDF, 0xC7, 0xD9, 0xD9, 0x19, 0x6C, 0x36, 0x1B,
+ 0x36, 0x36, 0x36, 0x38, 0x9F, 0x85, 0x85, 0x05, 0xAC, 0xAF, 0xAF, 0x23, 0x1A, 0x8D, 0x22, 0x91,
+ 0x48, 0x20, 0x16, 0x8B, 0xFD, 0xDA, 0xDA, 0xDA, 0x7A, 0x41, 0x33, 0x7E, 0x57, 0x50, 0x50, 0x80,
+ 0x89, 0x89, 0x09, 0x84, 0xC3, 0x61, 0x6C, 0x6F, 0x6F, 0x23, 0x12, 0x89, 0xE0, 0xE0, 0xE0, 0x00,
+ 0x43, 0x43, 0x43, 0x58, 0x5E, 0x5E, 0xE6, 0x9C, 0x7D, 0x3E, 0x1F, 0x46, 0x47, 0x47, 0x79, 0xBE,
+ 0xBD, 0xBD, 0x3D, 0xE1, 0x3C, 0x1D, 0x0C, 0x06, 0x9F, 0x10, 0xB7, 0xC7, 0x84, 0x4F, 0xF6, 0xF7,
+ 0xF7, 0x63, 0x60, 0x60, 0x00, 0x83, 0x83, 0x83, 0x18, 0x19, 0x19, 0xC1, 0xDC, 0xDC, 0x1C, 0x8F,
+ 0x17, 0x7C, 0xA4, 0x27, 0xE7, 0x34, 0x39, 0x39, 0x89, 0x9D, 0x9D, 0x1D, 0x6E, 0x54, 0xE3, 0x13,
+ 0xE5, 0x34, 0x11, 0x37, 0x49, 0x51, 0x51, 0xD1, 0x4B, 0xA5, 0x52, 0xF9, 0x45, 0x26, 0x93, 0x5D,
+ 0x0A, 0xF3, 0x92, 0x48, 0x24, 0xA0, 0x6F, 0x14, 0x17, 0x17, 0xA3, 0xB6, 0xB6, 0x16, 0x5D, 0x5D,
+ 0x5D, 0x7C, 0x1E, 0xBB, 0xBB, 0xBB, 0x9C, 0xD7, 0xE1, 0xE1, 0x21, 0x42, 0xA1, 0xD0, 0x6B, 0xD2,
+ 0x45, 0x4C, 0x33, 0x12, 0x34, 0xCC, 0xA0, 0x19, 0x54, 0x92, 0x56, 0x0E, 0xD2, 0xD9, 0x43, 0xF8,
+ 0xCF, 0x82, 0x56, 0xC2, 0xDC, 0xEB, 0xEA, 0xEA, 0x38, 0x7E, 0x6C, 0x6C, 0x4C, 0xE0, 0xFE, 0x9D,
+ 0xB8, 0xBF, 0xA7, 0xFA, 0xAF, 0x56, 0x56, 0x56, 0xEE, 0x6D, 0x6E, 0x6E, 0xDE, 0xB8, 0x47, 0x55,
+ 0x55, 0x55, 0x6C, 0x66, 0x66, 0x46, 0x44, 0xDA, 0x3B, 0x34, 0x1A, 0x4D, 0x94, 0xB0, 0x3F, 0x09,
+ 0x7B, 0x45, 0xBD, 0xA5, 0x5D, 0x2E, 0x57, 0x8C, 0x7A, 0x73, 0xD9, 0xED, 0xF6, 0x3B, 0x84, 0xFF,
+ 0xE7, 0x7D, 0xA6, 0x3A, 0x2C, 0x95, 0x4A, 0xB1, 0x8E, 0x8E, 0x0E, 0x6D, 0x77, 0x77, 0xB7, 0xCD,
+ 0xE9, 0x74, 0x3E, 0x73, 0xBB, 0xDD, 0x8F, 0x3C, 0x1E, 0x8F, 0xE6, 0xF4, 0xF4, 0x94, 0xAD, 0xAD,
+ 0xAD, 0xDD, 0xDE, 0xCF, 0x73, 0x0B, 0x0B, 0xB8, 0xB6, 0xE0, 0x5D, 0xC6, 0x66, 0xC5, 0xE4, 0x10,
+ 0x4C, 0xF4, 0xF7, 0xD8, 0x59, 0xF2, 0x7F, 0xA3, 0xB8, 0xB4, 0xFC, 0x0F, 0xEE, 0x37, 0x70, 0xEC,
+ 0x16, 0x4A, 0x7E, 0x04, 0x00, 0x00
+};
+
+AsyncWebServerResponse *response = request->beginResponse_P(200, "image/x-icon", favicon_ico_gz, favicon_ico_gz_len);
+response->addHeader("Content-Encoding", "gzip");
 request->send(response);
 ```
 
 ### Respond with content coming from a Stream
-
 ```cpp
 //read 12 bytes from Serial and send them as Content Type text/plain
 request->send(Serial, "text/plain", 12);
 ```
 
 ### Respond with content coming from a Stream and extra headers
-
 ```cpp
 //read 12 bytes from Serial and send them as Content Type text/plain
 AsyncWebServerResponse *response = request->beginResponse(Serial, "text/plain", 12);
-response->addHeader("Server","AsyncWebServer_STM32");
+response->addHeader("Server","ESP Async Web Server");
 request->send(response);
 ```
 
 ### Respond with content coming from a Stream containing templates
-
 ```cpp
 String processor(const String& var)
 {
   if(var == "HELLO_FROM_TEMPLATE")
     return F("Hello world!");
-    
   return String();
 }
 
@@ -417,7 +508,6 @@ request->send(Serial, "text/plain", 12, processor);
 ```
 
 ### Respond with content coming from a Stream containing templates and extra headers
-
 ```cpp
 String processor(const String& var)
 {
@@ -430,16 +520,64 @@ String processor(const String& var)
 
 //read 12 bytes from Serial and send them as Content Type text/plain
 AsyncWebServerResponse *response = request->beginResponse(Serial, "text/plain", 12, processor);
-response->addHeader("Server","AsyncWebServer_STM32");
+response->addHeader("Server","ESP Async Web Server");
 request->send(response);
 ```
 
-### Respond with content using a callback
+### Respond with content coming from a File
+```cpp
+//Send index.htm with default content type
+request->send(SPIFFS, "/index.htm");
 
+//Send index.htm as text
+request->send(SPIFFS, "/index.htm", "text/plain");
+
+//Download index.htm
+request->send(SPIFFS, "/index.htm", String(), true);
+```
+
+### Respond with content coming from a File and extra headers
+```cpp
+//Send index.htm with default content type
+AsyncWebServerResponse *response = request->beginResponse(SPIFFS, "/index.htm");
+
+//Send index.htm as text
+AsyncWebServerResponse *response = request->beginResponse(SPIFFS, "/index.htm", "text/plain");
+
+//Download index.htm
+AsyncWebServerResponse *response = request->beginResponse(SPIFFS, "/index.htm", String(), true);
+
+response->addHeader("Server","ESP Async Web Server");
+request->send(response);
+```
+
+### Respond with content coming from a File containing templates
+Internally uses [Chunked Response](#chunked-response).
+
+Index.htm contents:
+```
+%HELLO_FROM_TEMPLATE%
+```
+
+Somewhere in source files:
+```cpp
+String processor(const String& var)
+{
+  if(var == "HELLO_FROM_TEMPLATE")
+    return F("Hello world!");
+  return String();
+}
+
+// ...
+
+//Send index.htm with template processor function
+request->send(SPIFFS, "/index.htm", String(), false, processor);
+```
+
+### Respond with content using a callback
 ```cpp
 //send 128 bytes as plain text
-request->send("text/plain", 128, [](uint8_t *buffer, size_t maxLen, size_t index) -> size_t 
-{
+request->send("text/plain", 128, [](uint8_t *buffer, size_t maxLen, size_t index) -> size_t {
   //Write up to "maxLen" bytes into "buffer" and return the amount written.
   //index equals the amount of bytes that have been already sent
   //You will not be asked for more bytes once the content length has been reached.
@@ -450,11 +588,9 @@ request->send("text/plain", 128, [](uint8_t *buffer, size_t maxLen, size_t index
 ```
 
 ### Respond with content using a callback and extra headers
-
 ```cpp
 //send 128 bytes as plain text
-AsyncWebServerResponse *response = request->beginResponse("text/plain", 128, [](uint8_t *buffer, size_t maxLen, size_t index) -> size_t 
-{
+AsyncWebServerResponse *response = request->beginResponse("text/plain", 128, [](uint8_t *buffer, size_t maxLen, size_t index) -> size_t {
   //Write up to "maxLen" bytes into "buffer" and return the amount written.
   //index equals the amount of bytes that have been already sent
   //You will not be asked for more bytes once the content length has been reached.
@@ -462,27 +598,23 @@ AsyncWebServerResponse *response = request->beginResponse("text/plain", 128, [](
   //Send what you currently have and you will be asked for more again
   return mySource.read(buffer, maxLen);
 });
-
-response->addHeader("Server","AsyncWebServer_STM32");
+response->addHeader("Server","ESP Async Web Server");
 request->send(response);
 ```
 
 ### Respond with content using a callback containing templates
-
 ```cpp
 String processor(const String& var)
 {
   if(var == "HELLO_FROM_TEMPLATE")
     return F("Hello world!");
-    
   return String();
 }
 
 // ...
 
 //send 128 bytes as plain text
-request->send("text/plain", 128, [](uint8_t *buffer, size_t maxLen, size_t index) -> size_t 
-{
+request->send("text/plain", 128, [](uint8_t *buffer, size_t maxLen, size_t index) -> size_t {
   //Write up to "maxLen" bytes into "buffer" and return the amount written.
   //index equals the amount of bytes that have been already sent
   //You will not be asked for more bytes once the content length has been reached.
@@ -493,7 +625,6 @@ request->send("text/plain", 128, [](uint8_t *buffer, size_t maxLen, size_t index
 ```
 
 ### Respond with content using a callback containing templates and extra headers
-
 ```cpp
 String processor(const String& var)
 {
@@ -505,8 +636,7 @@ String processor(const String& var)
 // ...
 
 //send 128 bytes as plain text
-AsyncWebServerResponse *response = request->beginResponse("text/plain", 128, [](uint8_t *buffer, size_t maxLen, size_t index) -> size_t 
-{
+AsyncWebServerResponse *response = request->beginResponse("text/plain", 128, [](uint8_t *buffer, size_t maxLen, size_t index) -> size_t {
   //Write up to "maxLen" bytes into "buffer" and return the amount written.
   //index equals the amount of bytes that have been already sent
   //You will not be asked for more bytes once the content length has been reached.
@@ -514,62 +644,51 @@ AsyncWebServerResponse *response = request->beginResponse("text/plain", 128, [](
   //Send what you currently have and you will be asked for more again
   return mySource.read(buffer, maxLen);
 }, processor);
-
-response->addHeader("Server","AsyncWebServer_STM32");
+response->addHeader("Server","ESP Async Web Server");
 request->send(response);
 ```
 
 ### Chunked Response
-
 Used when content length is unknown. Works best if the client supports HTTP/1.1
-
 ```cpp
-AsyncWebServerResponse *response = request->beginChunkedResponse("text/plain", [](uint8_t *buffer, size_t maxLen, size_t index) -> size_t 
-{
+AsyncWebServerResponse *response = request->beginChunkedResponse("text/plain", [](uint8_t *buffer, size_t maxLen, size_t index) -> size_t {
   //Write up to "maxLen" bytes into "buffer" and return the amount written.
   //index equals the amount of bytes that have been already sent
   //You will be asked for more data until 0 is returned
   //Keep in mind that you can not delay or yield waiting for more data!
   return mySource.read(buffer, maxLen);
 });
-
-response->addHeader("Server","AsyncWebServer_STM32");
+response->addHeader("Server","ESP Async Web Server");
 request->send(response);
 ```
 
 ### Chunked Response containing templates
-
 Used when content length is unknown. Works best if the client supports HTTP/1.1
-
 ```cpp
 String processor(const String& var)
 {
   if(var == "HELLO_FROM_TEMPLATE")
     return F("Hello world!");
-    
   return String();
 }
 
 // ...
 
-AsyncWebServerResponse *response = request->beginChunkedResponse("text/plain", [](uint8_t *buffer, size_t maxLen, size_t index) -> size_t 
-{
+AsyncWebServerResponse *response = request->beginChunkedResponse("text/plain", [](uint8_t *buffer, size_t maxLen, size_t index) -> size_t {
   //Write up to "maxLen" bytes into "buffer" and return the amount written.
   //index equals the amount of bytes that have been already sent
   //You will be asked for more data until 0 is returned
   //Keep in mind that you can not delay or yield waiting for more data!
   return mySource.read(buffer, maxLen);
 }, processor);
-
-response->addHeader("Server","AsyncWebServer_STM32");
+response->addHeader("Server","ESP Async Web Server");
 request->send(response);
 ```
 
 ### Print to response
-
 ```cpp
 AsyncResponseStream *response = request->beginResponseStream("text/html");
-response->addHeader("Server","AsyncWebServer_STM32");
+response->addHeader("Server","ESP Async Web Server");
 response->printf("<!DOCTYPE html><html><head><title>Webpage at %s</title></head><body>", request->url().c_str());
 
 response->print("<h2>Hello ");
@@ -590,38 +709,25 @@ response->print("</ul>");
 response->print("<h3>Headers</h3>");
 response->print("<ul>");
 int headers = request->headers();
-
-for(int i=0;i<headers;i++)
-{
+for(int i=0;i<headers;i++){
   AsyncWebHeader* h = request->getHeader(i);
   response->printf("<li>%s: %s</li>", h->name().c_str(), h->value().c_str());
 }
-
 response->print("</ul>");
 
 response->print("<h3>Parameters</h3>");
 response->print("<ul>");
-
 int params = request->params();
-
-for(int i=0;i<params;i++)
-{
+for(int i=0;i<params;i++){
   AsyncWebParameter* p = request->getParam(i);
-  
-  if(p->isFile())
-  {
+  if(p->isFile()){
     response->printf("<li>FILE[%s]: %s, size: %u</li>", p->name().c_str(), p->value().c_str(), p->size());
-  } 
-  else if(p->isPost())
-  {
+  } else if(p->isPost()){
     response->printf("<li>POST[%s]: %s</li>", p->name().c_str(), p->value().c_str());
-  } 
-  else 
-  {
+  } else {
     response->printf("<li>GET[%s]: %s</li>", p->name().c_str(), p->value().c_str());
   }
 }
-
 response->print("</ul>");
 
 response->print("</body></html>");
@@ -630,9 +736,7 @@ request->send(response);
 ```
 
 ### ArduinoJson Basic Response
-
-This way of sending Json is great for when the result is **below 4KB**
-
+This way of sending Json is great for when the result is below 4KB
 ```cpp
 #include "AsyncJson.h"
 #include "ArduinoJson.h"
@@ -644,32 +748,115 @@ JsonObject &root = jsonBuffer.createObject();
 root["heap"] = ESP.getFreeHeap();
 root["ssid"] = WiFi.SSID();
 root.printTo(*response);
-
 request->send(response);
 ```
 
 ### ArduinoJson Advanced Response
-
-This response can handle really **large Json objects (tested to 40KB)**
-
+This response can handle really large Json objects (tested to 40KB)
 There isn't any noticeable speed decrease for small results with the method above
-
-Since ArduinoJson does not allow reading parts of the string, the whole Json has to be passed every time a 
-chunks needs to be sent, which shows speed decrease proportional to the resulting json packets
-
+Since ArduinoJson does not allow reading parts of the string, the whole Json has to
+be passed every time a chunks needs to be sent, which shows speed decrease proportional
+to the resulting json packets
 ```cpp
 #include "AsyncJson.h"
 #include "ArduinoJson.h"
 
-AsyncJsonResponse * response = new AsyncJsonResponse();
-response->addHeader("Server","AsyncWebServer");
-JsonObject& root = response->getRoot();
-root["IP"] = Ethernet.localIP();
-response->setLength();
 
+AsyncJsonResponse * response = new AsyncJsonResponse();
+response->addHeader("Server","ESP Async Web Server");
+JsonObject& root = response->getRoot();
+root["heap"] = ESP.getFreeHeap();
+root["ssid"] = WiFi.SSID();
+response->setLength();
 request->send(response);
 ```
----
+
+## Serving static files
+In addition to serving files from SPIFFS as described above, the server provide a dedicated handler that optimize the
+performance of serving files from SPIFFS - ```AsyncStaticWebHandler```. Use ```server.serveStatic()``` function to
+initialize and add a new instance of ```AsyncStaticWebHandler``` to the server.
+The Handler will not handle the request if the file does not exists, e.g. the server will continue to look for another
+handler that can handle the request.
+Notice that you can chain setter functions to setup the handler, or keep a pointer to change it at a later time.
+
+### Serving specific file by name
+```cpp
+// Serve the file "/www/page.htm" when request url is "/page.htm"
+server.serveStatic("/page.htm", SPIFFS, "/www/page.htm");
+```
+
+### Serving files in directory
+To serve files in a directory, the path to the files should specify a directory in SPIFFS and ends with "/".
+```cpp
+// Serve files in directory "/www/" when request url starts with "/"
+// Request to the root or none existing files will try to server the defualt
+// file name "index.htm" if exists
+server.serveStatic("/", SPIFFS, "/www/");
+
+// Server with different default file
+server.serveStatic("/", SPIFFS, "/www/").setDefaultFile("default.html");
+```
+
+### Serving static files with authentication
+
+```cpp
+server
+    .serveStatic("/", SPIFFS, "/www/")
+    .setDefaultFile("default.html")
+    .setAuthentication("user", "pass");
+```
+
+### Specifying Cache-Control header
+It is possible to specify Cache-Control header value to reduce the number of calls to the server once the client loaded
+the files. For more information on Cache-Control values see [Cache-Control](https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9)
+```cpp
+// Cache responses for 10 minutes (600 seconds)
+server.serveStatic("/", SPIFFS, "/www/").setCacheControl("max-age=600");
+
+//*** Change Cache-Control after server setup ***
+
+// During setup - keep a pointer to the handler
+AsyncStaticWebHandler* handler = &server.serveStatic("/", SPIFFS, "/www/").setCacheControl("max-age=600");
+
+// At a later event - change Cache-Control
+handler->setCacheControl("max-age=30");
+```
+
+### Specifying Date-Modified header
+It is possible to specify Date-Modified header to enable the server to return Not-Modified (304) response for requests
+with "If-Modified-Since" header with the same value, instead of responding with the actual file content.
+```cpp
+// Update the date modified string every time files are updated
+server.serveStatic("/", SPIFFS, "/www/").setLastModified("Mon, 20 Jun 2016 14:00:00 GMT");
+
+//*** Chage last modified value at a later stage ***
+
+// During setup - read last modified value from config or EEPROM
+String date_modified = loadDateModified();
+AsyncStaticWebHandler* handler = &server.serveStatic("/", SPIFFS, "/www/");
+handler->setLastModified(date_modified);
+
+// At a later event when files are updated
+String date_modified = getNewDateModfied();
+saveDateModified(date_modified); // Save for next reset
+handler->setLastModified(date_modified);
+```
+
+### Specifying Template Processor callback
+It is possible to specify template processor for static files. For information on template processor see
+[Respond with content coming from a File containing templates](#respond-with-content-coming-from-a-file-containing-templates).
+```cpp
+String processor(const String& var)
+{
+  if(var == "HELLO_FROM_TEMPLATE")
+    return F("Hello world!");
+  return String();
+}
+
+// ...
+
+server.serveStatic("/", SPIFFS, "/www/").setTemplateProcessor(processor);
+```
 
 ## Param Rewrite With Matching
 It is possible to rewrite the request url with parameter matchg. Here is an example with one parameter:
@@ -685,47 +872,32 @@ class OneParamRewrite : public AsyncWebRewrite
 
   public:
   OneParamRewrite(const char* from, const char* to)
-    : AsyncWebRewrite(from, to) 
-    {
+    : AsyncWebRewrite(from, to) {
 
       _paramIndex = _from.indexOf('{');
 
-      if( _paramIndex >=0 && _from.endsWith("}")) 
-      {
+      if( _paramIndex >=0 && _from.endsWith("}")) {
         _urlPrefix = _from.substring(0, _paramIndex);
         int index = _params.indexOf('{');
-        
-        if(index >= 0) 
-        {
+        if(index >= 0) {
           _params = _params.substring(0, index);
         }
-      } 
-      else 
-      {
+      } else {
         _urlPrefix = _from;
       }
-      
       _paramsBackup = _params;
   }
 
-  bool match(AsyncWebServerRequest *request) override 
-  {
-    if(request->url().startsWith(_urlPrefix)) 
-    {
-      if(_paramIndex >= 0) 
-      {
+  bool match(AsyncWebServerRequest *request) override {
+    if(request->url().startsWith(_urlPrefix)) {
+      if(_paramIndex >= 0) {
         _params = _paramsBackup + request->url().substring(_paramIndex);
-      } 
-      else 
-      {
+      } else {
         _params = _paramsBackup;
       }
-      
-      return true;
+    return true;
 
-    } 
-    else 
-    {
+    } else {
       return false;
     }
   }
@@ -737,137 +909,131 @@ Usage:
 ```cpp
   server.addRewrite( new OneParamRewrite("/radio/{frequence}", "/radio?f={frequence}") );
 ```
----
 
 ## Using filters
-
 Filters can be set to `Rewrite` or `Handler` in order to control when to apply the rewrite and consider the handler.
 A filter is a callback function that evaluates the request and return a boolean `true` to include the item
 or `false` to exclude it.
-
 Two filter callback are provided for convince:
 * `ON_STA_FILTER` - return true when requests are made to the STA (station mode) interface.
 * `ON_AP_FILTER` - return true when requests are made to the AP (access point) interface.
 
----
+### Serve different site files in AP mode
+```cpp
+server.serveStatic("/", SPIFFS, "/www/").setFilter(ON_STA_FILTER);
+server.serveStatic("/", SPIFFS, "/ap/").setFilter(ON_AP_FILTER);
+```
+
+### Rewrite to different index on AP
+```cpp
+// Serve the file "/www/index-ap.htm" in AP, and the file "/www/index.htm" on STA
+server.rewrite("/", "index.htm");
+server.rewrite("/index.htm", "index-ap.htm").setFilter(ON_AP_FILTER);
+server.serveStatic("/", SPIFFS, "/www/");
+```
+
+### Serving different hosts
+```cpp
+// Filter callback using request host
+bool filterOnHost1(AsyncWebServerRequest *request) { return request->host() == "host1"; }
+
+// Server setup: server files in "/host1/" to requests for "host1", and files in "/www/" otherwise.
+server.serveStatic("/", SPIFFS, "/host1/").setFilter(filterOnHost1);
+server.serveStatic("/", SPIFFS, "/www/");
+```
+
+### Determine interface inside callbacks
+```cpp
+  String RedirectUrl = "http://";
+  if (ON_STA_FILTER(request)) {
+    RedirectUrl += WiFi.localIP().toString();
+  } else {
+    RedirectUrl += WiFi.softAPIP().toString();
+  }
+  RedirectUrl += "/index.htm";
+  request->redirect(RedirectUrl);
+```
 
 ## Bad Responses
-
 Some responses are implemented, but you should not use them, because they do not conform to HTTP.
 The following example will lead to unclean close of the connection and more time wasted
 than providing the length of the content
 
 ### Respond with content using a callback without content length to HTTP/1.0 clients
-
 ```cpp
 //This is used as fallback for chunked responses to HTTP/1.0 Clients
-request->send("text/plain", 0, [](uint8_t *buffer, size_t maxLen, size_t index) -> size_t 
-{
+request->send("text/plain", 0, [](uint8_t *buffer, size_t maxLen, size_t index) -> size_t {
   //Write up to "maxLen" bytes into "buffer" and return the amount written.
   //You will be asked for more data until 0 is returned
   //Keep in mind that you can not delay or yield waiting for more data!
   return mySource.read(buffer, maxLen);
 });
 ```
----
 
 ## Async WebSocket Plugin
-
 The server includes a web socket plugin which lets you define different WebSocket locations to connect to
 without starting another listening service or using different port
 
 ### Async WebSocket Event
-
 ```cpp
 
-void onEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len)
-{
-  if(type == WS_EVT_CONNECT)
-  {
+void onEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len){
+  if(type == WS_EVT_CONNECT){
     //client connected
-    Serial.printf("ws[%s][%u] connect\n", server->url(), client->id());
+    os_printf("ws[%s][%u] connect\n", server->url(), client->id());
     client->printf("Hello Client %u :)", client->id());
     client->ping();
-  } 
-  else if(type == WS_EVT_DISCONNECT)
-  {
+  } else if(type == WS_EVT_DISCONNECT){
     //client disconnected
-    Serial.printf("ws[%s][%u] disconnect: %u\n", server->url(), client->id());
-  } 
-  else if(type == WS_EVT_ERROR)
-  {
+    os_printf("ws[%s][%u] disconnect: %u\n", server->url(), client->id());
+  } else if(type == WS_EVT_ERROR){
     //error was received from the other end
-    Serial.printf("ws[%s][%u] error(%u): %s\n", server->url(), client->id(), *((uint16_t*)arg), (char*)data);
-  } 
-  else if(type == WS_EVT_PONG)
-  {
+    os_printf("ws[%s][%u] error(%u): %s\n", server->url(), client->id(), *((uint16_t*)arg), (char*)data);
+  } else if(type == WS_EVT_PONG){
     //pong message was received (in response to a ping request maybe)
-    Serial.printf("ws[%s][%u] pong[%u]: %s\n", server->url(), client->id(), len, (len)?(char*)data:"");
-  } 
-  else if(type == WS_EVT_DATA)
-  {
+    os_printf("ws[%s][%u] pong[%u]: %s\n", server->url(), client->id(), len, (len)?(char*)data:"");
+  } else if(type == WS_EVT_DATA){
     //data packet
     AwsFrameInfo * info = (AwsFrameInfo*)arg;
-    
-    if(info->final && info->index == 0 && info->len == len)
-    {
+    if(info->final && info->index == 0 && info->len == len){
       //the whole message is in a single frame and we got all of it's data
-      Serial.printf("ws[%s][%u] %s-message[%llu]: ", server->url(), client->id(), (info->opcode == WS_TEXT)?"text":"binary", info->len);
-      
-      if(info->opcode == WS_TEXT)
-      {
+      os_printf("ws[%s][%u] %s-message[%llu]: ", server->url(), client->id(), (info->opcode == WS_TEXT)?"text":"binary", info->len);
+      if(info->opcode == WS_TEXT){
         data[len] = 0;
-        Serial.printf("%s\n", (char*)data);
-      } 
-      else 
-      {
-        for(size_t i=0; i < info->len; i++)
-        {
-          Serial.printf("%02x ", data[i]);
+        os_printf("%s\n", (char*)data);
+      } else {
+        for(size_t i=0; i < info->len; i++){
+          os_printf("%02x ", data[i]);
         }
-        
-        Serial.printf("\n");
+        os_printf("\n");
       }
-      
       if(info->opcode == WS_TEXT)
         client->text("I got your text message");
       else
         client->binary("I got your binary message");
-    } 
-    else 
-    {
+    } else {
       //message is comprised of multiple frames or the frame is split into multiple packets
-      if(info->index == 0)
-      {
+      if(info->index == 0){
         if(info->num == 0)
-          Serial.printf("ws[%s][%u] %s-message start\n", server->url(), client->id(), (info->message_opcode == WS_TEXT)?"text":"binary");
-          
-        Serial.printf("ws[%s][%u] frame[%u] start[%llu]\n", server->url(), client->id(), info->num, info->len);
+          os_printf("ws[%s][%u] %s-message start\n", server->url(), client->id(), (info->message_opcode == WS_TEXT)?"text":"binary");
+        os_printf("ws[%s][%u] frame[%u] start[%llu]\n", server->url(), client->id(), info->num, info->len);
       }
 
-      Serial.printf("ws[%s][%u] frame[%u] %s[%llu - %llu]: ", server->url(), client->id(), info->num, (info->message_opcode == WS_TEXT)?"text":"binary", info->index, info->index + len);
-      
-      if(info->message_opcode == WS_TEXT)
-      {
+      os_printf("ws[%s][%u] frame[%u] %s[%llu - %llu]: ", server->url(), client->id(), info->num, (info->message_opcode == WS_TEXT)?"text":"binary", info->index, info->index + len);
+      if(info->message_opcode == WS_TEXT){
         data[len] = 0;
-        Serial.printf("%s\n", (char*)data);
-      } 
-      else 
-      {
+        os_printf("%s\n", (char*)data);
+      } else {
         for(size_t i=0; i < len; i++){
-          Serial.printf("%02x ", data[i]);
+          os_printf("%02x ", data[i]);
         }
-        Serial.printf("\n");
+        os_printf("\n");
       }
 
-      if((info->index + len) == info->len)
-      {
-        Serial.printf("ws[%s][%u] frame[%u] end[%llu]\n", server->url(), client->id(), info->num, info->len);
-        
-        if(info->final)
-        {
-          Serial.printf("ws[%s][%u] %s-message end\n", server->url(), client->id(), (info->message_opcode == WS_TEXT)?"text":"binary");
-          
+      if((info->index + len) == info->len){
+        os_printf("ws[%s][%u] frame[%u] end[%llu]\n", server->url(), client->id(), info->num, info->len);
+        if(info->final){
+          os_printf("ws[%s][%u] %s-message end\n", server->url(), client->id(), (info->message_opcode == WS_TEXT)?"text":"binary");
           if(info->message_opcode == WS_TEXT)
             client->text("I got your text message");
           else
@@ -880,8 +1046,10 @@ void onEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventTyp
 ```
 
 ### Methods for sending data to a socket client
-
 ```cpp
+
+
+
 //Server methods
 AsyncWebSocket ws("/ws");
 //printf to a client
@@ -936,8 +1104,7 @@ client->binary(flash_binary, 4);
 ```
 
 ### Direct access to web socket message buffer
-
-When sending a web socket message using the above methods a buffer is created.  Under certain circumstances you might want to manipulate or populate this buffer directly from your application, for example to prevent unnecessary duplications of the data.  This example below shows how to create a buffer and print data to it from an ArduinoJson object then send it.
+When sending a web socket message using the above methods a buffer is created.  Under certain circumstances you might want to manipulate or populate this buffer directly from your application, for example to prevent unnecessary duplications of the data.  This example below shows how to create a buffer and print data to it from an ArduinoJson object then send it.   
 
 ```cpp
 void sendDataWs(AsyncWebSocketClient * client)
@@ -951,17 +1118,11 @@ void sendDataWs(AsyncWebSocketClient * client)
     root["e"] = "abcdefg";
     size_t len = root.measureLength();
     AsyncWebSocketMessageBuffer * buffer = ws.makeBuffer(len); //  creates a buffer (len + 1) for you.
-    
-    if (buffer) 
-    {
+    if (buffer) {
         root.printTo((char *)buffer->get(), len + 1);
-        
-        if (client) 
-        {
+        if (client) {
             client->text(buffer);
-        } 
-        else 
-        {
+        } else {
             ws.textAll(buffer);
         }
     }
@@ -969,7 +1130,6 @@ void sendDataWs(AsyncWebSocketClient * client)
 ```
 
 ### Limiting the number of web socket clients
-
 Browsers sometimes do not correctly close the websocket connection, even when the close() function is called in javascript.  This will eventually exhaust the web server's resources and will cause the server to crash.  Periodically calling the cleanClients() function from the main loop() function limits the number of clients by closing the oldest client when the maximum number of clients has been exceeded.  This can called be every cycle, however, if you wish to use less power, then calling as infrequently as once per second is sufficient.
 
 ```cpp
@@ -978,42 +1138,33 @@ void loop(){
 }
 ```
 
----
 
 ## Async Event Source Plugin
-
 The server includes EventSource (Server-Sent Events) plugin which can be used to send short text events to the browser.
 Difference between EventSource and WebSockets is that EventSource is single direction, text-only protocol.
 
 ### Setup Event Source on the server
-
 ```cpp
 AsyncWebServer server(80);
 AsyncEventSource events("/events");
 
-void setup()
-{
+void setup(){
   // setup ......
-  events.onConnect([](AsyncEventSourceClient *client)
-  {
-    if(client->lastId())
-    {
+  events.onConnect([](AsyncEventSourceClient *client){
+    if(client->lastId()){
       Serial.printf("Client reconnected! Last message ID that it gat is: %u\n", client->lastId());
     }
-    
     //send event with message "hello!", id current millis
     // and set reconnect delay to 1 second
     client->send("hello!",NULL,millis(),1000);
   });
-  
   //HTTP Basic authentication
   events.setAuthentication("user", "pass");
   server.addHandler(&events);
   // setup ......
 }
 
-void loop()
-{
+void loop(){
   if(eventTriggered){ // your logic here
     //send event "myevent"
     events.send("my event content","myevent",millis());
@@ -1022,49 +1173,71 @@ void loop()
 ```
 
 ### Setup Event Source in the browser
-
 ```javascript
-if (!!window.EventSource) 
-{
+if (!!window.EventSource) {
   var source = new EventSource('/events');
 
-  source.addEventListener('open', function(e) 
-  {
+  source.addEventListener('open', function(e) {
     console.log("Events Connected");
   }, false);
 
-  source.addEventListener('error', function(e) 
-  {
-    if (e.target.readyState != EventSource.OPEN) 
-    {
+  source.addEventListener('error', function(e) {
+    if (e.target.readyState != EventSource.OPEN) {
       console.log("Events Disconnected");
     }
   }, false);
 
-  source.addEventListener('message', function(e) 
-  {
+  source.addEventListener('message', function(e) {
     console.log("message", e.data);
   }, false);
 
-  source.addEventListener('myevent', function(e) 
-  {
+  source.addEventListener('myevent', function(e) {
     console.log("myevent", e.data);
   }, false);
 }
 ```
----
+
+## Scanning for available WiFi Networks
+```cpp
+//First request will return 0 results unless you start scan from somewhere else (loop/setup)
+//Do not request more often than 3-5 seconds
+server.on("/scan", HTTP_GET, [](AsyncWebServerRequest *request){
+  String json = "[";
+  int n = WiFi.scanComplete();
+  if(n == -2){
+    WiFi.scanNetworks(true);
+  } else if(n){
+    for (int i = 0; i < n; ++i){
+      if(i) json += ",";
+      json += "{";
+      json += "\"rssi\":"+String(WiFi.RSSI(i));
+      json += ",\"ssid\":\""+WiFi.SSID(i)+"\"";
+      json += ",\"bssid\":\""+WiFi.BSSIDstr(i)+"\"";
+      json += ",\"channel\":"+String(WiFi.channel(i));
+      json += ",\"secure\":"+String(WiFi.encryptionType(i));
+      json += ",\"hidden\":"+String(WiFi.isHidden(i)?"true":"false");
+      json += "}";
+    }
+    WiFi.scanDelete();
+    if(WiFi.scanComplete() == -2){
+      WiFi.scanNetworks(true);
+    }
+  }
+  json += "]";
+  request->send(200, "application/json", json);
+  json = String();
+});
+```
 
 ## Remove handlers and rewrites
 
 Server goes through handlers in same order as they were added. You can't simple add handler with same path to override them.
 To remove handler:
-
 ```arduino
 // save callback for particular URL path
 auto handler = server.on("/some/path", [](AsyncWebServerRequest *request){
   //do something useful
 });
-
 // when you don't need handler anymore remove it
 server.removeHandler(&handler);
 
@@ -1081,136 +1254,146 @@ server.onNotFound(NULL);
 // remove all rewrites, handlers and onNotFound/onFileUpload/onRequestBody callbacks
 server.reset();
 ```
----
 
 ## Setting up the server
-
 ```cpp
-#include <LwIP.h>
-#include <STM32Ethernet.h>
-#include <AsyncWebServer_STM32.h>
+#include "ESPAsyncTCP.h"
+#include "ESPAsyncWebServer.h"
 
-// Enter a MAC address and IP address for your controller below.
-#define NUMBER_OF_MAC      20
+AsyncWebServer server(80);
+AsyncWebSocket ws("/ws"); // access at ws://[esp ip]/ws
+AsyncEventSource events("/events"); // event source (Server-Sent events)
 
-byte mac[][NUMBER_OF_MAC] =
-{
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x01 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x02 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x03 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x04 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x05 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x06 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x07 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x08 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x09 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x0A },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x0B },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x0C },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x0D },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x0E },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x0F },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x10 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x11 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x12 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x13 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x14 },
-};
-// Select the IP address according to your local network
-IPAddress ip(192, 168, 2, 232);
+const char* ssid = "your-ssid";
+const char* password = "your-pass";
+const char* http_username = "admin";
+const char* http_password = "admin";
 
-AsyncWebServer    server(80);
+//flag to use from web update to reboot the ESP
+bool shouldReboot = false;
 
-const int led = 13;
-
-void handleRoot(AsyncWebServerRequest *request)
-{
-  digitalWrite(led, 1);
-  request->send(200, "text/plain", String("Hello from AsyncWebServer_STM32 on ") + BOARD_NAME );
-  digitalWrite(led, 0);
+void onRequest(AsyncWebServerRequest *request){
+  //Handle Unknown Request
+  request->send(404);
 }
 
-void handleNotFound(AsyncWebServerRequest *request)
-{
-  digitalWrite(led, 1);
-  String message = "File Not Found\n\n";
+void onBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
+  //Handle body
+}
 
-  message += "URI: ";
-  //message += server.uri();
-  message += request->url();
-  message += "\nMethod: ";
-  message += (request->method() == HTTP_GET) ? "GET" : "POST";
-  message += "\nArguments: ";
-  message += request->args();
-  message += "\n";
+void onUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final){
+  //Handle upload
+}
 
-  for (uint8_t i = 0; i < request->args(); i++)
-  {
-    message += " " + request->argName(i) + ": " + request->arg(i) + "\n";
+void onEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len){
+  //Handle WebSocket event
+}
+
+void setup(){
+  Serial.begin(115200);
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  if (WiFi.waitForConnectResult() != WL_CONNECTED) {
+    Serial.printf("WiFi Failed!\n");
+    return;
   }
 
-  request->send(404, "text/plain", message);
-  digitalWrite(led, 0);
-}
+  // attach AsyncWebSocket
+  ws.onEvent(onEvent);
+  server.addHandler(&ws);
 
-void setup(void)
-{
-  pinMode(led, OUTPUT);
-  digitalWrite(led, 0);
+  // attach AsyncEventSource
+  server.addHandler(&events);
 
-  Serial.begin(115200);
-  Serial.println("\nStart Async_HelloServer on " + String(BOARD_NAME));
-
-  // start the ethernet connection and the server
-  // Use random mac
-  uint16_t index = millis() % NUMBER_OF_MAC;
-
-  // Use Static IP
-  //Ethernet.begin(mac[index], ip);
-  // Use DHCP dynamic IP and random mac
-  Ethernet.begin(mac[index]);
-
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest * request)
-  {
-    handleRoot(request);
+  // respond to GET requests on URL /heap
+  server.on("/heap", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(200, "text/plain", String(ESP.getFreeHeap()));
   });
 
-  server.on("/inline", [](AsyncWebServerRequest * request)
-  {
-    request->send(200, "text/plain", "This works as well");
+  // upload a file to /upload
+  server.on("/upload", HTTP_POST, [](AsyncWebServerRequest *request){
+    request->send(200);
+  }, onUpload);
+
+  // send a file when /index is requested
+  server.on("/index", HTTP_ANY, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/index.htm");
   });
 
-  server.onNotFound(handleNotFound);
+  // HTTP basic authentication
+  server.on("/login", HTTP_GET, [](AsyncWebServerRequest *request){
+    if(!request->authenticate(http_username, http_password))
+        return request->requestAuthentication();
+    request->send(200, "text/plain", "Login Success!");
+  });
+
+  // Simple Firmware Update Form
+  server.on("/update", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(200, "text/html", "<form method='POST' action='/update' enctype='multipart/form-data'><input type='file' name='update'><input type='submit' value='Update'></form>");
+  });
+  server.on("/update", HTTP_POST, [](AsyncWebServerRequest *request){
+    shouldReboot = !Update.hasError();
+    AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", shouldReboot?"OK":"FAIL");
+    response->addHeader("Connection", "close");
+    request->send(response);
+  },[](AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final){
+    if(!index){
+      Serial.printf("Update Start: %s\n", filename.c_str());
+      Update.runAsync(true);
+      if(!Update.begin((ESP.getFreeSketchSpace() - 0x1000) & 0xFFFFF000)){
+        Update.printError(Serial);
+      }
+    }
+    if(!Update.hasError()){
+      if(Update.write(data, len) != len){
+        Update.printError(Serial);
+      }
+    }
+    if(final){
+      if(Update.end(true)){
+        Serial.printf("Update Success: %uB\n", index+len);
+      } else {
+        Update.printError(Serial);
+      }
+    }
+  });
+
+  // attach filesystem root at URL /fs
+  server.serveStatic("/fs", SPIFFS, "/");
+
+  // Catch-All Handlers
+  // Any request that can not find a Handler that canHandle it
+  // ends in the callbacks below.
+  server.onNotFound(onRequest);
+  server.onFileUpload(onUpload);
+  server.onRequestBody(onBody);
 
   server.begin();
-
-  Serial.print(F("HTTP EthernetWebServer is @ IP : "));
-  Serial.println(Ethernet.localIP());
 }
 
-void loop(void)
-{
+void loop(){
+  if(shouldReboot){
+    Serial.println("Rebooting...");
+    delay(100);
+    ESP.restart();
+  }
+  static char temp[128];
+  sprintf(temp, "Seconds since boot: %u", millis()/1000);
+  events.send(temp, "time"); //send event "time"
 }
 ```
----
 
 ### Setup global and class functions as request handlers
 
 ```cpp
 #include <Arduino.h>
-
-#include <LwIP.h>
-#include <STM32Ethernet.h>
-#include <AsyncWebServer_STM32.h>
-
+#include <ESPAsyncWebserver.h>
+#include <Hash.h>
 #include <functional>
-
-...
 
 void handleRequest(AsyncWebServerRequest *request){}
 
-class WebClass 
-{
+class WebClass {
 public :
   AsyncWebServer classWebServer = AsyncWebServer(81);
 
@@ -1218,8 +1401,7 @@ public :
 
   void classRequest (AsyncWebServerRequest *request){}
 
-  void begin()
-  {
+  void begin(){
     // attach global request handler
     classWebServer.on("/example", HTTP_ANY, handleRequest);
 
@@ -1231,8 +1413,7 @@ public :
 AsyncWebServer globalWebServer(80);
 WebClass webClassInstance;
 
-void setup() 
-{
+void setup() {
   // attach global request handler
   globalWebServer.on("/example", HTTP_ANY, handleRequest);
 
@@ -1240,8 +1421,7 @@ void setup()
   globalWebServer.on("/example", HTTP_ANY, std::bind(&WebClass::classRequest, webClassInstance, std::placeholders::_1));
 }
 
-void loop() 
-{
+void loop() {
 
 }
 ```
@@ -1258,6 +1438,26 @@ void loop()
     ws.enable(true);
 ```
 
+Example of OTA code
+
+```cpp
+  // OTA callbacks
+  ArduinoOTA.onStart([]() {
+    // Clean SPIFFS
+    SPIFFS.end();
+
+    // Disable client connections    
+    ws.enable(false);
+
+    // Advertise connected clients what's going on
+    ws.textAll("OTA Update Started");
+
+    // Close them
+    ws.closeAll();
+
+  });
+
+```
 
 ### Adding Default Headers
 
@@ -1277,8 +1477,7 @@ webServer.begin();
 This is one option:
 
 ```cpp
-webServer.onNotFound([](AsyncWebServerRequest *request) 
-{
+webServer.onNotFound([](AsyncWebServerRequest *request) {
   if (request->method() == HTTP_OPTIONS) {
     request->send(200);
   } else {
@@ -1293,8 +1492,7 @@ With path variable you can create a custom regex rule for a specific parameter i
 For example we want a `sensorId` parameter in a route rule to match only a integer.
 
 ```cpp
-  server.on("^\\/sensor\\/([0-9]+)$", HTTP_GET, [] (AsyncWebServerRequest *request) 
-  {
+  server.on("^\\/sensor\\/([0-9]+)$", HTTP_GET, [] (AsyncWebServerRequest *request) {
       String sensorId = request->pathArg(0);
   });
 ```
@@ -1320,369 +1518,4 @@ For platformio modify `platformio.ini`:
 build_flags = 
   -DASYNCWEBSERVER_REGEX
 ```
-
 *NOTE*: By enabling `ASYNCWEBSERVER_REGEX`, `<regex>` will be included. This will add an 100k to your binary.
-
----
----
-
-### Examples
-
- 1. [Async_AdvancedWebServer](examples/Async_AdvancedWebServer)
- 2. [AsyncFSBrowser_STM32](examples/AsyncFSBrowser_STM32)
- 3. [Async_HelloServer](examples/Async_HelloServer) 
- 4. [Async_HelloServer2](examples/Async_HelloServer2)
- 5. [Async_PostServer](examples/Async_PostServer)
- 6. [Async_RegexPatterns_STM32](examples/Async_RegexPatterns_STM32)
- 7. [Async_SimpleWebServer_STM32](examples/Async_SimpleWebServer_STM32)
- 8. [WebClient](examples/WebClient)
- 9. [WebClientRepeating](examples/WebClientRepeating)
-
----
-
-### Example [Async_AdvancedWebServer](examples/Async_AdvancedWebServer)
-
-```cpp
-/*
-   Currently support
-   1) STM32 boards with built-in Ethernet (to use USE_BUILTIN_ETHERNET = true) such as :
-      - Nucleo-144 (F429ZI, F767ZI)
-      - Discovery (STM32F746G-DISCOVERY)
-      - STM32 boards (STM32F/L/H/G/WB/MP1) with 32K+ Flash, with Built-in Ethernet,
-      - See How To Use Built-in Ethernet at (https://github.com/khoih-prog/EthernetWebServer_STM32/issues/1)
-*/
-
-#if !( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
-       defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
-       defined(STM32WB) || defined(STM32MP1) )
-  #error This code is designed to run on STM32F/L/H/G/WB/MP1 platform! Please check your Tools->Board setting.
-#endif
-
-#define _ASYNCWEBSERVER_STM32_LOGLEVEL_       3
-
-#if defined(STM32F0)
-  #warning STM32F0 board selected
-  #define BOARD_TYPE  "STM32F0"
-#elif defined(STM32F1)
-  #warning STM32F1 board selected
-  #define BOARD_TYPE  "STM32F1"
-#elif defined(STM32F2)
-  #warning STM32F2 board selected
-  #define BOARD_TYPE  "STM32F2"
-#elif defined(STM32F3)
-  #warning STM32F3 board selected
-  #define BOARD_TYPE  "STM32F3"
-#elif defined(STM32F4)
-  #warning STM32F4 board selected
-  #define BOARD_TYPE  "STM32F4"
-#elif defined(STM32F7)
-  #warning STM32F7 board selected
-  #define BOARD_TYPE  "STM32F7"
-#elif defined(STM32L0)
-  #warning STM32L0 board selected
-  #define BOARD_TYPE  "STM32L0"
-#elif defined(STM32L1)
-  #warning STM32L1 board selected
-  #define BOARD_TYPE  "STM32L1"
-#elif defined(STM32L4)
-  #warning STM32L4 board selected
-  #define BOARD_TYPE  "STM32L4"
-#elif defined(STM32H7)
-  #warning STM32H7 board selected
-  #define BOARD_TYPE  "STM32H7"
-#elif defined(STM32G0)
-  #warning STM32G0 board selected
-  #define BOARD_TYPE  "STM32G0"
-#elif defined(STM32G4)
-  #warning STM32G4 board selected
-  #define BOARD_TYPE  "STM32G4"
-#elif defined(STM32WB)
-  #warning STM32WB board selected
-  #define BOARD_TYPE  "STM32WB"
-#elif defined(STM32MP1)
-  #warning STM32MP1 board selected
-  #define BOARD_TYPE  "STM32MP1"
-#else
-  #warning STM32 unknown board selected
-  #define BOARD_TYPE  "STM32 Unknown"
-#endif
-
-#ifndef BOARD_NAME
-  #define BOARD_NAME    BOARD_TYPE
-#endif
-
-#include <LwIP.h>
-#include <STM32Ethernet.h>
-#include <AsyncWebServer_STM32.h>
-
-// Enter a MAC address and IP address for your controller below.
-#define NUMBER_OF_MAC      20
-
-byte mac[][NUMBER_OF_MAC] =
-{
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x01 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x02 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x03 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x04 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x05 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x06 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x07 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x08 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x09 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x0A },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x0B },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x0C },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x0D },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x0E },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x0F },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x10 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x11 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x12 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x13 },
-  { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x14 },
-};
-// Select the IP address according to your local network
-IPAddress ip(192, 168, 2, 232);
-
-AsyncWebServer    server(80);
-
-int reqCount = 0;                // number of requests received
-
-const int led = 13;
-
-void handleRoot(AsyncWebServerRequest *request)
-{
-  digitalWrite(led, 1);
-
-#define BUFFER_SIZE     400
-
-  char temp[BUFFER_SIZE];
-  int sec = millis() / 1000;
-  int min = sec / 60;
-  int hr = min / 60;
-  int day = hr / 24;
-
-  snprintf(temp, BUFFER_SIZE - 1,
-           "<html>\
-<head>\
-<meta http-equiv='refresh' content='5'/>\
-<title>AsyncWebServer-%s</title>\
-<style>\
-body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }\
-</style>\
-</head>\
-<body>\
-<h2>AsyncWebServer_STM32!</h2>\
-<h3>running on %s</h3>\
-<p>Uptime: %d d %02d:%02d:%02d</p>\
-<img src=\"/test.svg\" />\
-</body>\
-</html>", BOARD_NAME, BOARD_NAME, day, hr % 24, min % 60, sec % 60);
-
-  request->send(200, "text/html", temp);
-
-  digitalWrite(led, 0);
-}
-
-void handleNotFound(AsyncWebServerRequest *request)
-{
-  digitalWrite(led, 1);
-  String message = "File Not Found\n\n";
-
-  message += "URI: ";
-  message += request->url();
-  message += "\nMethod: ";
-  message += (request->method() == HTTP_GET) ? "GET" : "POST";
-  message += "\nArguments: ";
-  message += request->args();
-  message += "\n";
-
-  for (uint8_t i = 0; i < request->args(); i++)
-  {
-    message += " " + request->argName(i) + ": " + request->arg(i) + "\n";
-  }
-
-  request->send(404, "text/plain", message);
-  digitalWrite(led, 0);
-}
-
-void drawGraph(AsyncWebServerRequest *request)
-{
-  String out;
-
-  out.reserve(3000);
-  char temp[70];
-  
-  out += "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"310\" height=\"150\">\n";
-  out += "<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"2\" stroke=\"rgb(0, 0, 0)\" />\n";
-  out += "<g stroke=\"blue\">\n";
-  int y = rand() % 130;
-
-  for (int x = 10; x < 300; x += 10)
-  {
-    int y2 = rand() % 130;
-    sprintf(temp, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke-width=\"2\" />\n", x, 140 - y, x + 10, 140 - y2);
-    out += temp;
-    y = y2;
-  }
-  out += "</g>\n</svg>\n";
-
-  request->send(200, "image/svg+xml", out);
-}
-
-
-void setup(void)
-{
-  pinMode(led, OUTPUT);
-  digitalWrite(led, 0);
-
-  Serial.begin(115200);
-  Serial.println("\nStart Async_AdvancedWebServer_STM32 on " + String(BOARD_NAME));
-
-  // start the ethernet connection and the server
-  // Use random mac
-  uint16_t index = millis() % NUMBER_OF_MAC;
-
-  // Use Static IP
-  //Ethernet.begin(mac[index], ip);
-  // Use DHCP dynamic IP and random mac
-  Ethernet.begin(mac[index]);
-
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest * request)
-  {
-    handleRoot(request);
-  });
-
-  server.on("/test.svg", HTTP_GET, [](AsyncWebServerRequest * request)
-  {
-    drawGraph(request);
-  });
-
-  server.on("/inline", [](AsyncWebServerRequest * request)
-  {
-    request->send(200, "text/plain", "This works as well");
-  });
-
-  server.onNotFound(handleNotFound);
-
-  server.begin();
-
-  Serial.print(F("HTTP EthernetWebServer is @ IP : "));
-  Serial.println(Ethernet.localIP());
-}
-
-void loop(void)
-{
-}
-```
-
-You can access the Async Advanced WebServer @ the server IP
-
-<p align="center">
-    <img src="https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/pics/Async_AdvancedWebServer.png">
-</p>
-
----
-
----
-
-### Troubleshooting
-
-If you get compilation errors, more often than not, you may need to install a newer version of Arduino IDE, the Arduino `STM32` core or depending libraries.
-
-Sometimes, the library will only work if you update the `STM32` core to the latest version because I am always using the latest cores /libraries.
-
-If you connect to the created configuration Access Point but the ConfigPortal does not show up, just open a browser and type in the IP of the web portal, by default `192.168.4.1`.
-
----
-
-### Issues ###
-
-Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/AsyncWebServer_STM32/issues)
-
----
----
-
-## TO DO
-
- 1. Fix bug. Add enhancement
- 2. Add Authentication support (MD5, SHA1).
- 3. Add support to more Ethernet / WiFi shield
- 4. Add AsyncUDP_STM32 to support Async UDP on STM32
- 5. Add support to more STM32 boards.
-
-
-## DONE
-
- 1. Initial port to STM32 using builtin LAN8742A Etnernet. Tested on **STM32F7 Nucleo-144 F767ZI**.
- 2. Add more examples.
- 3. Add debugging features.
-
----
----
-
-### Initial Releases 1.2.3
-
-1. Initial coding to port [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer) to STM32 boards using builtin LAN8742A Ethernet. More supports will be added gradually later, such as AsyncUDP, other Ethernet / WiFi shields.
-2. Add more examples.
-3. Add debugging features.
-4. Bump up to v1.2.3 to sync with [ESPAsyncWebServer v1.2.3](https://github.com/me-no-dev/ESPAsyncWebServer).
-
-#### Currently Supported Boards
-
-1. Nucleo-144 (F429ZI, F746ZG, F756ZG, F767ZI)
-2. Discovery STM32F746G-DISCOVERY
-3. Any STM32 boards with enough flash/memory and already configured to run LAN8742A Ethernet.
-
----
----
-
-This library is based on, modified from:
-
-1. [Hristo Gochkov's ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer)
-
-to apply the better and faster **asynchronous** feature of the **great** [ESPAsyncWebServer Library](https://github.com/me-no-dev/ESPAsyncWebServer) into STM32 boards using builtin LAN8742A Ethernet.
-
----
-
-### Contributions and Thanks
-
-1. Based on and modified from [Hristo Gochkov's ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer). Many thanks to [Hristo Gochkov](https://github.com/me-no-dev) for great [ESPAsyncWebServer Library](https://github.com/me-no-dev/ESPAsyncWebServer)
-2. Relied on [Frederic Pillon's STM32duino LwIP Library](https://github.com/stm32duino/LwIP).
-3. Relied on [PhilBowles' STM32 AsyncTCP Library](https://github.com/philbowles/STM32AsyncTCP).
-4. Thanks to good work of [Miguel Wisintainer](https://github.com/tcpipchip) for working with, developing, debugging and testing.
-
-
-<table>
-  <tr>
-    <td align="center"><a href="https://github.com/me-no-dev"><img src="https://github.com/me-no-dev.png" width="100px;" alt="me-no-dev"/><br /><sub><b>⭐️⭐️ Hristo Gochkov</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/fpistm"><img src="https://github.com/fpistm" width="100px;" alt="fpistm"/><br /><sub><b>⭐️ Frederic Pillon</b></sub></a><br /></td>
-     <td align="center"><a href="https://github.com/philbowles"><img src="https://github.com/philbowles" width="100px;" alt="philbowles"/><br /><sub><b>⭐️ Phil Bowles</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b>tcpipchip</b></sub></a><br /></td>
-  </tr> 
-</table>
-
----
-
-### Contributing
-
-If you want to contribute to this project:
-- Report bugs and errors
-- Ask for enhancements
-- Create issues and pull requests
-- Tell other people about this library
-
----
-
-### License and credits ###
-
-- The library is licensed under [MIT](https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/LICENSE)
-
----
-
-## Copyright
-
-Copyright 2020- Khoi Hoang
-
-
-
