@@ -1,0 +1,504 @@
+###############################################
+# Syntax Coloring Map For AsyncWebServer_STM32
+###############################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+AsyncWebServer	KEYWORD1
+AsyncWebServerRequest	KEYWORD1
+AsyncWebServerResponse	KEYWORD1
+AsyncWebHeader	KEYWORD1
+AsyncWebParameter	KEYWORD1
+AsyncWebRewrite	KEYWORD1
+AsyncWebHandler	KEYWORD1
+AsyncStaticWebHandler	KEYWORD1
+AsyncCallbackWebHandler	KEYWORD1
+AsyncResponseStream	KEYWORD1
+
+AsyncWebSocketMessageBuffer
+AsyncWebSocketMessage
+AsyncWebSocketBasicMessage
+AsyncWebSocketMultiMessage
+AsyncWebSocket	KEYWORD1
+AsyncWebSocketResponse	KEYWORD1
+AsyncWebSocketClient	KEYWORD1
+AsyncWebSocketControl	KEYWORD1
+
+AsyncEventSourceMessage	KEYWORD1
+AsyncEventSourceClient	KEYWORD1
+AsyncEventSource	KEYWORD1
+AsyncEventSourceResponse	KEYWORD1
+ChunkPrint	KEYWORD1
+
+AsyncJsonResponse	KEYWORD1
+PrettyAsyncJsonResponse	KEYWORD1
+AsyncCallbackJsonWebHandler	KEYWORD1
+
+AsyncBasicResponse	KEYWORD1
+AsyncAbstractResponse	KEYWORD1
+AsyncStreamResponse	KEYWORD1
+AsyncCallbackResponse	KEYWORD1
+AsyncChunkedResponse	KEYWORD1
+AsyncResponseStream	KEYWORD1
+
+AsyncWebLock	KEYWORD1
+AsyncWebLockGuard	KEYWORD1
+
+LinkedListNode	KEYWORD1
+LinkedList	KEYWORD1
+StringArray	KEYWORD1
+
+WebRequestMethod  KEYWORD1
+WebRequestMethodComposite  KEYWORD1
+ArDisconnectHandler  KEYWORD1
+
+RequestedConnectionType  KEYWORD1
+AwsResponseFiller  KEYWORD1
+AwsTemplateProcessor  KEYWORD1
+ArRequestFilterFunction  KEYWORD1
+
+WebResponseState  KEYWORD1
+ArRequestHandlerFunction  KEYWORD1
+ArUploadHandlerFunction  KEYWORD1
+ArBodyHandlerFunction  KEYWORD1
+
+ArJsonRequestHandlerFunction	KEYWORD1
+
+AwsFrameInfo	KEYWORD1
+AwsClientStatus	KEYWORD1
+AwsFrameType	KEYWORD1
+AwsMessageStatus	KEYWORD1
+AwsEventType	KEYWORD1
+AwsEventHandler	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+###################
+# AsyncWebParameter
+###################
+
+name KEYWORD2
+value KEYWORD2
+size  KEYWORD2
+isPost  KEYWORD2
+isFile  KEYWORD2
+
+###################
+# AsyncWebHeader
+###################
+
+name KEYWORD2
+value KEYWORD2
+toString  KEYWORD2
+
+########################
+# AsyncWebServerRequest
+########################
+
+client KEYWORD2
+version KEYWORD2
+method  KEYWORD2
+url KEYWORD2
+host  KEYWORD2
+contentType  KEYWORD2
+contentLength  KEYWORD2
+multipart  KEYWORD2
+methodToString  KEYWORD2
+requestedConnType  KEYWORD2
+isExpectedRequestedConnType  KEYWORD2
+onDisconnect  KEYWORD2
+authenticate  KEYWORD2
+requestAuthentication  KEYWORD2
+setHandler  KEYWORD2
+addInterestingHeader  KEYWORD2
+redirect  KEYWORD2
+send  KEYWORD2
+sendChunked  KEYWORD2
+beginResponse  KEYWORD2
+beginChunkedResponse  KEYWORD2
+beginResponseStream  KEYWORD2
+headers  KEYWORD2
+hasHeader  KEYWORD2
+getHeader  KEYWORD2
+params  KEYWORD2
+hasParam  KEYWORD2
+getParam  KEYWORD2
+arg  KEYWORD2
+argName  KEYWORD2
+hasArg  KEYWORD2
+header  KEYWORD2
+headerName  KEYWORD2
+urlDecode  KEYWORD2
+
+###################
+# AsyncWebRewrite
+###################
+
+filter KEYWORD2
+from KEYWORD2
+toUrl  KEYWORD2
+params  KEYWORD2
+match KEYWORD2
+
+########################
+# AsyncWebHandler
+########################
+
+setFilter KEYWORD2
+setAuthentication KEYWORD2
+filter  KEYWORD2
+canHandle KEYWORD2
+handleRequest  KEYWORD2
+handleUpload  KEYWORD2
+handleBody  KEYWORD2
+isRequestHandlerTrivial  KEYWORD2
+
+#########################
+# AsyncWebServerResponse
+#########################
+
+setCode  KEYWORD2
+setContentLength  KEYWORD2
+setContentType  KEYWORD2
+addHeader  KEYWORD2
+_assembleHead  KEYWORD2
+_started  KEYWORD2
+_finished  KEYWORD2
+_failed	KEYWORD2
+_sourceValid	KEYWORD2
+_respond	KEYWORD2
+_ack	KEYWORD2
+
+#########################
+# AsyncWebServer
+#########################
+
+begin  KEYWORD2
+end  KEYWORD2
+addRewrite  KEYWORD2
+removeRewrite  KEYWORD2
+addHandler  KEYWORD2
+removeHandler  KEYWORD2
+on  KEYWORD2
+onNotFound	KEYWORD2
+onRequestBody	KEYWORD2
+reset	KEYWORD2
+_handleDisconnect	KEYWORD2
+_attachHandler	KEYWORD2
+_rewriteRequest	KEYWORD2
+
+#########################
+# DefaultHeaders
+#########################
+
+addHeader  KEYWORD2
+end  KEYWORD2
+begin  KEYWORD2
+Instance  KEYWORD2
+
+#########################
+# AsyncEventSourceMessage
+#########################
+
+ack  KEYWORD2
+send  KEYWORD2
+finished  KEYWORD2
+sent	KEYWORD2
+
+#########################
+# AsyncEventSourceClient
+#########################
+
+client  KEYWORD2
+close  KEYWORD2
+write  KEYWORD2
+send	KEYWORD2
+connected	KEYWORD2
+lastId	KEYWORD2
+packetsWaiting	KEYWORD2
+_onAck	KEYWORD2
+_onPoll	KEYWORD2
+_onTimeout	KEYWORD2
+_onDisconnect	KEYWORD2
+
+###########################
+# AsyncEventSource
+###########################
+
+url  KEYWORD2
+close  KEYWORD2
+onConnect  KEYWORD2
+send	KEYWORD2
+count	KEYWORD2
+avgPacketsWaiting	KEYWORD2
+_addClient	KEYWORD2
+_handleDisconnect	KEYWORD2
+canHandle	KEYWORD2
+handleRequest	KEYWORD2
+
+###########################
+# AsyncEventSourceResponse
+###########################
+
+_respond  KEYWORD2
+_ack  KEYWORD2
+_sourceValid  KEYWORD2
+
+###########################
+# ChunkPrint
+###########################
+
+write  KEYWORD2
+
+###########################
+# AsyncJsonResponse
+###########################
+
+getRoot  KEYWORD2
+_sourceValid  KEYWORD2
+setLength	KEYWORD2
+getSize	KEYWORD2
+_fillBuffer	KEYWORD2
+
+###########################
+# PrettyAsyncJsonResponse
+###########################
+
+setLength	KEYWORD2
+_fillBuffer	KEYWORD2
+
+##############################
+# AsyncCallbackJsonWebHandler
+##############################
+
+setMethod	KEYWORD2
+setMaxContentLength	KEYWORD2
+
+onRequest  KEYWORD2
+canHandle  KEYWORD2
+handleRequest	KEYWORD2
+handleUpload	KEYWORD2
+handleBody	KEYWORD2
+isRequestHandlerTrivial	KEYWORD2
+
+###########################
+# AsyncStaticWebHandler
+###########################
+
+canHandle	KEYWORD2
+handleRequest	KEYWORD2
+setIsDir	KEYWORD2
+setCacheControl	KEYWORD2
+setLastModified  KEYWORD2
+setTemplateProcessor  KEYWORD2
+
+##############################
+# AsyncCallbackWebHandler
+##############################
+
+setUri	KEYWORD2
+setMethod	KEYWORD2
+onRequest  KEYWORD2
+onUpload  KEYWORD2
+onBody	KEYWORD2
+canHandle	KEYWORD2
+handleRequest	KEYWORD2
+handleBody	KEYWORD2
+isRequestHandlerTrivial	KEYWORD2
+
+##############################
+# AsyncBasicResponse
+##############################
+
+_respond	KEYWORD2
+_ack	KEYWORD2
+_sourceValid  KEYWORD2
+
+##############################
+# AsyncAbstractResponse
+##############################
+
+_respond	KEYWORD2
+_ack	KEYWORD2
+_sourceValid  KEYWORD2
+_fillBuffer  KEYWORD2
+
+##############################
+# AsyncStreamResponse
+##############################
+
+_sourceValid  KEYWORD2
+_fillBuffer  KEYWORD2
+
+##############################
+# AsyncCallbackResponse
+##############################
+
+_sourceValid  KEYWORD2
+_fillBuffer  KEYWORD2
+
+##############################
+# AsyncChunkedResponse
+##############################
+
+_sourceValid  KEYWORD2
+_fillBuffer  KEYWORD2
+
+##############################
+# AsyncResponseStream
+##############################
+
+_sourceValid  KEYWORD2
+_fillBuffer  KEYWORD2
+write	KEYWORD2
+
+##############################
+# AsyncWebSocketMessage
+##############################
+
+ack  KEYWORD2
+send  KEYWORD2
+finished	KEYWORD2
+betweenFrames	KEYWORD2
+
+##############################
+# AsyncWebSocketBasicMessage
+##############################
+
+ack  KEYWORD2
+send  KEYWORD2
+betweenFrames	KEYWORD2
+
+##############################
+# AsyncWebSocketMultiMessage
+##############################
+
+ack  KEYWORD2
+send  KEYWORD2
+betweenFrames	KEYWORD2
+
+##############################
+# AsyncWebSocketClient
+##############################
+
+id	KEYWORD2
+status	KEYWORD2
+client	KEYWORD2
+server	KEYWORD2
+pinfo	KEYWORD2
+remoteIP	KEYWORD2
+remotePort	KEYWORD2
+close	KEYWORD2
+ping	KEYWORD2
+keepAlivePeriod	KEYWORD2
+message	KEYWORD2
+queueIsFull	KEYWORD2
+printf	KEYWORD2
+text	KEYWORD2
+binary	KEYWORD2
+canSend	KEYWORD2
+_onAck	KEYWORD2
+_onError	KEYWORD2
+_onPoll	KEYWORD2
+_onTimeout	KEYWORD2
+_onDisconnect	KEYWORD2
+_onData	KEYWORD2
+
+##############################
+# AsyncWebSocket
+##############################
+
+url	KEYWORD2
+enable	KEYWORD2
+enabled	KEYWORD2
+availableForWriteAll	KEYWORD2
+availableForWrite	KEYWORD2
+count	KEYWORD2
+client	KEYWORD2
+hasClient	KEYWORD2
+close	KEYWORD2
+closeAll	KEYWORD2
+cleanupClients	KEYWORD2
+
+ping	KEYWORD2
+pingAll	KEYWORD2
+text	KEYWORD2
+textAll	KEYWORD2
+binary	KEYWORD2
+binaryAll	KEYWORD2
+message	KEYWORD2
+messageAll	KEYWORD2
+printf	KEYWORD2
+printfAll	KEYWORD2
+onEvent	KEYWORD2
+_getNextId	KEYWORD2
+_addClient	KEYWORD2
+_handleDisconnect	KEYWORD2
+_handleEvent	KEYWORD2
+canHandle	KEYWORD2
+handleRequest	KEYWORD2
+makeBuffer	KEYWORD2
+_cleanBuffers	KEYWORD2
+getClients	KEYWORD2
+
+##############################
+# AsyncWebSocketResponse
+##############################
+
+_respond	KEYWORD2
+_ack	KEYWORD2
+_sourceValid	KEYWORD2
+
+##############################
+# AsyncWebLock
+##############################
+
+lock	KEYWORD2
+unlock	KEYWORD2
+
+##############################
+# LinkedListNode
+##############################
+
+value	KEYWORD2
+
+##############################
+# LinkedList
+##############################
+
+begin	KEYWORD2
+end	KEYWORD2
+add	KEYWORD2
+front	KEYWORD2
+isEmpty	KEYWORD2
+length	KEYWORD2
+count_if	KEYWORD2
+nth	KEYWORD2
+remove	KEYWORD2
+remove_first	KEYWORD2
+free	KEYWORD2
+
+##############################
+# StringArray
+##############################
+
+containsIgnoreCase	KEYWORD2
+
+##############################
+# General
+##############################
+
+memchr	KEYWORD2
+webSocketSendFrameWindow	KEYWORD2
+webSocketSendFrame	KEYWORD2
+generateEventMessage	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+#	LITERAL1

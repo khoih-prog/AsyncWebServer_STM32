@@ -1,0 +1,40 @@
+{
+  "name":"AsyncWebServer_STM32",
+  "version": "1.2.3",
+  "description":"Asynchronous HTTP and WebSocket Server Library for STM32 using builtin LAN8742A Ethernet",
+  "keywords":"http,async,websocket,webserver,stm32, ethernet",
+  "authors": [
+    {
+      "name": "Hristo Gochkov",
+      "url":   "https://github.com/me-no-dev",
+    }
+    {
+      "name":  "Khoi Hoang",
+      "url":   "https://github.com/khoih-prog",
+      "email": "khoih.prog@gmail.com",
+      "maintainer": true,
+    }  
+  ],
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/khoih-prog/AsyncWebServer_STM32"
+  },
+  "license": "MIT",
+  "frameworks": "arduino",
+  "platforms": ["stm32"],
+  "dependencies": [
+    {
+      "name": "STM32duino LwIP",
+      "platforms": "stm32"
+    },
+    {
+      "name": "STM32duino STM32Ethernet",
+      "platforms": "stm32"
+    },
+    {
+      "name": "STM32AsyncTCP",
+      "platforms": "stm32"
+    }
+  ]
+}
