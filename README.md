@@ -1585,10 +1585,9 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
 ## TO DO
 
  1. Fix bug. Add enhancement
- 2. Add Authentication support (MD5, SHA1).
- 3. Add support to more Ethernet / WiFi shield
- 4. Add AsyncUDP_STM32 to support Async UDP on STM32
- 5. Add support to more STM32 boards.
+ 2. Add support to more Ethernet / WiFi shield
+ 3. Add support to more STM32 boards.
+ 4. Add support to File using STM32-SD or STM32-FS.
 
 
 ## DONE
@@ -1596,6 +1595,8 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
  1. Initial port to STM32 using builtin LAN8742A Etnernet. Tested on **STM32F7 Nucleo-144 F767ZI**.
  2. Add more examples.
  3. Add debugging features.
+ 4. Add AsyncUDP_STM32 to support Async UDP on STM32
+ 5. Add Authentication support (MD5, SHA1).
 
 ---
 ---
