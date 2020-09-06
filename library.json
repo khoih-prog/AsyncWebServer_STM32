@@ -1,6 +1,6 @@
 {
   "name":"AsyncWebServer_STM32",
-  "version": "1.2.3a",
+  "version": "1.2.3-a",
   "description":"Asynchronous HTTP and WebSocket Server Library for STM32 using builtin LAN8742A Ethernet",
   "keywords":"http,async,websocket,webserver,stm32,ethernet",
   "authors": [
