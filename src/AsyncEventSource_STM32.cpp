@@ -9,14 +9,18 @@
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
  
-  Version: 1.2.3
+  Version: 1.2.3a
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.2.3   K Hoang      02/09/2020 Initial coding for STM32 for built-in Ethernet (Nucleo-144, DISCOVERY, etc).
                                   Bump up version to v1.2.3 to sync with ESPAsyncWebServer v1.2.3
- *****************************************************************************************************************************/
- 
+  1.2.3a  K Hoang      05/09/2020 Add back MD5/SHA1 authentication feature. *****************************************************************************************************************************/
+
+#define _ASYNCWEBSERVER_STM32_LOGLEVEL_     1
+
+#include "AsyncWebServer_Debug_STM32.h"
+
 #include "Arduino.h"
 #include "AsyncEventSource_STM32.h"
 
@@ -451,11 +455,8 @@ bool AsyncEventSource::canHandle(AsyncWebServerRequest *request)
 
 void AsyncEventSource::handleRequest(AsyncWebServerRequest *request)
 {
-  // KH temporarily remove all MD5-related
-#if 0
   if ((_username != "" && _password != "") && !request->authenticate(_username.c_str(), _password.c_str()))
     return request->requestAuthentication();
-#endif
 
   request->send(new AsyncEventSourceResponse(this));
 }

@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-  Async_AdvancedWebServer.h - Dead simple AsyncWebServer for STM32 built-in LAN8742A Ethernet
+  Async_AdvancedWebServer.ino - Dead simple AsyncWebServer for STM32 built-in LAN8742A Ethernet
   
   For STM32 with built-in LAN8742A Ethernet (Nucleo-144, DISCOVERY, etc)
   
@@ -37,12 +37,13 @@
   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   
-  Version: 1.2.3
+  Version: 1.2.3a
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.2.3   K Hoang      02/09/2020 Initial coding for STM32 for built-in Ethernet (Nucleo-144, DISCOVERY, etc).
                                   Bump up version to v1.2.3 to sync with ESPAsyncWebServer v1.2.3
+  1.2.3a  K Hoang      05/09/2020 Add back MD5/SHA1 authentication feature.
  *****************************************************************************************************************************/
 /*
    Currently support

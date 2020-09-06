@@ -9,19 +9,24 @@
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
  
-  Version: 1.2.3
+  Version: 1.2.3a
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.2.3   K Hoang      02/09/2020 Initial coding for STM32 for built-in Ethernet (Nucleo-144, DISCOVERY, etc).
                                   Bump up version to v1.2.3 to sync with ESPAsyncWebServer v1.2.3
+  1.2.3a  K Hoang      05/09/2020 Add back MD5/SHA1 authentication feature.
  *****************************************************************************************************************************/
- 
+
+#define _ASYNCWEBSERVER_STM32_LOGLEVEL_     1
+
+#include "AsyncWebServer_Debug_STM32.h"
+
 #include "AsyncWebServer_STM32.h"
 #include "AsyncWebResponseImpl_STM32.h"
 #include "AsyncWebAuthentication_STM32.h"
 
-static const String SharedEmptyString = String();
+//static const String SharedEmptyString = String();
 
 #define __is_param_char(c) ((c) && ((c) != '{') && ((c) != '[') && ((c) != '&') && ((c) != '='))
 
@@ -471,16 +476,11 @@ bool AsyncWebServerRequest::_parseReqHeader()
       {
         _authorization = value.substring(6);
       }
-
-      // KH temporarily remove all MD5-related
-#if 0
       else if (value.length() > 6 && value.substring(0, 6).equalsIgnoreCase("Digest"))
       {
         _isDigest = true;
         _authorization = value.substring(7);
       }
-#endif
-
     }
     else
     {
@@ -1059,19 +1059,33 @@ void AsyncWebServerRequest::redirect(const String& url)
   send(response);
 }
 
-// KH temporarily remove all MD5-related
-#if 0
 bool AsyncWebServerRequest::authenticate(const char * username, const char * password, const char * realm, bool passwordIsHash)
-{
+{ 
+  LOGDEBUG1("AsyncWebServerRequest::authenticate: auth-len =", _authorization.length());
+  
   if (_authorization.length())
-  {
+  {   
     if (_isDigest)
+    {
+      LOGDEBUG("AsyncWebServerRequest::authenticate: _isDigest");
+      
       return checkDigestAuthentication(_authorization.c_str(), methodToString(), username, password, realm, passwordIsHash, NULL, NULL, NULL);
+    }
     else if (!passwordIsHash)
+    {
+      LOGDEBUG("AsyncWebServerRequest::authenticate: !passwordIsHash");
+      
       return checkBasicAuthentication(_authorization.c_str(), username, password);
+    }
     else
+    {
+      LOGDEBUG("AsyncWebServerRequest::authenticate: Using password _authorization.equals");
+      
       return _authorization.equals(password);
+    }
   }
+  
+  LOGDEBUG("AsyncWebServerRequest::authenticate: failed, len = 0");
 
   return false;
 }
@@ -1129,7 +1143,6 @@ void AsyncWebServerRequest::requestAuthentication(const char * realm, bool isDig
 
   send(r);
 }
-#endif
 
 bool AsyncWebServerRequest::hasArg(const char* name) const
 {

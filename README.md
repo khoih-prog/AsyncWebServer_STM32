@@ -9,7 +9,12 @@
 ---
 ---
 
-### Initial Releases v1.2.3
+### Releases v1.2.3a
+
+1. Add back MD5/SHA1 authentication feature.
+4. Add example, update README.md, clean up.
+
+#### Initial Releases v1.2.3
 
 1. Initial coding to port [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer) to STM32 boards using builtin LAN8742A Ethernet. More supports will be added gradually later, such as AsyncUDP, other Ethernet / WiFi shields.
 2. Add more examples.
@@ -181,8 +186,6 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncW
   the rewrite url, and when the optional ```Filter``` callback return true.
 - Setting a ```Filter``` to the ```Rewrite``` enables to control when to apply the rewrite, decision can be based on
   request url, http version, request host/port/target host, get parameters or the request client's localIP or remoteIP.
-- Two filter callbacks are provided: ```ON_AP_FILTER``` to execute the rewrite when request is made to the AP interface,
-  ```ON_STA_FILTER``` to execute the rewrite when request is made to the STA interface.
 - The ```Rewrite``` can specify a target url with optional get parameters, e.g. ```/to-url?with=params```
 
 ### Handlers and how do they work
@@ -191,8 +194,6 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncW
 - One ```Handler``` instance can be attached to any request and lives together with the server
 - Setting a ```Filter``` to the ```Handler``` enables to control when to apply the handler, decision can be based on
   request url, http version, request host/port/target host, get parameters or the request client's localIP or remoteIP.
-- Two filter callbacks are provided: ```ON_AP_FILTER``` to execute the rewrite when request is made to the AP interface,
-  ```ON_STA_FILTER``` to execute the rewrite when request is made to the STA interface.
 - The ```canHandle``` method is used for handler specific control on whether the requests can be handled
   and for declaring any interesting headers that the ```Request``` should parse. Decision can be based on request
   method, request url, http version, request host/port/target host and get parameters
@@ -745,10 +746,6 @@ Filters can be set to `Rewrite` or `Handler` in order to control when to apply t
 A filter is a callback function that evaluates the request and return a boolean `true` to include the item
 or `false` to exclude it.
 
-Two filter callback are provided for convince:
-* `ON_STA_FILTER` - return true when requests are made to the STA (station mode) interface.
-* `ON_AP_FILTER` - return true when requests are made to the AP (access point) interface.
-
 ---
 
 ## Bad Responses
@@ -888,25 +885,15 @@ AsyncWebSocket ws("/ws");
 ws.printf((uint32_t)client_id, arguments...);
 //printf to all clients
 ws.printfAll(arguments...);
-//printf_P to a client
-ws.printf_P((uint32_t)client_id, PSTR(format), arguments...);
-//printfAll_P to all clients
-ws.printfAll_P(PSTR(format), arguments...);
 //send text to a client
 ws.text((uint32_t)client_id, (char*)text);
 ws.text((uint32_t)client_id, (uint8_t*)text, (size_t)len);
-//send text from PROGMEM to a client
-ws.text((uint32_t)client_id, PSTR("text"));
-const char flash_text[] PROGMEM = "Text to send"
-ws.text((uint32_t)client_id, FPSTR(flash_text));
 //send text to all clients
 ws.textAll((char*)text);
 ws.textAll((uint8_t*)text, (size_t)len);
 //send binary to a client
 ws.binary((uint32_t)client_id, (char*)binary);
 ws.binary((uint32_t)client_id, (uint8_t*)binary, (size_t)len);
-//send binary from PROGMEM to a client
-const uint8_t flash_binary[] PROGMEM = { 0x01, 0x02, 0x03, 0x04 };
 ws.binary((uint32_t)client_id, flash_binary, 4);
 //send binary to all clients
 ws.binaryAll((char*)binary);
@@ -918,21 +905,12 @@ ws.setAuthentication("user", "pass");
 AsyncWebSocketClient * client;
 //printf
 client->printf(arguments...);
-//printf_P
-client->printf_P(PSTR(format), arguments...);
 //send text
 client->text((char*)text);
 client->text((uint8_t*)text, (size_t)len);
-//send text from PROGMEM
-client->text(PSTR("text"));
-const char flash_text[] PROGMEM = "Text to send";
-client->text(FPSTR(flash_text));
 //send binary
 client->binary((char*)binary);
 client->binary((uint8_t*)binary, (size_t)len);
-//send binary from PROGMEM
-const uint8_t flash_binary[] PROGMEM = { 0x01, 0x02, 0x03, 0x04 };
-client->binary(flash_binary, 4);
 ```
 
 ### Direct access to web socket message buffer
@@ -998,7 +976,7 @@ void setup()
   {
     if(client->lastId())
     {
-      Serial.printf("Client reconnected! Last message ID that it gat is: %u\n", client->lastId());
+      Serial.printf("Client reconnected! Last message ID that it got is: %u\n", client->lastId());
     }
     
     //send event with message "hello!", id current millis
@@ -1337,6 +1315,7 @@ build_flags =
  7. [Async_SimpleWebServer_STM32](examples/Async_SimpleWebServer_STM32)
  8. [WebClient](examples/WebClient)
  9. [WebClientRepeating](examples/WebClientRepeating)
+10. [Async_HttpBasicAuth](examples/Async_HttpBasicAuth) 
 
 ---
 
@@ -1621,7 +1600,12 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
 ---
 ---
 
-### Initial Releases v1.2.3
+### Releases v1.2.3a
+
+1. Add back MD5/SHA1 authentication feature.
+4. Add example, update README.md, clean up.
+
+#### Initial Releases v1.2.3
 
 1. Initial coding to port [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer) to STM32 boards using builtin LAN8742A Ethernet. More supports will be added gradually later, such as AsyncUDP, other Ethernet / WiFi shields.
 2. Add more examples.

@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-  Async_SimpleWebServer_STM32.ino - Dead simple AsyncWebServer for STM32 built-in LAN8742A Ethernet
+  Async_HttpBasicAuth.ino - Dead simple AsyncWebServer for STM32 built-in LAN8742A Ethernet
   
   For STM32 with built-in LAN8742A Ethernet (Nucleo-144, DISCOVERY, etc)
   
@@ -25,18 +25,15 @@
       - STM32 boards (STM32F/L/H/G/WB/MP1) with 32K+ Flash, with Built-in Ethernet,
       - See How To Use Built-in Ethernet at (https://github.com/khoih-prog/EthernetWebServer_STM32/issues/1)
 */
-//
-// A simple server implementation showing how to:
-//  * serve static messages
-//  * read GET and POST parameters
-//  * handle missing pages / 404s
-//
 
 #if !( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
        defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
        defined(STM32WB) || defined(STM32MP1) )
   #error This code is designed to run on STM32F/L/H/G/WB/MP1 platform! Please check your Tools->Board setting.
 #endif
+
+#define ASYNCWEBSERVER_STM32_DEBUG_PORT     Serial
+#define _ASYNCWEBSERVER_STM32_LOGLEVEL_     4
 
 #if defined(STM32F0)
   #warning STM32F0 board selected
@@ -124,19 +121,14 @@ IPAddress ip(192, 168, 2, 232);
 
 AsyncWebServer    server(80);
 
-const char* PARAM_MESSAGE = "message";
+const char* www_username = "admin";
+const char* www_password = "ethernet";
 
-void notFound(AsyncWebServerRequest *request)
-{
-  request->send(404, "text/plain", "Not found");
-}
-
-void setup() 
+void setup()
 {
   Serial.begin(115200);
-  while (!Serial);
-
-  Serial.println("\nStarting Async_SimpleWebServer_STM32 on " + String(BOARD_NAME));
+  delay(1000);
+  Serial.println("\nStart Async_HTTPBasicAuth on " + String(BOARD_NAME));
 
   // start the ethernet connection and the server
   // Use random mac
@@ -145,53 +137,33 @@ void setup()
   // Use Static IP
   //Ethernet.begin(mac[index], ip);
   // Use DHCP dynamic IP and random mac
+  //Ethernet.begin(mac[10]);
   Ethernet.begin(mac[index]);
 
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest * request) 
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest * request)
   {
-    request->send(200, "text/plain", "Hello, world");
-  });
-
-  // Send a GET request to <IP>/get?message=<message>
-  server.on("/get", HTTP_GET, [] (AsyncWebServerRequest * request) 
-  {
-    String message;
-    
-    if (request->hasParam(PARAM_MESSAGE)) 
+    if (!request->authenticate(www_username, www_password))
     {
-      message = request->getParam(PARAM_MESSAGE)->value();
-    } 
-    else 
-    {
-      message = "No message sent";
+      return request->requestAuthentication();
     }
     
-    request->send(200, "text/plain", "Hello, GET: " + message);
+    request->send(200, "text/plain", "Login OK");
   });
-
-  // Send a POST request to <IP>/post with a form field message set to <message>
-  server.on("/post", HTTP_POST, [](AsyncWebServerRequest * request) 
-  {
-    String message;
-    
-    if (request->hasParam(PARAM_MESSAGE, true)) 
-    {
-      message = request->getParam(PARAM_MESSAGE, true)->value();
-    } 
-    else 
-    {
-      message = "No message sent";
-    }
-    
-    request->send(200, "text/plain", "Hello, POST: " + message);
-  });
-
-  server.onNotFound(notFound);
+  
 
   server.begin();
 
-  Serial.print("Server started @ ");
+  Serial.print(F("Async_HttpBasicAuth started @ IP : "));
   Serial.println(Ethernet.localIP());
+
+  Serial.print(F("Open http://"));
+  Serial.print(Ethernet.localIP());
+  Serial.println(F("/ in your browser to see it working"));
+
+  Serial.print(F("Login using username = "));
+  Serial.print(www_username);
+  Serial.print(F(" and password = "));
+  Serial.println(www_password);
 }
 
 void loop()

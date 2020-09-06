@@ -9,12 +9,13 @@
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
  
-  Version: 1.2.3
+  Version: 1.2.3a
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.2.3   K Hoang      02/09/2020 Initial coding for STM32 for built-in Ethernet (Nucleo-144, DISCOVERY, etc).
                                   Bump up version to v1.2.3 to sync with ESPAsyncWebServer v1.2.3
+  1.2.3a  K Hoang      05/09/2020 Add back MD5/SHA1 authentication feature.
  *****************************************************************************************************************************/
  
 #ifndef ASYNCWEBSOCKET_STM32_H_
@@ -210,8 +211,10 @@ class AsyncWebSocketBasicMessage: public AsyncWebSocketMessage
       return _acked == _ack;
     }
     
-    virtual void ack(size_t len, uint32_t time) override ;
-    virtual size_t send(AsyncClient *client) override ;
+    virtual void ack(size_t len, uint32_t time) override;
+    virtual size_t send(AsyncClient *client) override;
+    
+    virtual bool reserve(size_t size);
 };
 
 class AsyncWebSocketMultiMessage: public AsyncWebSocketMessage 

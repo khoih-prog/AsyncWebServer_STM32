@@ -9,44 +9,53 @@
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
  
-  Version: 1.2.3
+  Version: 1.2.3a
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.2.3   K Hoang      02/09/2020 Initial coding for STM32 for built-in Ethernet (Nucleo-144, DISCOVERY, etc).
                                   Bump up version to v1.2.3 to sync with ESPAsyncWebServer v1.2.3
+  1.2.3a  K Hoang      05/09/2020 Add back MD5/SHA1 authentication feature.
  *****************************************************************************************************************************/
 
-// KH, To be fixed to add auth feature
-#if 0
+#define _ASYNCWEBSERVER_STM32_LOGLEVEL_     1
+
+#include "AsyncWebServer_Debug_STM32.h"
 
 #include "AsyncWebAuthentication_STM32.h"
 #include <libb64/cencode.h>
 
 // For STM32
-//#include "Crypto/md5.h"
-// From STM32 LwIP
-//#include "Crypto/MD5Builder.h"
-#include "netif/ppp/polarssl/md5.h"
-#include "netif/ppp/polarssl/sha1.h"
+#include "Crypto/md5.h"
+#include "Crypto/bearssl_hash.h"
+#include "Crypto/Hash.h"
 
 // Basic Auth hash = base64("username:password")
 
 bool checkBasicAuthentication(const char * hash, const char * username, const char * password) 
 {
   if (username == NULL || password == NULL || hash == NULL)
+  {
+    LOGDEBUG("checkBasicAuthentication: Fail: NULL username/password/hash");
     return false;
+  }
 
   size_t toencodeLen = strlen(username) + strlen(password) + 1;
   size_t encodedLen = base64_encode_expected_len(toencodeLen);
   
   if (strlen(hash) != encodedLen)
+  {
+    LOGDEBUG3("checkBasicAuthentication: Fail: strlen(hash) = ", strlen(hash), " != encodedLen = ", encodedLen );
+    
     return false;
+  }
 
   char *toencode = new char[toencodeLen + 1];
   
   if (toencode == NULL) 
   {
+    LOGDEBUG("checkBasicAuthentication: NULL toencode");
+    
     return false;
   }
   
@@ -54,6 +63,8 @@ bool checkBasicAuthentication(const char * hash, const char * username, const ch
   
   if (encoded == NULL) 
   {
+    LOGDEBUG("checkBasicAuthentication: NULL encoded");
+  
     delete[] toencode;
     return false;
   }
@@ -62,10 +73,14 @@ bool checkBasicAuthentication(const char * hash, const char * username, const ch
   
   if (base64_encode_chars(toencode, toencodeLen, encoded) > 0 && memcmp(hash, encoded, encodedLen) == 0) 
   {
+    LOGDEBUG("checkBasicAuthentication: OK");
+    
     delete[] toencode;
     delete[] encoded;
     return true;
   }
+  
+  LOGDEBUG("checkBasicAuthentication: Failed");
   
   delete[] toencode;
   delete[] encoded;
@@ -77,21 +92,25 @@ static bool getMD5(uint8_t * data, uint16_t len, char * output)
   //33 bytes or more
 
   // For STM32
-  md5_context_t _ctx;
+  md5_context _ctx;
 
   uint8_t i;
   uint8_t * _buf = (uint8_t*) malloc(16);
   
   if (_buf == NULL)
+  {
+    LOGDEBUG("getMD5: Can malloc _buf");
+    
     return false;
+  }
     
   memset(_buf, 0x00, 16);
 
   // For STM32
-  MD5Init(&_ctx);
-  MD5Update(&_ctx, data, len);
-  MD5Final(_buf, &_ctx);
-
+  md5_starts(&_ctx);
+  md5_update(&_ctx, data, len);
+  md5_finish(&_ctx, _buf);
+  
   for (i = 0; i < 16; i++) 
   {
     sprintf(output + (i * 2), "%02x", _buf[i]);
@@ -99,12 +118,13 @@ static bool getMD5(uint8_t * data, uint16_t len, char * output)
   
   free(_buf);
   
+  LOGDEBUG("getMD5: Success");
+  
   return true;
 }
 
 static String genRandomMD5() 
 {
-
   // For STM32
   uint32_t r = rand();
 
@@ -115,6 +135,8 @@ static String genRandomMD5()
     
   String res = String(out);
   free(out);
+  
+  LOGDEBUG1("genRandomMD5: res = ", res);
   
   return res;
 }
@@ -128,6 +150,8 @@ static String stringMD5(const String& in)
     
   String res = String(out);
   free(out);
+  
+  LOGDEBUG1("stringMD5: res = ", res);
   
   return res;
 }
@@ -156,6 +180,8 @@ String generateDigestHash(const char * username, const char * password, const ch
   res.concat(out);
   free(out);
   
+  LOGDEBUG1("generateDigestHash: res = ", res);
+  
   return res;
 }
 
@@ -174,6 +200,8 @@ String requestDigestAuthentication(const char * realm)
   header.concat(genRandomMD5());
   header.concat("\"");
   
+  LOGDEBUG1("requestDigestAuthentication: header = ", header);
+  
   return header;
 }
 
@@ -182,7 +210,7 @@ bool checkDigestAuthentication(const char * header, const char * method, const c
 {
   if (username == NULL || password == NULL || header == NULL || method == NULL) 
   {
-    LOGDEBUG("AUTH FAIL: missing requred fields");
+    LOGDEBUG("AUTH FAIL: missing required fields");
     
     return false;
   }
@@ -198,13 +226,13 @@ bool checkDigestAuthentication(const char * header, const char * method, const c
   }
 
   String myUsername = String();
-  String myRealm = String();
-  String myNonce = String();
-  String myUri = String();
+  String myRealm    = String();
+  String myNonce    = String();
+  String myUri      = String();
   String myResponse = String();
-  String myQop = String();
-  String myNc = String();
-  String myCnonce = String();
+  String myQop      = String();
+  String myNc       = String();
+  String myCnonce   = String();
 
   myHeader += ", ";
   
@@ -316,7 +344,6 @@ bool checkDigestAuthentication(const char * header, const char * method, const c
   }
 
   LOGDEBUG("AUTH FAIL: password");
+  
   return false;
 }
-
-#endif

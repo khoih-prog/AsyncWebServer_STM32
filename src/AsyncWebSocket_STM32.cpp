@@ -9,35 +9,28 @@
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
  
-  Version: 1.2.3
+  Version: 1.2.3a
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.2.3   K Hoang      02/09/2020 Initial coding for STM32 for built-in Ethernet (Nucleo-144, DISCOVERY, etc).
                                   Bump up version to v1.2.3 to sync with ESPAsyncWebServer v1.2.3
+  1.2.3a  K Hoang      05/09/2020 Add back MD5/SHA1 authentication feature.
  *****************************************************************************************************************************/
- 
+
 #include "Arduino.h"
+
+#define _ASYNCWEBSERVER_STM32_LOGLEVEL_     1
+
+#include "AsyncWebServer_Debug_STM32.h"
+
 #include "AsyncWebSocket_STM32.h"
 
 #include <libb64/cencode.h>
 
-extern "C"
-{
-  typedef struct
-  {
-    uint32_t state[5];
-    uint32_t count[2];
-    unsigned char buffer[64];
-  } SHA1_CTX;
-
-  void SHA1Transform(uint32_t state[5], const unsigned char buffer[64]);
-  void SHA1Init(SHA1_CTX* context);
-  void SHA1Update(SHA1_CTX* context, const unsigned char* data, uint32_t len);
-  void SHA1Final(unsigned char digest[20], SHA1_CTX* context);
-}
-
-//#include <Hash.h>
+// For STM32
+#include "Crypto/sha1.h"
+#include "Crypto/Hash.h"
 
 #define MAX_PRINTF_LEN 64
 
@@ -429,7 +422,6 @@ size_t AsyncWebSocketBasicMessage::send(AsyncClient *client)
   return sent;
 }
 
-#if 0
 bool AsyncWebSocketBasicMessage::reserve(size_t size)
 {
   if (size)
@@ -447,7 +439,6 @@ bool AsyncWebSocketBasicMessage::reserve(size_t size)
 
   return false;
 }
-#endif
 
 /*
    AsyncWebSocketMultiMessage Message
@@ -1418,12 +1409,9 @@ void AsyncWebSocket::handleRequest(AsyncWebServerRequest * request)
     return;
   }
 
-  // KH temporarily remove all MD5-related
-#if 0
   if ((_username != "" && _password != "") && !request->authenticate(_username.c_str(), _password.c_str())) {
     return request->requestAuthentication();
   }
-#endif
 
   AsyncWebHeader* version = request->getHeader(WS_STR_VERSION);
 
@@ -1504,7 +1492,7 @@ AsyncWebSocketResponse::AsyncWebSocketResponse(const String & key, AsyncWebSocke
   _code = 101;
   _sendContentLength = false;
 
-  uint8_t * hash = (uint8_t*) malloc(20);
+  uint8_t * hash = (uint8_t*) malloc(HASH_BUFFER_SIZE);
 
   if (hash == NULL)
   {
@@ -1521,20 +1509,19 @@ AsyncWebSocketResponse::AsyncWebSocketResponse(const String & key, AsyncWebSocke
     return;
   }
 
-  // KH temporarily comment out sha1
-#if 1
-  //sha1(key + WS_STR_UUID, hash);
-#else
-  (String&)key += WS_STR_UUID;
-  SHA1_CTX ctx;
-  SHA1Init(&ctx);
-  SHA1Update(&ctx, (const unsigned char*)key.c_str(), key.length());
-  SHA1Final(hash, &ctx);
-#endif
+  // KH, for STM32
+  sha1_context _ctx;
+  
+  (String&) key += WS_STR_UUID;
 
+  sha1_starts(&_ctx);
+  sha1_update(&_ctx, (const unsigned char*) key.c_str(), key.length());
+  sha1_finish(&_ctx, hash);
+  //////
+ 
   base64_encodestate _state;
   base64_init_encodestate(&_state);
-  int len = base64_encode_block((const char *) hash, 20, buffer, &_state);
+  int len = base64_encode_block((const char *) hash, HASH_BUFFER_SIZE, buffer, &_state);
   len = base64_encode_blockend((buffer + len), &_state);
 
   addHeader(WS_STR_CONNECTION, WS_STR_UPGRADE);
