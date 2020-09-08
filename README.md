@@ -46,7 +46,7 @@ to apply the better and faster **asynchronous** feature of the **powerful** [ESP
  2. [`Arduino Core for STM32 1.9.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32 (Use Arduino Board Manager)
  3. [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in Ethernet on (Nucleo-144, Discovery)
  4. [`LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP) for built-in Ethernet on (Nucleo-144, Discovery)
- 5. [`STM32AsyncTCP library v1.0.0+`](https://github.com/philbowles/STM32AsyncTCP) for built-in Ethernet on (Nucleo-144, Discovery)
+ 5. [`STM32AsyncTCP library`](https://github.com/philbowles/STM32AsyncTCP) for built-in Ethernet on (Nucleo-144, Discovery)
  
 ---
 
@@ -66,8 +66,7 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncW
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
 3. Install **AsyncWebServer_STM32** library by using [Library Manager](https://docs.platformio.org/en/latest/librarymanager/). Search for ***AsyncWebServer_STM32*** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
-4. Use included [platformio.ini](examples/platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically.
-
+4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
 ---
 
 ## Table of contents
