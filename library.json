@@ -6,13 +6,13 @@
   "authors": [
     {
       "name": "Hristo Gochkov",
-      "url":   "https://github.com/me-no-dev",
-    }
+      "url":   "https://github.com/me-no-dev"
+    },
     {
       "name":  "Khoi Hoang",
       "url":   "https://github.com/khoih-prog",
       "email": "khoih.prog@gmail.com",
-      "maintainer": true,
+      "maintainer": true
     }  
   ],
   "repository":
