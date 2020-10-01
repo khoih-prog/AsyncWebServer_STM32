@@ -12,7 +12,7 @@
 ### Releases v1.2.3.1
 
 1. Add back MD5/SHA1 authentication feature.
-4. Add example, update README.md, clean up.
+2. Add example, update README.md, clean up.
 
 #### Initial Releases v1.2.3
 
@@ -1603,7 +1603,7 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
 ### Releases v1.2.3.1
 
 1. Add back MD5/SHA1 authentication feature.
-4. Add example, update README.md, clean up.
+2. Add example, update README.md, clean up.
 
 #### Initial Releases v1.2.3
 
