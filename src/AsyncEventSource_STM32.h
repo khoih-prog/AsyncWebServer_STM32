@@ -9,13 +9,13 @@
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
  
-  Version: 1.2.3a
+  Version: 1.2.4
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.2.3   K Hoang      02/09/2020 Initial coding for STM32 for built-in Ethernet (Nucleo-144, DISCOVERY, etc).
                                   Bump up version to v1.2.3 to sync with ESPAsyncWebServer v1.2.3
-  1.2.3a  K Hoang      05/09/2020 Add back MD5/SHA1 authentication feature.
+  1.2.4   K Hoang      05/09/2020 Add back MD5/SHA1 authentication feature.
  *****************************************************************************************************************************/
 
 #ifndef ASYNCEVENTSOURCE_STM32_H_
