@@ -3,7 +3,8 @@
   "version": "1.2.4",
   "description":"Asynchronous HTTP and WebSocket Server Library for STM32 using builtin LAN8742A Ethernet",
   "keywords":"http,async,websocket,webserver,stm32,ethernet",
-  "authors": [
+  "authors": 
+  [
     {
       "name": "Hristo Gochkov",
       "url":   "https://github.com/me-no-dev"
@@ -22,19 +23,24 @@
   },
   "license": "MIT",
   "frameworks": "arduino",
-  "platforms": ["stm32"],
-  "dependencies": [
+  "dependencies": 
+  [
     {
+      "owner": "stm32duino",
       "name": "STM32duino LwIP",
-      "platforms": "stm32"
+      "version": "^2.1.2",
+      "platforms": "ststm32"
     },
     {
-      "name": "STM32duino STM32Ethernet",
-      "platforms": "stm32"
+      "owner": "stm32duino",
+      "name": "STM32Ethernet",
+      "version": "^1.2.0",
+      "platforms": "ststm32"
     },
     {
-      "name": "STM32AsyncTCP",
-      "platforms": "stm32"
+      "name": "external-repo",
+      "version": "https://github.com/philbowles/STM32AsyncTCP"
     }
-  ]
+  ],
+  "platforms": ["ststm32"]
 }
