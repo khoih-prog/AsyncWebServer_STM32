@@ -42,5 +42,6 @@
       "version": "https://github.com/philbowles/STM32AsyncTCP"
     }
   ],
-  "platforms": ["ststm32"]
+  "platforms": ["ststm32"],
+  "examples": "examples/*/*/*.ino"
 }
