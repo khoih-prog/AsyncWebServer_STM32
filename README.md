@@ -91,10 +91,10 @@
   * [14. WebClientRepeating](examples/WebClientRepeating)
 * [Debug Terminal Output Samples](#debug-termimal-output-samples)
   * [1. AsyncMultiWebServer_STM32 on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#1-asyncmultiwebserver_stm32-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
-  * [2. WebClient on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#1-webclient-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
-  * [3. MQTTClient_Auth on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#1-mqttclient_auth-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
-  * [4. MQTTClient_Basic on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#1-mqttclient_basic-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
-  * [5. MQTT_ThingStream on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#1-mqtt_thingstream-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
+  * [2. WebClient on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#2-webclient-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
+  * [3. MQTTClient_Auth on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#3-mqttclient_auth-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
+  * [4. MQTTClient_Basic on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#4-mqttclient_basic-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
+  * [5. MQTT_ThingStream on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#5-mqtt_thingstream-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
@@ -109,7 +109,7 @@
 ---
 ---
 
-### Why do we need this Async [AsyncWebServer_STM32 library](https://github.com/khoih-prog/AsyncWebServer_STM32)
+### Why do we need this [AsyncWebServer_STM32 library](https://github.com/khoih-prog/AsyncWebServer_STM32)
 
 #### Features
 
