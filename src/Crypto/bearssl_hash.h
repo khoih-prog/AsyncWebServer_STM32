@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+#pragma once
+
 #ifndef BR_BEARSSL_HASH_H__
 #define BR_BEARSSL_HASH_H__
 

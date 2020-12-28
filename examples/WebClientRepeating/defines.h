@@ -9,11 +9,14 @@
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
  
-  Version: 1.0.0
+  Version: 1.2.5
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
-  1.0.0   K Hoang      02/09/2020 Initial coding for STM32 for built-in Ethernet (Nucleo-144, DISCOVERY, etc)
+  1.2.3   K Hoang      02/09/2020 Initial coding for STM32 for built-in Ethernet (Nucleo-144, DISCOVERY, etc).
+                                  Bump up version to v1.2.3 to sync with ESPAsyncWebServer v1.2.3
+  1.2.4   K Hoang      05/09/2020 Add back MD5/SHA1 authentication feature.
+  1.2.5   K Hoang      28/12/2020 Suppress all possible compiler warnings. Add examples.
  *****************************************************************************************************************************/
 /*
    Currently support
@@ -84,8 +87,11 @@
   #define BOARD_NAME    BOARD_TYPE
 #endif
 
+#define SHIELD_TYPE     "LAN8742A built-in Ethernet"
+
 #include <LwIP.h>
 #include <STM32Ethernet.h>
+#include <AsyncWebServer_STM32.h>
 
 // Enter a MAC address and IP address for your controller below.
 #define NUMBER_OF_MAC      20

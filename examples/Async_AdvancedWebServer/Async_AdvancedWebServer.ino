@@ -37,13 +37,14 @@
   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   
-  Version: 1.2.4
+  Version: 1.2.5
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.2.3   K Hoang      02/09/2020 Initial coding for STM32 for built-in Ethernet (Nucleo-144, DISCOVERY, etc).
                                   Bump up version to v1.2.3 to sync with ESPAsyncWebServer v1.2.3
   1.2.4   K Hoang      05/09/2020 Add back MD5/SHA1 authentication feature.
+  1.2.5   K Hoang      28/12/2020 Suppress all possible compiler warnings. Add examples.
  *****************************************************************************************************************************/
 /*
    Currently support
@@ -60,7 +61,7 @@
   #error This code is designed to run on STM32F/L/H/G/WB/MP1 platform! Please check your Tools->Board setting.
 #endif
 
-#define _ASYNCWEBSERVER_STM32_LOGLEVEL_       3
+#define _ASYNCWEBSERVER_STM32_LOGLEVEL_       4
 
 #if defined(STM32F0)
   #warning STM32F0 board selected
@@ -112,6 +113,8 @@
 #ifndef BOARD_NAME
   #define BOARD_NAME    BOARD_TYPE
 #endif
+
+#define SHIELD_TYPE     "LAN8742A built-in Ethernet"
 
 #include <LwIP.h>
 #include <STM32Ethernet.h>
@@ -239,7 +242,9 @@ void setup(void)
   digitalWrite(led, 0);
 
   Serial.begin(115200);
-  Serial.println("\nStart Async_AdvancedWebServer_STM32 on " + String(BOARD_NAME));
+
+  Serial.printf("\nStarting Async_AdvancedWebServer_STM32 on %s with %s\n", BOARD_NAME, SHIELD_TYPE);
+  Serial.println(ASYNC_WEBSERVER_STM32_VERSION);
 
   // start the ethernet connection and the server
   // Use random mac

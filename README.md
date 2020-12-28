@@ -9,27 +9,122 @@
 ---
 ---
 
-### Releases v1.2.4
+## Table of contents
 
-1. Add back MD5/SHA1 authentication feature.
-2. Add example, update README.md, clean up.
-
-#### Initial Releases v1.2.3
-
-1. Initial coding to port [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer) to STM32 boards using builtin LAN8742A Ethernet. More supports will be added gradually later, such as AsyncUDP, other Ethernet / WiFi shields.
-2. Add more examples.
-3. Add debugging features.
-4. Bump up to v1.2.3 to sync with [ESPAsyncWebServer v1.2.3](https://github.com/me-no-dev/ESPAsyncWebServer).
-
-#### Currently Supported Boards
-
-1. Nucleo-144 (F429ZI, F746ZG, F756ZG, F767ZI)
-2. Discovery STM32F746G-DISCOVERY
-3. Any STM32 boards with enough flash/memory and already configured to run LAN8742A Ethernet.
+* [Table of contents](#table-of-contents)
+* [Why do we need this AsyncWebServer_STM32 library](#why-do-we-need-this-asyncwebserver_stm32-library)
+  * [Features](#features)
+  * [Currently supported Boards](#currently-supported-boards)
+* [Changelog](#changelog)
+  * [Releases v1.2.5](#releases-v125)
+  * [Releases v1.2.4](#releases-v124)
+  * [Releases v1.2.3](#releases-v123)
+* [Prerequisites](#prerequisites)
+* [Installation](#installation)
+  * [Use Arduino Library Manager](#use-arduino-library-manager)
+  * [Manual Install](#manual-install)
+  * [VS Code & PlatformIO](#vs-code--platformio)
+* [Important things to remember](#important-things-to-remember)
+* [Principles of operation](#principles-of-operation)
+  * [The Async Web server](#the-async-web-server)
+  * [Request Life Cycle](#request-life-cycle)
+  * [Rewrites and how do they work](#rewrites-and-how-do-they-work)
+  * [Handlers and how do they work](#handlers-and-how-do-they-work)
+  * [Responses and how do they work](#responses-and-how-do-they-work)
+  * [Template processing](#template-processing)
+* [Request Variables](#request-variables)
+  * [Common Variables](#common-variables)
+  * [Headers](#headers)
+  * [GET, POST and FILE parameters](#get-post-and-file-parameters)
+  * [JSON body handling with ArduinoJson](#json-body-handling-with-arduinojson)
+* [Responses](#responses)
+  * [Redirect to another URL](#redirect-to-another-url)
+  * [Basic response with HTTP Code](#basic-response-with-http-code)
+  * [Basic response with HTTP Code and extra headers](#basic-response-with-http-code-and-extra-headers)
+  * [Basic response with string content](#basic-response-with-string-content)
+  * [Basic response with string content and extra headers](#basic-response-with-string-content-and-extra-headers)
+  * [Respond with content coming from a Stream](#respond-with-content-coming-from-a-stream)
+  * [Respond with content coming from a Stream and extra headers](#respond-with-content-coming-from-a-stream-and-extra-headers)
+  * [Respond with content coming from a Stream containing templates](#respond-with-content-coming-from-a-stream-containing-templates)
+  * [Respond with content coming from a Stream containing templates and extra headers](#respond-with-content-coming-from-a-stream-containing-templates-and-extra-headers)
+  * [Respond with content using a callback](#respond-with-content-using-a-callback)
+  * [Respond with content using a callback and extra headers](#respond-with-content-using-a-callback-and-extra-headers)
+  * [Respond with content using a callback containing templates](#respond-with-content-using-a-callback-containing-templates)
+  * [Respond with content using a callback containing templates and extra headers](#respond-with-content-using-a-callback-containing-templates-and-extra-headers)
+  * [Chunked Response](#chunked-response)
+  * [Chunked Response containing templates](#chunked-response-containing-templates)
+  * [Print to response](#print-to-response)
+  * [ArduinoJson Basic Response](#arduinojson-basic-response)
+  * [ArduinoJson Advanced Response](#arduinojson-advanced-response)
+* [Param Rewrite With Matching](#param-rewrite-with-matching)
+* [Using filters](#using-filters)
+* [Bad Responses](#bad-responses)
+  * [Respond with content using a callback without content length to HTTP/1.0 clients](#respond-with-content-using-a-callback-without-content-length-to-http10-clients)
+* [Async WebSocket Plugin](#async-websocket-plugin)
+  * [Async WebSocket Event](#async-websocket-event)
+  * [Methods for sending data to a socket client](#methods-for-sending-data-to-a-socket-client)
+  * [Direct access to web socket message buffer](#direct-access-to-web-socket-message-buffer)
+  * [Limiting the number of web socket clients](#limiting-the-number-of-web-socket-clients)
+* [Async Event Source Plugin](#async-event-source-plugin)
+  * [Setup Event Source on the server](#setup-event-source-on-the-server)
+  * [Setup Event Source in the browser](#setup-event-source-in-the-browser)
+* [Remove handlers and rewrites](#remove-handlers-and-rewrites)
+* [Setting up the server](#setting-up-the-server)
+  * [Setup global and class functions as request handlers](#setup-global-and-class-functions-as-request-handlers)
+  * [Methods for controlling websocket connections](#methods-for-controlling-websocket-connections)
+  * [Adding Default Headers](#adding-default-headers)
+  * [Path variable](#path-variable)
+* [Examples](#examples)
+  * [ 1. Async_AdvancedWebServer](examples/Async_AdvancedWebServer)
+  * [ 2. AsyncFSBrowser_STM32](examples/AsyncFSBrowser_STM32)
+  * [ 3. Async_HelloServer](examples/Async_HelloServer)
+  * [ 4. Async_HelloServer2](examples/Async_HelloServer2)
+  * [ 5. Async_HttpBasicAuth](examples/Async_HttpBasicAuth)
+  * [ 6. AsyncMultiWebServer_STM32](examples/AsyncMultiWebServer_STM32)
+  * [ 7. Async_PostServer](examples/Async_PostServer)
+  * [ 8. Async_RegexPatterns_STM32](examples/Async_RegexPatterns_STM32)
+  * [ 9. Async_SimpleWebServer_STM32](examples/Async_SimpleWebServer_STM32)
+  * [10. **MQTTClient_Auth**](examples/MQTTClient_Auth)
+  * [11. **MQTTClient_Basic**](examples/MQTTClient_Basic)
+  * [12. **MQTT_ThingStream**](examples/MQTT_ThingStream)
+  * [13. WebClient](examples/WebClient) 
+  * [14. WebClientRepeating](examples/WebClientRepeating)
+* [Debug Terminal Output Samples](#debug-termimal-output-samples)
+  * [1. AsyncMultiWebServer_STM32 on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#1-asyncmultiwebserver_stm32-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
+  * [2. WebClient on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#1-webclient-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
+  * [3. MQTTClient_Auth on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#1-mqttclient_auth-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
+  * [4. MQTTClient_Basic on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#1-mqttclient_basic-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
+  * [5. MQTT_ThingStream on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#1-mqtt_thingstream-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
+* [Debug](#debug)
+* [Troubleshooting](#troubleshooting)
+* [Releases](#releases)
+* [Issues](#issues)
+* [TO DO](#to-do)
+* [DONE](#done)
+* [Contributions and Thanks](#contributions-and-thanks)
+* [Contributing](#contributing)
+* [License](#license)
+* [Copyright](#copyright)
 
 ---
+---
 
-### Async HTTP and WebSocket Server for STM32 boards using builtin LAN8742A Ethernet
+### Why do we need this Async [AsyncWebServer_STM32 library](https://github.com/khoih-prog/AsyncWebServer_STM32)
+
+#### Features
+
+- Using asynchronous network means that you can handle **more than one connection at the same time**
+- **You are called once the request is ready and parsed**
+- When you send the response, you are **immediately ready** to handle other connections while the server is taking care of sending the response in the background
+- **Speed is OMG**
+- **Easy to use API, HTTP Basic and Digest MD5 Authentication (default), ChunkedResponse**
+- Easily extensible to handle **any type of content**
+- Supports Continue 100
+- **Async WebSocket plugin offering different locations without extra servers or ports**
+- Async EventSource (Server-Sent Events) plugin to send events to the browser
+- URL Rewrite plugin for conditional and permanent url rewrites
+- ServeStatic plugin that supports cache, Last-Modified, default index and more
+- Simple template processing engine to handle templates
 
 This library is based on, modified from:
 
@@ -38,9 +133,42 @@ This library is based on, modified from:
 to apply the better and faster **asynchronous** feature of the **powerful** [ESPAsyncWebServer Library](https://github.com/me-no-dev/ESPAsyncWebServer) into STM32 boards using builtin LAN8742A Ethernet.
 
 ---
+
+#### Currently Supported Boards
+
+1. Nucleo-144 (F429ZI, F746ZG, F756ZG, F767ZI)
+2. Discovery STM32F746G-DISCOVERY
+3. Any STM32 boards with enough flash/memory and already configured to run LAN8742A Ethernet.
+
+
+---
 ---
 
-## Prerequisite
+## Changelog
+
+### Releases v1.2.5
+
+1. Clean-up all compiler warnings possible.
+2. Update Table of Contents
+3. Add examples
+4. Add Version String 
+
+### Releases v1.2.4
+
+1. Add back MD5/SHA1 authentication feature.
+2. Add example, update README.md, clean up.
+
+#### Releases v1.2.3
+
+1. Initial coding to port [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer) to STM32 boards using builtin LAN8742A Ethernet. More supports will be added gradually later, such as AsyncUDP, other Ethernet / WiFi shields.
+2. Add more examples.
+3. Add debugging features.
+4. Bump up to v1.2.3 to sync with [ESPAsyncWebServer v1.2.3](https://github.com/me-no-dev/ESPAsyncWebServer).
+
+---
+---
+
+## Prerequisites
 
  1. [`Arduino IDE 1.8.13+` for Arduino](https://www.arduino.cc/en/Main/Software)
  2. [`Arduino Core for STM32 1.9.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32 (Use Arduino Board Manager)
@@ -53,6 +181,7 @@ to apply the better and faster **asynchronous** feature of the **powerful** [ESP
 ## Installation
 
 ### Use Arduino Library Manager
+
 The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncWebServer_STM32`, then select / install the latest version. You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/badge/AsyncWebServer_STM32.svg?)](https://www.ardu-badge.com/AsyncWebServer_STM32) for more detailed instructions.
 
 ### Manual Install
@@ -63,86 +192,13 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncW
 4. Copy the whole `AsyncWebServer_STM32-master` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
 
 ### VS Code & PlatformIO:
+
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
-3. Install **AsyncWebServer_STM32** library by using [Library Manager](https://docs.platformio.org/en/latest/librarymanager/). Search for ***AsyncWebServer_STM32*** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
+3. Install [**AsyncWebServer_STM32** library](https://platformio.org/lib/show/11237/AsyncWebServer_STM32) by using [Library Manager](https://platformio.org/lib/show/11237/AsyncWebServer_STM32/installation). Search for **AsyncWebServer_STM32** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
 4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
----
-
-## Table of contents
-
-- [AsyncWebServer_STM32](#espasyncwebserver)
-  - [Table of contents](#table-of-contents)
-  - [Why should you care](#why-should-you-care)
-  - [Important things to remember](#important-things-to-remember)
-  - [Principles of operation](#principles-of-operation)
-    - [The Async Web server](#the-async-web-server)
-    - [Request Life Cycle](#request-life-cycle)
-    - [Rewrites and how do they work](#rewrites-and-how-do-they-work)
-    - [Handlers and how do they work](#handlers-and-how-do-they-work)
-    - [Responses and how do they work](#responses-and-how-do-they-work)
-    - [Template processing](#template-processing)
-  - [Request Variables](#request-variables)
-    - [Common Variables](#common-variables)
-    - [Headers](#headers)
-    - [GET, POST and FILE parameters](#get-post-and-file-parameters)
-    - [JSON body handling with ArduinoJson](#json-body-handling-with-arduinojson)
-  - [Responses](#responses)
-    - [Redirect to another URL](#redirect-to-another-url)
-    - [Basic response with HTTP Code](#basic-response-with-http-code)
-    - [Basic response with HTTP Code and extra headers](#basic-response-with-http-code-and-extra-headers)
-    - [Basic response with string content](#basic-response-with-string-content)
-    - [Basic response with string content and extra headers](#basic-response-with-string-content-and-extra-headers)
-    - [Respond with content coming from a Stream](#respond-with-content-coming-from-a-stream)
-    - [Respond with content coming from a Stream and extra headers](#respond-with-content-coming-from-a-stream-and-extra-headers)
-    - [Respond with content coming from a Stream containing templates](#respond-with-content-coming-from-a-stream-containing-templates)
-    - [Respond with content coming from a Stream containing templates and extra headers](#respond-with-content-coming-from-a-stream-containing-templates-and-extra-headers)
-    - [Respond with content using a callback](#respond-with-content-using-a-callback)
-    - [Respond with content using a callback and extra headers](#respond-with-content-using-a-callback-and-extra-headers)
-    - [Respond with content using a callback containing templates](#respond-with-content-using-a-callback-containing-templates)
-    - [Respond with content using a callback containing templates and extra headers](#respond-with-content-using-a-callback-containing-templates-and-extra-headers)
-    - [Chunked Response](#chunked-response)
-    - [Chunked Response containing templates](#chunked-response-containing-templates)
-    - [Print to response](#print-to-response)
-    - [ArduinoJson Basic Response](#arduinojson-basic-response)
-    - [ArduinoJson Advanced Response](#arduinojson-advanced-response)
-  - [Param Rewrite With Matching](#param-rewrite-with-matching)
-  - [Using filters](#using-filters)
-  - [Bad Responses](#bad-responses)
-    - [Respond with content using a callback without content length to HTTP/1.0 clients](#respond-with-content-using-a-callback-without-content-length-to-http10-clients)
-  - [Async WebSocket Plugin](#async-websocket-plugin)
-    - [Async WebSocket Event](#async-websocket-event)
-    - [Methods for sending data to a socket client](#methods-for-sending-data-to-a-socket-client)
-    - [Direct access to web socket message buffer](#direct-access-to-web-socket-message-buffer)
-    - [Limiting the number of web socket clients](#limiting-the-number-of-web-socket-clients)
-  - [Async Event Source Plugin](#async-event-source-plugin)
-    - [Setup Event Source on the server](#setup-event-source-on-the-server)
-    - [Setup Event Source in the browser](#setup-event-source-in-the-browser)
-  - [Remove handlers and rewrites](#remove-handlers-and-rewrites)
-  - [Setting up the server](#setting-up-the-server)
-    - [Setup global and class functions as request handlers](#setup-global-and-class-functions-as-request-handlers)
-    - [Methods for controlling websocket connections](#methods-for-controlling-websocket-connections)
-    - [Adding Default Headers](#adding-default-headers)
-    - [Path variable](#path-variable)
 
 ---
----
-
-## Why should you care
-
-- Using asynchronous network means that you can handle **more than one connection at the same time**
-- You are called once the request is ready and parsed
-- When you send the response, you are **immediately ready** to handle other connections while the server is taking care of sending the response in the background
-- **Speed is OMG**
-- **Easy to use API, HTTP Basic and Digest MD5 Authentication (default), ChunkedResponse**
-- Easily extensible to handle **any type of content**
-- Supports Continue 100
-- Async WebSocket plugin offering different locations without extra servers or ports
-- Async EventSource (Server-Sent Events) plugin to send events to the browser
-- URL Rewrite plugin for conditional and permanent url rewrites
-- ServeStatic plugin that supports cache, Last-Modified, default index and more
-- Simple template processing engine to handle templates
-
 ---
 
 ## Important things to remember
@@ -1309,12 +1365,16 @@ build_flags =
  2. [AsyncFSBrowser_STM32](examples/AsyncFSBrowser_STM32)
  3. [Async_HelloServer](examples/Async_HelloServer) 
  4. [Async_HelloServer2](examples/Async_HelloServer2)
- 5. [Async_PostServer](examples/Async_PostServer)
- 6. [Async_RegexPatterns_STM32](examples/Async_RegexPatterns_STM32)
- 7. [Async_SimpleWebServer_STM32](examples/Async_SimpleWebServer_STM32)
- 8. [WebClient](examples/WebClient)
- 9. [WebClientRepeating](examples/WebClientRepeating)
-10. [Async_HttpBasicAuth](examples/Async_HttpBasicAuth) 
+ 5. [Async_HttpBasicAuth](examples/Async_HttpBasicAuth)
+ 6. [Async_PostServer](examples/Async_PostServer)
+ 7. [**AsyncMultiWebServer_STM32**](examples/AsyncMultiWebServer_STM32)
+ 8. [Async_RegexPatterns_STM32](examples/Async_RegexPatterns_STM32)
+ 9. [Async_SimpleWebServer_STM32](examples/Async_SimpleWebServer_STM32)
+10. [**MQTTClient_Auth**](examples/MQTTClient_Auth)
+11. [**MQTTClient_Basic**](examples/MQTTClient_Basic)
+12. [**MQTT_ThingStream**](examples/MQTT_ThingStream)
+13. [WebClient](examples/WebClient)
+14. [WebClientRepeating](examples/WebClientRepeating)
 
 ---
 
@@ -1388,6 +1448,8 @@ build_flags =
 #ifndef BOARD_NAME
   #define BOARD_NAME    BOARD_TYPE
 #endif
+
+#define SHIELD_TYPE     "LAN8742A built-in Ethernet"
 
 #include <LwIP.h>
 #include <STM32Ethernet.h>
@@ -1515,7 +1577,9 @@ void setup(void)
   digitalWrite(led, 0);
 
   Serial.begin(115200);
-  Serial.println("\nStart Async_AdvancedWebServer_STM32 on " + String(BOARD_NAME));
+
+  Serial.printf("\nStarting Async_AdvancedWebServer_STM32 on %s with %s\n", BOARD_NAME, SHIELD_TYPE);
+  Serial.println(ASYNC_WEBSERVER_STM32_VERSION);
 
   // start the ethernet connection and the server
   // Use random mac
@@ -1561,14 +1625,205 @@ You can access the Async Advanced WebServer @ the server IP
 </p>
 
 ---
+---
+
+### Debug Termimal Output Samples
+
+#### 1. AsyncMultiWebServer_STM32 on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library
+
+Following are debug terminal output and screen shots when running example [AsyncMultiWebServer_STM32](examples/AsyncMultiWebServer_STM32) on STM32F7 Nucleo-144 NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library to demonstrate the operation of 3 independent AsyncWebServers on 3 different ports and how to handle the complicated AsyncMultiWebServers.
+
+
+```
+Starting AsyncMultiWebServer_STM32 on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+AsyncWebServer_STM32 v1.2.5
+
+Connected to network. IP = 192.168.2.141
+Initialize multiServer OK, serverIndex = 0, port = 8080
+HTTP server started at ports 8080
+Initialize multiServer OK, serverIndex = 1, port = 8081
+HTTP server started at ports 8081
+Initialize multiServer OK, serverIndex = 2, port = 8082
+HTTP server started at ports 8082
+```
+
+You can access the Async Advanced WebServers @ the server IP and corresponding ports (8080, 8081 and 8082)
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/pics/AsyncMultiWebServer_STM32_SVR1.png">
+</p>
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/pics/AsyncMultiWebServer_STM32_SVR2.png">
+</p>
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/pics/AsyncMultiWebServer_STM32_SVR3.png">
+</p>
 
 ---
+
+#### 2. WebClient on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library
+
+Following is debug terminal output when running example [WebClient](examples/WebClient) on STM32F7 Nucleo-144 NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library.
+
+```
+Starting WebClient on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+AsyncWebServer_STM32 v1.2.5
+You're connected to the network, IP = 192.168.2.71
+
+Starting connection to server...
+Connected to server
+HTTP/1.1 200 OK
+Server: nginx/1.4.2
+Date: Mon, 28 Dec 2020 22:30:39 GMT
+Content-Type: text/plain
+Content-Length: 2263
+Last-Modified: Wed, 02 Oct 2013 13:46:47 GMT
+Connection: close
+Vary: Accept-Encoding
+ETag: "524c23c7-8d7"
+Accept-Ranges: bytes
+
+
+           `:;;;,`                      .:;;:.           
+        .;;;;;;;;;;;`                :;;;;;;;;;;:     TM 
+      `;;;;;;;;;;;;;;;`            :;;;;;;;;;;;;;;;      
+     :;;;;;;;;;;;;;;;;;;         `;;;;;;;;;;;;;;;;;;     
+    ;;;;;;;;;;;;;;;;;;;;;       .;;;;;;;;;;;;;;;;;;;;    
+   ;;;;;;;;:`   `;;;;;;;;;     ,;;;;;;;;.`   .;;;;;;;;   
+  .;;;;;;,         :;;;;;;;   .;;;;;;;          ;;;;;;;  
+  ;;;;;;             ;;;;;;;  ;;;;;;,            ;;;;;;. 
+ ,;;;;;               ;;;;;;.;;;;;;`              ;;;;;; 
+ ;;;;;.                ;;;;;;;;;;;`      ```       ;;;;;`
+ ;;;;;                  ;;;;;;;;;,       ;;;       .;;;;;
+`;;;;:                  `;;;;;;;;        ;;;        ;;;;;
+,;;;;`    `,,,,,,,,      ;;;;;;;      .,,;;;,,,     ;;;;;
+:;;;;`    .;;;;;;;;       ;;;;;,      :;;;;;;;;     ;;;;;
+:;;;;`    .;;;;;;;;      `;;;;;;      :;;;;;;;;     ;;;;;
+.;;;;.                   ;;;;;;;.        ;;;        ;;;;;
+ ;;;;;                  ;;;;;;;;;        ;;;        ;;;;;
+ ;;;;;                 .;;;;;;;;;;       ;;;       ;;;;;,
+ ;;;;;;               `;;;;;;;;;;;;                ;;;;; 
+ `;;;;;,             .;;;;;; ;;;;;;;              ;;;;;; 
+  ;;;;;;:           :;;;;;;.  ;;;;;;;            ;;;;;;  
+   ;;;;;;;`       .;;;;;;;,    ;;;;;;;;        ;;;;;;;:  
+    ;;;;;;;;;:,:;;;;;;;;;:      ;;;;;;;;;;:,;;;;;;;;;;   
+    `;;;;;;;;;;;;;;;;;;;.        ;;;;;;;;;;;;;;;;;;;;    
+      ;;;;;;;;;;;;;;;;;           :;;;;;;;;;;;;;;;;:     
+       ,;;;;;;;;;;;;;,              ;;;;;;;;;;;;;;       
+         .;;;;;;;;;`                  ,;;;;;;;;:         
+                                                         
+                                                         
+                                                         
+                                                         
+    ;;;   ;;;;;`  ;;;;:  .;;  ;; ,;;;;;, ;;. `;,  ;;;;   
+    ;;;   ;;:;;;  ;;;;;; .;;  ;; ,;;;;;: ;;; `;, ;;;:;;  
+   ,;:;   ;;  ;;  ;;  ;; .;;  ;;   ,;,   ;;;,`;, ;;  ;;  
+   ;; ;:  ;;  ;;  ;;  ;; .;;  ;;   ,;,   ;;;;`;, ;;  ;;. 
+   ;: ;;  ;;;;;:  ;;  ;; .;;  ;;   ,;,   ;;`;;;, ;;  ;;` 
+  ,;;;;;  ;;`;;   ;;  ;; .;;  ;;   ,;,   ;; ;;;, ;;  ;;  
+  ;;  ,;, ;; .;;  ;;;;;:  ;;;;;: ,;;;;;: ;;  ;;, ;;;;;;  
+  ;;   ;; ;;  ;;` ;;;;.   `;;;:  ,;;;;;, ;;  ;;,  ;;;;   
+
+Disconnecting from server...
+```
+
+---
+
+
+#### 3. MQTTClient_Auth on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library
+
+Following is debug terminal output when running example [MQTTClient_Auth](examples/MQTTClient_Auth) on STM32F7 Nucleo-144 NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library.
+
+```
+Starting MQTTClient_Auth on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+AsyncWebServer_STM32 v1.2.5
+
+Connected to network. IP = 192.168.2.71
+Attempting MQTT connection to broker.emqx.io...connected
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+```
+
+---
+
+#### 4. MQTTClient_Basic on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library
+
+Following is debug terminal output when running example [MQTTClient_Basic](examples/MQTTClient_Basic) on STM32F7 Nucleo-144 NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library.
+
+```
+Starting MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+AsyncWebServer_STM32 v1.2.5
+
+Connected to network. IP = 192.168.2.71
+Attempting MQTT connection to broker.shiftr.io...connected
+Message Send : MQTT_Pub => Hello from MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+Message arrived [MQTT_Pub] Hello from MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+Message Send : MQTT_Pub => Hello from MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+Message arrived [MQTT_Pub] Hello from MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+Message Send : MQTT_Pub => Hello from MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+Message arrived [MQTT_Pub] Hello from MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+Message Send : MQTT_Pub => Hello from MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+Message arrived [MQTT_Pub] Hello from MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+Message Send : MQTT_Pub => Hello from MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+Message arrived [MQTT_Pub] Hello from MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+Message Send : MQTT_Pub => Hello from MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+Message arrived [MQTT_Pub] Hello from MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+```
+
+---
+
+#### 5. MQTT_ThingStream on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library
+
+Following is debug terminal output when running example [MQTT_ThingStream](examples/MQTT_ThingStream) on STM32F7 Nucleo-144 NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library.
+
+```
+Starting MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+AsyncWebServer_STM32 v1.2.5
+
+Connected to network. IP = 192.168.2.71
+***************************************
+STM32_Pub
+***************************************
+Attempting MQTT connection to broker.emqx.io
+...connected
+Published connection message successfully!
+Subcribed to: STM32_Sub
+MQTT Message Send : STM32_Pub => Hello from MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+MQTT Message receive [STM32_Pub] Hello from MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+MQTT Message Send : STM32_Pub => Hello from MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+MQTT Message receive [STM32_Pub] Hello from MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+MQTT Message Send : STM32_Pub => Hello from MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+MQTT Message receive [STM32_Pub] Hello from MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+MQTT Message Send : STM32_Pub => Hello from MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+MQTT Message receive [STM32_Pub] Hello from MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+MQTT Message Send : STM32_Pub => Hello from MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+MQTT Message receive [STM32_Pub] Hello from MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+```
+
+---
+---
+
+### Debug
+
+Debug is enabled by default on Serial. Debug Level from 0 to 4. To disable, change the _ETHERNET_WEBSERVER_LOGLEVEL_ to 0
+
+```cpp
+// Use this to output debug msgs to Serial
+#define ASYNCWEBSERVER_STM32_DEBUG_PORT       Serial
+// Use this to disable all output debug msgs
+// Debug Level from 0 to 4
+#define _ASYNCWEBSERVER_STM32_LOGLEVEL_       0
+```
 
 ### Troubleshooting
 
 If you get compilation errors, more often than not, you may need to install a newer version of Arduino IDE, the Arduino `STM32` core or depending libraries.
 
-Sometimes, the library will only work if you update the `STM32` core to the latest version because I am always using the latest cores /libraries.
+Sometimes, the library will only work if you update the `STM32` core to the latest version because I'm always using the latest cores /libraries.
 
 If you connect to the created configuration Access Point but the ConfigPortal does not show up, just open a browser and type in the IP of the web portal, by default `192.168.4.1`.
 
@@ -1600,6 +1855,15 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
 ---
 ---
 
+## Releases
+
+### Releases v1.2.5
+
+1. Clean-up all compiler warnings possible.
+2. Update Table of Contents
+3. Add examples
+4. Add Version String 
+
 ### Releases v1.2.4
 
 1. Add back MD5/SHA1 authentication feature.
@@ -1618,7 +1882,7 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
 2. Discovery STM32F746G-DISCOVERY
 3. Any STM32 boards with enough flash/memory and already configured to run LAN8742A Ethernet.
 
----
+
 ---
 
 This library is based on, modified from:
@@ -1627,6 +1891,7 @@ This library is based on, modified from:
 
 to apply the better and faster **asynchronous** feature of the **great** [ESPAsyncWebServer Library](https://github.com/me-no-dev/ESPAsyncWebServer) into STM32 boards using builtin LAN8742A Ethernet.
 
+---
 ---
 
 ### Contributions and Thanks
@@ -1658,7 +1923,7 @@ If you want to contribute to this project:
 
 ---
 
-### License and credits ###
+### License
 
 - The library is licensed under [MIT](https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/LICENSE)
 

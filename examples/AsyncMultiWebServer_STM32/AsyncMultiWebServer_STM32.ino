@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-  Async_RegexPatterns_STM32.ino - Dead simple AsyncWebServer for STM32 built-in LAN8742A Ethernet
+  AsyncMultiWebServer_STM32.h - Dead simple AsyncWebServer for STM32 built-in LAN8742A Ethernet
   
   For STM32 with built-in LAN8742A Ethernet (Nucleo-144, DISCOVERY, etc)
   
@@ -8,7 +8,7 @@
   Based on and modified from ESPAsyncWebServer (https://github.com/me-no-dev/ESPAsyncWebServer)
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
-  
+ 
   Version: 1.2.5
   
   Version Modified By   Date      Comments
@@ -26,25 +26,6 @@
       - STM32 boards (STM32F/L/H/G/WB/MP1) with 32K+ Flash, with Built-in Ethernet,
       - See How To Use Built-in Ethernet at (https://github.com/khoih-prog/EthernetWebServer_STM32/issues/1)
 */
-//
-// A simple server implementation with regex routes:
-//  * serve static messages
-//  * read GET and POST parameters
-//  * handle missing pages / 404s
-//
-// Add buildflag ASYNCWEBSERVER_REGEX to enable the regex support
-//
-// For platformio: platformio.ini:
-//  build_flags =
-//      -DASYNCWEBSERVER_REGEX
-//
-// For arduino IDE: create/update platform.local.txt
-// Windows: C:\Users\(username)\AppData\Local\Arduino15\packages\espxxxx\hardware\espxxxx\{version}\platform.local.txt
-// Linux: ~/.arduino15/packages/espxxxx/hardware/espxxxx/{version}/platform.local.txt
-//
-// compiler.cpp.extra_flags=-DASYNCWEBSERVER_REGEX=1
-
-#define ASYNCWEBSERVER_REGEX      true
 
 #if !( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
        defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
@@ -138,21 +119,101 @@ byte mac[][NUMBER_OF_MAC] =
 // Select the IP address according to your local network
 IPAddress ip(192, 168, 2, 232);
 
-AsyncWebServer    server(80);
+unsigned int    analogReadPin []  = { 12, 13, 14 };
 
-const char* PARAM_MESSAGE = "message";
+#define BUFFER_SIZE       500
 
-void notFound(AsyncWebServerRequest *request)
+#define HTTP_PORT1        8080
+#define HTTP_PORT2        8081
+#define HTTP_PORT3        8082
+
+AsyncWebServer* server1;
+AsyncWebServer* server2;
+AsyncWebServer* server3;
+
+AsyncWebServer*  multiServer  []  = { server1, server2, server3 };
+uint16_t        http_port     []  = { HTTP_PORT1, HTTP_PORT2, HTTP_PORT3 };
+
+#define NUM_SERVERS     ( sizeof(multiServer) / sizeof(AsyncWebServer*) )
+
+unsigned int serverIndex;
+
+String createBuffer()
 {
-  request->send(404, "text/plain", "Not found");
+  char temp[BUFFER_SIZE];
+
+  memset(temp, 0, sizeof(temp));
+
+  int sec = millis() / 1000;
+  int min = sec / 60;
+  int hr = min / 60;
+  int day = hr / 24;
+
+  snprintf(temp, BUFFER_SIZE - 1,
+           "<html>\
+<head>\
+<meta http-equiv='refresh' content='5'/>\
+<title>%s</title>\
+<style>\
+body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }\
+</style>\
+</head>\
+<body>\
+<h1>Hello from %s</h1>\
+<h2>running AsyncWebServer_STM32</h2>\
+<h3>on %s</h3>\
+<h3>Uptime: %d d %02d:%02d:%02d</h3>\
+</body>\
+</html>", BOARD_NAME, BOARD_NAME, "Built-in LAN8742A", day, hr, min % 60, sec % 60);
+
+  return temp;
 }
 
-void setup() 
+
+void handleRoot(AsyncWebServerRequest * request)
+{
+  String message = createBuffer();
+  request->send(200, F("text/html"), message);
+}
+
+String createNotFoundBuffer(AsyncWebServerRequest * request)
+{
+  String message;
+
+  message.reserve(500);
+
+  message = F("File Not Found\n\n");
+
+  message += F("URI: ");
+  message += request->url();
+  message += F("\nMethod: ");
+  message += (request->method() == HTTP_GET) ? F("GET") : F("POST");
+  message += F("\nArguments: ");
+  message += request->args();
+  message += F("\n");
+
+  for (uint8_t i = 0; i < request->args(); i++)
+  {
+    message += " " + request->argName(i) + ": " + request->arg(i) + "\n";
+  }
+
+  return message;
+}
+
+void handleNotFound(AsyncWebServerRequest * request)
+{
+  String message = createNotFoundBuffer(request);
+  request->send(404, F("text/plain"), message);
+}
+
+void setup()
 {
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.printf("\nStarting Async_RegexPatterns_STM32 on %s with %s\n", BOARD_NAME, SHIELD_TYPE);
+  delay(200);
+
+  Serial.printf("\nStarting AsyncMultiWebServer_STM32 on %s with %s\n", BOARD_NAME, SHIELD_TYPE);
   Serial.println(ASYNC_WEBSERVER_STM32_VERSION);
 
   // start the ethernet connection and the server
@@ -164,34 +225,48 @@ void setup()
   // Use DHCP dynamic IP and random mac
   Ethernet.begin(mac[index]);
 
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest * request) 
-  {
-    request->send(200, "text/plain", "Hello, world from Async_RegexPatterns_STM32 on " + String(BOARD_NAME));
-  });
-
-  // Send a GET request to <IP>/sensor/<number>
-  server.on("^\\/sensor\\/([0-9]+)$", HTTP_GET, [] (AsyncWebServerRequest * request) 
-  {
-    String sensorNumber = request->pathArg(0);
-    request->send(200, "text/plain", "Hello, sensor: " + sensorNumber);
-  });
-
-  // Send a GET request to <IP>/sensor/<number>/action/<action>
-  server.on("^\\/sensor\\/([0-9]+)\\/action\\/([a-zA-Z0-9]+)$", HTTP_GET, [] (AsyncWebServerRequest * request) 
-  {
-    String sensorNumber = request->pathArg(0);
-    String action = request->pathArg(1);
-    request->send(200, "text/plain", "Hello, sensor: " + sensorNumber + ", with action: " + action);
-  });
-
-  server.onNotFound(notFound);
-
-  server.begin();
-
-  Serial.print("Server started @ ");
+  Serial.print("\nConnected to network. IP = ");
   Serial.println(Ethernet.localIP());
+
+  for (serverIndex = 0; serverIndex < NUM_SERVERS; serverIndex++)
+  {
+    multiServer[serverIndex] = new AsyncWebServer(http_port[serverIndex]);  
+
+    if (multiServer[serverIndex])
+    {
+      Serial.printf("Initialize multiServer OK, serverIndex = %d, port = %d\n", serverIndex, http_port[serverIndex]);
+    }
+    else
+    {
+      Serial.printf("Error initialize multiServer, serverIndex = %d\n", serverIndex);
+
+      while(1);
+    }
+
+    multiServer[serverIndex]->on("/", HTTP_GET, [](AsyncWebServerRequest * request)
+    {
+      handleRoot(request);
+    });
+
+    multiServer[serverIndex]->on("/hello", HTTP_GET, [](AsyncWebServerRequest * request) 
+    {     
+      String message = F("Hello from AsyncWebServer using built-in LAN8742A Ethernet, running on ");
+      message       += BOARD_NAME;
+      
+      request->send(200, "text/plain", message);
+    });
+      
+    multiServer[serverIndex]->onNotFound([](AsyncWebServerRequest * request) 
+    {
+      handleNotFound(request);
+    });
+
+    multiServer[serverIndex]->begin();
+
+    Serial.printf("HTTP server started at ports %d\n", http_port[serverIndex]);
+  }
 }
 
-void loop() 
+void loop()
 {
 }
