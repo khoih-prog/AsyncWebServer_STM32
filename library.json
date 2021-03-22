@@ -1,6 +1,6 @@
 {
   "name":"AsyncWebServer_STM32",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description":"Asynchronous HTTP and WebSocket Server Library for STM32F/L/H/G/WB/MP1 using LAN8742A Ethernet",
   "keywords":"http,async,websocket,webserver,stm32f,stm32l,stm32h,stm32g,stm32wb,stm32mp1,ethernet,lan8742a",
   "authors": 
@@ -39,7 +39,7 @@
     },
     {
       "name": "external-repo",
-      "version": "https://github.com/philbowles/STM32AsyncTCP"
+      "version": "https://github.com/khoih-prog/STM32AsyncTCP"
     }
   ],
   "platforms": ["ststm32"],

@@ -16,6 +16,7 @@
   * [Features](#features)
   * [Currently supported Boards](#currently-supported-boards)
 * [Changelog](#changelog)
+  * [Releases v1.2.6](#releases-v126)
   * [Releases v1.2.5](#releases-v125)
   * [Releases v1.2.4](#releases-v124)
   * [Releases v1.2.3](#releases-v123)
@@ -146,6 +147,10 @@ to apply the better and faster **asynchronous** feature of the **powerful** [ESP
 
 ## Changelog
 
+### Releases v1.2.6
+
+1. Fix dependency on unpublished [**STM32AsyncTCP Library**](https://github.com/philbowles/STM32AsyncTCP). Check [Compilation broken due to error in STM32AsyncTCP dependency](https://github.com/khoih-prog/AsyncWebServer_STM32/issues/4) and [how to run one of the examples?](https://github.com/khoih-prog/AsyncWebServer_STM32/issues/2).
+
 ### Releases v1.2.5
 
 1. Clean-up all compiler warnings possible.
@@ -174,7 +179,7 @@ to apply the better and faster **asynchronous** feature of the **powerful** [ESP
  2. [`Arduino Core for STM32 1.9.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32 (Use Arduino Board Manager)
  3. [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in Ethernet on (Nucleo-144, Discovery)
  4. [`LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP) for built-in Ethernet on (Nucleo-144, Discovery)
- 5. [`STM32AsyncTCP library`](https://github.com/philbowles/STM32AsyncTCP) for built-in Ethernet on (Nucleo-144, Discovery)
+ 5. [`STM32AsyncTCP library v1.0.1+`](https://github.com/khoih-prog/STM32AsyncTCP) for built-in Ethernet on (Nucleo-144, Discovery). To install manually for Arduino IDE.
  
 ---
 
@@ -1857,6 +1862,10 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
 
 ## Releases
 
+### Releases v1.2.6
+
+1. Fix dependency on unpublished [**STM32AsyncTCP Library**](https://github.com/philbowles/STM32AsyncTCP). Check [Compilation broken due to error in STM32AsyncTCP dependency](https://github.com/khoih-prog/AsyncWebServer_STM32/issues/4) and [how to run one of the examples?](https://github.com/khoih-prog/AsyncWebServer_STM32/issues/2)
+
 ### Releases v1.2.5
 
 1. Clean-up all compiler warnings possible.
@@ -1900,6 +1909,7 @@ to apply the better and faster **asynchronous** feature of the **great** [ESPAsy
 2. Relied on [Frederic Pillon's STM32duino LwIP Library](https://github.com/stm32duino/LwIP).
 3. Relied on [PhilBowles' STM32 AsyncTCP Library](https://github.com/philbowles/STM32AsyncTCP).
 4. Thanks to good work of [Miguel Wisintainer](https://github.com/tcpipchip) for working with, developing, debugging and testing.
+5. Thanks to [Jean-Claude](https://github.com/jcw) and [chris007de](https://github.com/chris007de) to help locate the dependency issue, discuss solution leading to release v1.2.6. Check [Compilation broken due to error in STM32AsyncTCP dependency](https://github.com/khoih-prog/AsyncWebServer_STM32/issues/4) and [how to run one of the examples?](https://github.com/khoih-prog/AsyncWebServer_STM32/issues/2).
 
 
 <table>
@@ -1908,6 +1918,8 @@ to apply the better and faster **asynchronous** feature of the **great** [ESPAsy
     <td align="center"><a href="https://github.com/fpistm"><img src="https://github.com/fpistm.png" width="100px;" alt="fpistm"/><br /><sub><b>⭐️ Frederic Pillon</b></sub></a><br /></td>
      <td align="center"><a href="https://github.com/philbowles"><img src="https://github.com/philbowles.png" width="100px;" alt="philbowles"/><br /><sub><b>⭐️ Phil Bowles</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b>tcpipchip</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/jcw"><img src="https://github.com/jcw.png" width="100px;" alt="jcw"/><br /><sub><b>Jean-Claude</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/chris007de"><img src="https://github.com/chris007de.png" width="100px;" alt="chris007de"/><br /><sub><b>chris007de</b></sub></a><br /></td>
   </tr> 
 </table>
 
