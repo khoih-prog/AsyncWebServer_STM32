@@ -1641,7 +1641,7 @@ Following are debug terminal output and screen shots when running example [Async
 
 ```
 Starting AsyncMultiWebServer_STM32 on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.2.5
+AsyncWebServer_STM32 v1.2.6
 
 Connected to network. IP = 192.168.2.141
 Initialize multiServer OK, serverIndex = 0, port = 8080
@@ -1674,7 +1674,7 @@ Following is debug terminal output when running example [WebClient](examples/Web
 
 ```
 Starting WebClient on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.2.5
+AsyncWebServer_STM32 v1.2.6
 You're connected to the network, IP = 192.168.2.71
 
 Starting connection to server...
@@ -1743,7 +1743,7 @@ Following is debug terminal output when running example [MQTTClient_Auth](exampl
 
 ```
 Starting MQTTClient_Auth on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.2.5
+AsyncWebServer_STM32 v1.2.6
 
 Connected to network. IP = 192.168.2.71
 Attempting MQTT connection to broker.emqx.io...connected
@@ -1761,7 +1761,7 @@ Following is debug terminal output when running example [MQTTClient_Basic](examp
 
 ```
 Starting MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.2.5
+AsyncWebServer_STM32 v1.2.6
 
 Connected to network. IP = 192.168.2.71
 Attempting MQTT connection to broker.shiftr.io...connected
@@ -1787,7 +1787,7 @@ Following is debug terminal output when running example [MQTT_ThingStream](examp
 
 ```
 Starting MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.2.5
+AsyncWebServer_STM32 v1.2.6
 
 Connected to network. IP = 192.168.2.71
 ***************************************
