@@ -1,15 +1,15 @@
 /****************************************************************************************************************************
-  AsyncWebSynchronization_STM32.h - Dead simple AsyncWebServer for STM32 built-in LAN8742A Ethernet
+  AsyncWebSynchronization_STM32.h - Dead simple AsyncWebServer for STM32 LAN8720 or built-in LAN8742A Ethernet
   
-  For STM32 with built-in LAN8742A Ethernet (Nucleo-144, DISCOVERY, etc)
+  For STM32 with LAN8720 (STM32F4/F7) or built-in LAN8742A Ethernet (Nucleo-144, DISCOVERY, etc)
   
-  AsyncWebServer_STM32 is a library for the STM32 run built-in Ethernet WebServer
+  AsyncWebServer_STM32 is a library for the STM32 with LAN8720 or built-in LAN8742A Ethernet WebServer
   
   Based on and modified from ESPAsyncWebServer (https://github.com/me-no-dev/ESPAsyncWebServer)
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
  
-  Version: 1.2.6
+  Version: 1.3.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -18,6 +18,7 @@
   1.2.4   K Hoang      05/09/2020 Add back MD5/SHA1 authentication feature.
   1.2.5   K Hoang      28/12/2020 Suppress all possible compiler warnings. Add examples.
   1.2.6   K Hoang      22/03/2021 Fix dependency on STM32AsyncTCP Library
+  1.3.0   K Hoang      14/04/2021 Add support to LAN8720 using STM32F4 or STM32F7
  *****************************************************************************************************************************/
 
 #pragma once

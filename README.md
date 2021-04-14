@@ -14,8 +14,10 @@
 * [Table of contents](#table-of-contents)
 * [Why do we need this AsyncWebServer_STM32 library](#why-do-we-need-this-asyncwebserver_stm32-library)
   * [Features](#features)
+  * [Why Async is better](#why-async-is-better)
   * [Currently supported Boards](#currently-supported-boards)
 * [Changelog](#changelog)
+  * [Releases v1.3.0](#releases-v130)
   * [Releases v1.2.6](#releases-v126)
   * [Releases v1.2.5](#releases-v125)
   * [Releases v1.2.4](#releases-v124)
@@ -25,6 +27,9 @@
   * [Use Arduino Library Manager](#use-arduino-library-manager)
   * [Manual Install](#manual-install)
   * [VS Code & PlatformIO](#vs-code--platformio)
+* [Packages' Patches](#packages-patches)
+  * [1. For STM32 boards to use LAN8720](#1-for-stm32-boards-to-use-lan8720)
+  * [2. For STM32 boards to use Serial1](#2-for-stm32-boards-to-use-serial1)
 * [Important things to remember](#important-things-to-remember)
 * [Principles of operation](#principles-of-operation)
   * [The Async Web server](#the-async-web-server)
@@ -75,27 +80,50 @@
   * [Methods for controlling websocket connections](#methods-for-controlling-websocket-connections)
   * [Adding Default Headers](#adding-default-headers)
   * [Path variable](#path-variable)
+* [HOWTO use STM32F4 with LAN8720](#howto-use-stm32f4-with-lan8720)
+  * [1. Wiring](#1-wiring)
+  * [2. HOWTO program using STLink V-2 or V-3](#2-howto-program-using-stlink-v-2-or-v-3)
+  * [3. HOWTO use Serial Port for Debugging](#3-howto-use-serial-port-for-debugging)
 * [Examples](#examples)
-  * [ 1. Async_AdvancedWebServer](examples/Async_AdvancedWebServer)
-  * [ 2. AsyncFSBrowser_STM32](examples/AsyncFSBrowser_STM32)
-  * [ 3. Async_HelloServer](examples/Async_HelloServer)
-  * [ 4. Async_HelloServer2](examples/Async_HelloServer2)
-  * [ 5. Async_HttpBasicAuth](examples/Async_HttpBasicAuth)
-  * [ 6. AsyncMultiWebServer_STM32](examples/AsyncMultiWebServer_STM32)
-  * [ 7. Async_PostServer](examples/Async_PostServer)
-  * [ 8. Async_RegexPatterns_STM32](examples/Async_RegexPatterns_STM32)
-  * [ 9. Async_SimpleWebServer_STM32](examples/Async_SimpleWebServer_STM32)
-  * [10. **MQTTClient_Auth**](examples/MQTTClient_Auth)
-  * [11. **MQTTClient_Basic**](examples/MQTTClient_Basic)
-  * [12. **MQTT_ThingStream**](examples/MQTT_ThingStream)
-  * [13. WebClient](examples/WebClient) 
-  * [14. WebClientRepeating](examples/WebClientRepeating)
+  * [1. For LAN8742A](#1-for-lan8742a)
+    * [ 1. Async_AdvancedWebServer](examples/Async_AdvancedWebServer)
+    * [ 2. AsyncFSBrowser_STM32](examples/AsyncFSBrowser_STM32)
+    * [ 3. Async_HelloServer](examples/Async_HelloServer)
+    * [ 4. Async_HelloServer2](examples/Async_HelloServer2)
+    * [ 5. Async_HttpBasicAuth](examples/Async_HttpBasicAuth)
+    * [ 6. AsyncMultiWebServer_STM32](examples/AsyncMultiWebServer_STM32)
+    * [ 7. Async_PostServer](examples/Async_PostServer)
+    * [ 8. Async_RegexPatterns_STM32](examples/Async_RegexPatterns_STM32)
+    * [ 9. Async_SimpleWebServer_STM32](examples/Async_SimpleWebServer_STM32)
+    * [10. **MQTTClient_Auth**](examples/MQTTClient_Auth)
+    * [11. **MQTTClient_Basic**](examples/MQTTClient_Basic)
+    * [12. **MQTT_ThingStream**](examples/MQTT_ThingStream)
+    * [13. WebClient](examples/WebClient) 
+    * [14. WebClientRepeating](examples/WebClientRepeating)
+  * [2. For LAN8720](#2-for-lan8720)
+    * [ 1. Async_AdvancedWebServer_LAN8720](examples/STM32_LAN8720/Async_AdvancedWebServer_LAN8720)
+    * [ 2. AsyncFSBrowser_STM32_LAN8720](examples/STM32_LAN8720/AsyncFSBrowser_STM32_LAN8720)
+    * [ 3. Async_HelloServer_LAN8720](examples/STM32_LAN8720/Async_HelloServer_LAN8720)
+    * [ 4. Async_HelloServer2_LAN8720](examples/STM32_LAN8720/Async_HelloServer2_LAN8720)
+    * [ 5. Async_HttpBasicAuth_LAN8720](examples/STM32_LAN8720/Async_HttpBasicAuth_LAN8720)
+    * [ 6. AsyncMultiWebServer_STM32_LAN8720](examples/STM32_LAN8720/AsyncMultiWebServer_STM32_LAN8720)
+    * [ 7. Async_PostServer_LAN8720](examples/STM32_LAN8720/Async_PostServer_LAN8720)
+    * [ 8. Async_RegexPatterns_STM32_LAN8720](examples/STM32_LAN8720/Async_RegexPatterns_STM32_LAN8720)
+    * [ 9. Async_SimpleWebServer_STM32_LAN8720](examples/STM32_LAN8720/Async_SimpleWebServer_STM32_LAN8720)
+    * [10. **MQTTClient_Auth_LAN8720**](examples/STM32_LAN8720/MQTTClient_Auth_LAN8720)
+    * [11. **MQTTClient_Basic_LAN8720**](examples/STM32_LAN8720/MQTTClient_Basic_LAN8720)
+    * [12. **MQTT_ThingStream_LAN8720**](examples/STM32_LAN8720/MQTT_ThingStream_LAN8720)
+    * [13. WebClient_LAN8720](examples/STM32_LAN8720/WebClient_LAN8720)
+    * [14. WebClientRepeating_LAN8720](examples/STM32_LAN8720/WebClientRepeating_LAN8720)
 * [Debug Terminal Output Samples](#debug-termimal-output-samples)
   * [1. AsyncMultiWebServer_STM32 on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#1-asyncmultiwebserver_stm32-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
   * [2. WebClient on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#2-webclient-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
   * [3. MQTTClient_Auth on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#3-mqttclient_auth-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
   * [4. MQTTClient_Basic on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#4-mqttclient_basic-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
   * [5. MQTT_ThingStream on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#5-mqtt_thingstream-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
+  * [6.  MQTTClient_Auth_LAN8720 on BLACK_F407VE using LAN8720 Ethernet and STM32Ethernet Library](#6-mqttclient_auth-on-black_f407ve-using-lan8720-ethernet-and-stm32ethernet-library)
+  * [7. Async_AdvancedWebServer_LAN8720 on BLACK_F407VE using LAN8720 Ethernet and STM32Ethernet Library](#7-async_advancedwebserver_lan8720-on-black_f407ve-using-lan8720-ethernet-and-stm32ethernet-library)
+  * [8. AsyncMultiWebServer_STM32_LAN8720 on BLACK_F407VE using LAN8720 Ethernet and STM32Ethernet Library](#8-asyncmultiwebserver_stm32_lan8720-on-black_f407ve-using-lan8720-ethernet-and-stm32ethernet-library)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
@@ -114,6 +142,15 @@
 
 #### Features
 
+This library is based on, modified from:
+
+1. [Hristo Gochkov's ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer)
+
+to apply the better and faster **asynchronous** feature of the **powerful** [ESPAsyncWebServer Library](https://github.com/me-no-dev/ESPAsyncWebServer) into **STM32F/L/H/G/WB/MP1 boards using LAN8720 or built-in LAN8742A Ethernet**.
+
+
+#### Why Async is better
+
 - Using asynchronous network means that you can handle **more than one connection at the same time**
 - **You are called once the request is ready and parsed**
 - When you send the response, you are **immediately ready** to handle other connections while the server is taking care of sending the response in the background
@@ -127,25 +164,35 @@
 - ServeStatic plugin that supports cache, Last-Modified, default index and more
 - Simple template processing engine to handle templates
 
-This library is based on, modified from:
-
-1. [Hristo Gochkov's ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer)
-
-to apply the better and faster **asynchronous** feature of the **powerful** [ESPAsyncWebServer Library](https://github.com/me-no-dev/ESPAsyncWebServer) into STM32 boards using builtin LAN8742A Ethernet.
 
 ---
 
-#### Currently Supported Boards
+#### Currently supported Boards
 
-1. Nucleo-144 (F429ZI, F746ZG, F756ZG, F767ZI)
-2. Discovery STM32F746G-DISCOVERY
-3. Any STM32 boards with enough flash/memory and already configured to run LAN8742A Ethernet.
+1. **STM32F/L/H/G/WB/MP1 boards with built-in Ethernet LAN8742A** such as :
 
+  - **Nucleo-144 (F429ZI, F767ZI)**
+  - **Discovery (STM32F746G-DISCOVERY)**
+  - **All STM32 boards (STM32F/L/H/G/WB/MP1) with 32K+ Flash, with Built-in Ethernet**
+  - See [EthernetWebServer_STM32 Support and Test Results](https://github.com/khoih-prog/EthernetWebServer_STM32/issues/1)
+  
+2. **STM32F4/F7 boards using Ethernet LAN8720** such as :
+
+  - **Nucleo-144 (F429ZI, NUCLEO_F746NG, NUCLEO_F746ZG, NUCLEO_F756ZG)**
+  - **Discovery (DISCO_F746NG)**
+  - **STM32F4 boards (BLACK_F407VE, BLACK_F407VG, BLACK_F407ZE, BLACK_F407ZG, BLACK_F407VE_Mini, DIYMORE_F407VGT, FK407M1)**
 
 ---
 ---
 
 ## Changelog
+
+### Releases v1.3.0
+
+1. Add support to **LAN8720** Ethernet for many **STM32F4** (F407xx, NUCLEO_F429ZI) and **STM32F7** (DISCO_F746NG, NUCLEO_F746ZG, NUCLEO_F756ZG) boards.
+2. Add LAN8720 examples
+3. Add Packages' Patches for STM32 to use LAN8720 with STM32Ethernet and LwIP libraries
+4. Reduce compiled code size.
 
 ### Releases v1.2.6
 
@@ -180,7 +227,7 @@ to apply the better and faster **asynchronous** feature of the **powerful** [ESP
  3. [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in Ethernet on (Nucleo-144, Discovery)
  4. [`LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP) for built-in Ethernet on (Nucleo-144, Discovery)
  5. [`STM32AsyncTCP library v1.0.1+`](https://github.com/khoih-prog/STM32AsyncTCP) for built-in Ethernet on (Nucleo-144, Discovery). To install manually for Arduino IDE.
- 
+
 ---
 
 ## Installation
@@ -202,6 +249,48 @@ The best and easiest way is to use `Arduino Library Manager`. Search for `AsyncW
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
 3. Install [**AsyncWebServer_STM32** library](https://platformio.org/lib/show/11237/AsyncWebServer_STM32) by using [Library Manager](https://platformio.org/lib/show/11237/AsyncWebServer_STM32/installation). Search for **AsyncWebServer_STM32** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
 4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
+
+---
+---
+
+### Packages' Patches
+
+#### 1. For STM32 boards to use LAN8720
+
+To use LAN8720 on some STM32 boards 
+
+- **Nucleo-144 (F429ZI, NUCLEO_F746NG, NUCLEO_F746ZG, NUCLEO_F756ZG)**
+- **Discovery (DISCO_F746NG)**
+- **STM32F4 boards (BLACK_F407VE, BLACK_F407VG, BLACK_F407ZE, BLACK_F407ZG, BLACK_F407VE_Mini, DIYMORE_F407VGT, FK407M1)**
+
+you have to copy the files [stm32f4xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/1.9.0/system/STM32F4xx) and [stm32f7xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/1.9.0/system/STM32F7xx) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/1.9.0/system) to overwrite the old files.
+
+Supposing the STM32 stm32 core version is 1.9.0. These files must be copied into the directory:
+
+- `~/.arduino15/packages/STM32/hardware/stm32/1.9.0/system/STM32F4xx/stm32f4xx_hal_conf_default.h` for STM32F4.
+- `~/.arduino15/packages/STM32/hardware/stm32/1.9.0/system/STM32F7xx/stm32f7xx_hal_conf_default.h` for Nucleo-144 STM32F7.
+
+Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
+theses files must be copied into the corresponding directory:
+
+- `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/system/STM32F4xx/stm32f4xx_hal_conf_default.h`
+- `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/system/STM32F7xx/stm32f7xx_hal_conf_default.h
+
+
+#### 2. For STM32 boards to use Serial1
+
+**To use Serial1 on some STM32 boards without Serial1 definition (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.) boards**, you have to copy the files [STM32 variant.h](Packages_Patches/STM32/hardware/stm32/1.9.0) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/1.9.0). You have to modify the files corresponding to your boards, this is just an illustration how to do.
+
+Supposing the STM32 stm32 core version is 1.9.0. These files must be copied into the directory:
+
+- `~/.arduino15/packages/STM32/hardware/stm32/1.9.0/variants/NUCLEO_F767ZI/variant.h` for Nucleo-144 NUCLEO_F767ZI.
+- `~/.arduino15/packages/STM32/hardware/stm32/1.9.0/variants/NUCLEO_L053R8/variant.h` for Nucleo-64 NUCLEO_L053R8.
+
+Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
+theses files must be copied into the corresponding directory:
+
+- `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/NUCLEO_F767ZI/variant.h`
+- `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/NUCLEO_L053R8/variant.h`
 
 ---
 ---
@@ -1361,10 +1450,73 @@ build_flags =
 
 *NOTE*: By enabling `ASYNCWEBSERVER_REGEX`, `<regex>` will be included. This will add an 100k to your binary.
 
+
+---
+---
+
+### HOWTO use STM32F4 with LAN8720
+
+#### 1. Wiring
+
+This is the Wiring for STM32F4 (BLACK_F407VE, etc.) using LAN8720
+
+
+|LAN8720 PHY|<--->|STM32F4|
+|:-:|:-:|:-:|
+|TX1|<--->|PB_13|
+|TX_EN|<--->|PB_11|
+|TX0|<--->|PB_12|
+|RX0|<--->|PC_4|
+|RX1|<--->|PC_5|
+|nINT/RETCLK|<--->|PA_1|
+|CRS|<--->|PA_7|
+|MDIO|<--->|PA_2|
+|MDC|<--->|PC_1|
+|GND|<--->|GND|
+|VCC|<--->|+3.3V|
+
+---
+
+#### 2. HOWTO program using STLink V-2 or V-3
+
+Connect as follows. To program, use **STM32CubeProgrammer** or Arduino IDE with 
+
+- **U(S)ART Support: "Enabled (generic Serial)"**
+- **Upload Method : "STM32CubeProgrammer (SWD)"**
+
+
+|STLink|<--->|STM32F4|
+|:-:|:-:|:-:|
+|SWCLK|<--->|SWCLK|
+|SWDIO|<--->|SWDIO|
+|RST|<--->|NRST|
+|GND|<--->|GND|
+|5v|<--->|5V|
+
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/AsyncDNSServer_STM32/blob/master/pics/STM32F407VET6.png">
+</p>
+
+---
+
+#### 3. HOWTO use Serial Port for Debugging
+
+Connect FDTI (USB to Serial) as follows:
+
+|FDTI|<--->|STM32F4|
+|:-:|:-:|:-:|
+|RX|<--->|TX=PA_9|
+|TX|<--->|RX=PA_10|
+|GND|<--->|GND|
+
+
 ---
 ---
 
 ### Examples
+
+#### 1. For LAN8742A
 
  1. [Async_AdvancedWebServer](examples/Async_AdvancedWebServer)
  2. [AsyncFSBrowser_STM32](examples/AsyncFSBrowser_STM32)
@@ -1381,6 +1533,24 @@ build_flags =
 13. [WebClient](examples/WebClient)
 14. [WebClientRepeating](examples/WebClientRepeating)
 
+#### 2. For LAN8720
+
+ 1. [Async_AdvancedWebServer_LAN8720](examples/STM32_LAN8720/Async_AdvancedWebServer_LAN8720)
+ 2. [AsyncFSBrowser_STM32_LAN8720](examples/STM32_LAN8720/AsyncFSBrowser_STM32_LAN8720)
+ 3. [Async_HelloServer_LAN8720](examples/STM32_LAN8720/Async_HelloServer_LAN8720)
+ 4. [Async_HelloServer2_LAN8720](examples/STM32_LAN8720/Async_HelloServer2_LAN8720)
+ 5. [Async_HttpBasicAuth_LAN8720](examples/STM32_LAN8720/Async_HttpBasicAuth_LAN8720)
+ 6. [AsyncMultiWebServer_STM32_LAN8720](examples/STM32_LAN8720/AsyncMultiWebServer_STM32_LAN8720)
+ 7. [Async_PostServer_LAN8720](examples/STM32_LAN8720/Async_PostServer_LAN8720)
+ 8. [Async_RegexPatterns_STM32_LAN8720](examples/STM32_LAN8720/Async_RegexPatterns_STM32_LAN8720)
+ 9. [Async_SimpleWebServer_STM32_LAN8720](examples/STM32_LAN8720/Async_SimpleWebServer_STM32_LAN8720)
+10. [**MQTTClient_Auth_LAN8720**](examples/STM32_LAN8720/MQTTClient_Auth_LAN8720)
+11. [**MQTTClient_Basic_LAN8720**](examples/STM32_LAN8720/MQTTClient_Basic_LAN8720)
+12. [**MQTT_ThingStream_LAN8720**](examples/STM32_LAN8720/MQTT_ThingStream_LAN8720)
+13. [WebClient_LAN8720](examples/STM32_LAN8720/WebClient_LAN8720)
+14. [WebClientRepeating_LAN8720](examples/STM32_LAN8720/WebClientRepeating_LAN8720)
+
+---
 ---
 
 ### Example [Async_AdvancedWebServer](examples/Async_AdvancedWebServer)
@@ -1391,8 +1561,11 @@ build_flags =
    1) STM32 boards with built-in Ethernet (to use USE_BUILTIN_ETHERNET = true) such as :
       - Nucleo-144 (F429ZI, F767ZI)
       - Discovery (STM32F746G-DISCOVERY)
-      - STM32 boards (STM32F/L/H/G/WB/MP1) with 32K+ Flash, with Built-in Ethernet,
+      - STM32 boards (STM32F/L/H/G/WB/MP1) with 32K+ Flash, with Built-in Ethernet, 
       - See How To Use Built-in Ethernet at (https://github.com/khoih-prog/EthernetWebServer_STM32/issues/1)
+   2) STM32F/L/H/G/WB/MP1 boards (with 64+K Flash) running ENC28J60 shields (to use USE_BUILTIN_ETHERNET = false)
+   3) STM32F/L/H/G/WB/MP1 boards (with 64+K Flash) running W5x00 shields
+   4) STM32F4 and STM32F7 boards (with 64+K Flash) running LAN8720 shields
 */
 
 #if !( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
@@ -1401,7 +1574,7 @@ build_flags =
   #error This code is designed to run on STM32F/L/H/G/WB/MP1 platform! Please check your Tools->Board setting.
 #endif
 
-#define _ASYNCWEBSERVER_STM32_LOGLEVEL_       3
+#define _ASYNCWEBSERVER_STM32_LOGLEVEL_       4
 
 #if defined(STM32F0)
   #warning STM32F0 board selected
@@ -1582,8 +1755,12 @@ void setup(void)
   digitalWrite(led, 0);
 
   Serial.begin(115200);
+  while (!Serial);
 
-  Serial.printf("\nStarting Async_AdvancedWebServer_STM32 on %s with %s\n", BOARD_NAME, SHIELD_TYPE);
+  delay(200);
+
+  Serial.print("\nStart Async_AdvancedWebServer_STM32 on "); Serial.print(BOARD_NAME);
+  Serial.print(" with "); Serial.println(SHIELD_TYPE);
   Serial.println(ASYNC_WEBSERVER_STM32_VERSION);
 
   // start the ethernet connection and the server
@@ -1641,7 +1818,7 @@ Following are debug terminal output and screen shots when running example [Async
 
 ```
 Starting AsyncMultiWebServer_STM32 on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.2.6
+AsyncWebServer_STM32 v1.3.0
 
 Connected to network. IP = 192.168.2.141
 Initialize multiServer OK, serverIndex = 0, port = 8080
@@ -1674,7 +1851,7 @@ Following is debug terminal output when running example [WebClient](examples/Web
 
 ```
 Starting WebClient on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.2.6
+AsyncWebServer_STM32 v1.3.0
 You're connected to the network, IP = 192.168.2.71
 
 Starting connection to server...
@@ -1743,7 +1920,7 @@ Following is debug terminal output when running example [MQTTClient_Auth](exampl
 
 ```
 Starting MQTTClient_Auth on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.2.6
+AsyncWebServer_STM32 v1.3.0
 
 Connected to network. IP = 192.168.2.71
 Attempting MQTT connection to broker.emqx.io...connected
@@ -1761,7 +1938,7 @@ Following is debug terminal output when running example [MQTTClient_Basic](examp
 
 ```
 Starting MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.2.6
+AsyncWebServer_STM32 v1.3.0
 
 Connected to network. IP = 192.168.2.71
 Attempting MQTT connection to broker.shiftr.io...connected
@@ -1787,7 +1964,7 @@ Following is debug terminal output when running example [MQTT_ThingStream](examp
 
 ```
 Starting MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.2.6
+AsyncWebServer_STM32 v1.3.0
 
 Connected to network. IP = 192.168.2.71
 ***************************************
@@ -1808,6 +1985,82 @@ MQTT Message receive [STM32_Pub] Hello from MQTT_ThingStream on NUCLEO_F767ZI wi
 MQTT Message Send : STM32_Pub => Hello from MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
 MQTT Message receive [STM32_Pub] Hello from MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
 ```
+
+---
+
+#### 6. MQTTClient_Auth_LAN8720 on BLACK_F407VE using LAN8720 Ethernet and STM32Ethernet Library
+
+Following is debug terminal output when running example [MQTTClient_Auth_LAN8720](examples/STM32_LAN8720/MQTTClient_Auth_LAN8720) on STM32F4 BLACK_F407VE with LAN8720 Ethernet and STM32Ethernet Library.
+
+```
+Start MQTTClient_Auth_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
+AsyncWebServer_STM32 v1.3.0
+
+Connected to network. IP = 192.168.2.150
+Attempting MQTT connection to broker.emqx.io...connected
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
+```
+
+---
+
+#### 7. Async_AdvancedWebServer_LAN8720 on BLACK_F407VE using LAN8720 Ethernet and STM32Ethernet Library
+
+Following is the screen shot when running example [Async_AdvancedWebServer_LAN8720](examples/STM32_LAN8720/Async_AdvancedWebServer_LAN8720) on STM32F4 BLACK_F407VE with LAN8720 Ethernet and STM32Ethernet Library to demonstrate the operation of AsyncWebServer.
+
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/pics/Async_AdvancedWebServer_LAN8720.png">
+</p>
+
+
+---
+
+#### 8. AsyncMultiWebServer_STM32_LAN8720 on BLACK_F407VE using LAN8720 Ethernet and STM32Ethernet Library
+
+Following are debug terminal output and screen shots when running example [AsyncMultiWebServer_STM32_LAN8720](examples/STM32_LAN8720/AsyncMultiWebServer_STM32_LAN8720) on STM32F4 BLACK_F407VE with LAN8720 Ethernet and STM32Ethernet Library to demonstrate the operation of 3 independent AsyncWebServers on 3 different ports and how to handle the complicated AsyncMultiWebServers.
+
+
+```
+Start AsyncMultiWebServer_STM32_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
+AsyncWebServer_STM32 v1.3.0
+
+Connected to network. IP = 192.168.2.150
+Initialize multiServer OK, serverIndex = 0, port = 8080
+HTTP server started at ports 8080
+Initialize multiServer OK, serverIndex = 1, port = 8081
+HTTP server started at ports 8081
+Initialize multiServer OK, serverIndex = 2, port = 8082
+HTTP server started at ports 8082
+```
+
+You can access the Async Advanced WebServers @ the server IP and corresponding ports (8080, 8081 and 8082)
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/pics/AsyncMultiWebServer_STM32_LAN8720_SVR1.png">
+</p>
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/pics/AsyncMultiWebServer_STM32_LAN8720_SVR2.png">
+</p>
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/pics/AsyncMultiWebServer_STM32_LAN8720_SVR3.png">
+</p>
+
+
+
+
 
 ---
 ---
@@ -1861,6 +2114,12 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
 ---
 
 ## Releases
+
+### Releases v1.3.0
+
+1. Add support to **LAN8720** Ethernet for many **STM32F4** (F407xx, NUCLEO_F429ZI) and **STM32F7** (DISCO_F746NG, NUCLEO_F746ZG, NUCLEO_F756ZG) boards.
+2. Add LAN8720 examples
+3. Add Packages' Patches for STM32 to use LAN8720 with STM32Ethernet and LwIP libraries
 
 ### Releases v1.2.6
 
