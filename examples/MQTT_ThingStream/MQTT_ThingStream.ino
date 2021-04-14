@@ -1,15 +1,15 @@
 /****************************************************************************************************************************
-  MQTT_ThingStream.ino - Dead simple MQTT Client for Ethernet shields
-
-  For STM32 with built-in LAN8742A Ethernet (Nucleo-144, DISCOVERY, etc)
+  MQTT_ThingStream.ino - Dead simple AsyncWebServer for STM32 LAN8720 or built-in LAN8742A Ethernet
   
-  AsyncWebServer_STM32 is a library for the STM32 run built-in Ethernet WebServer
+  For STM32 with LAN8720 (STM32F4/F7) or built-in LAN8742A Ethernet (Nucleo-144, DISCOVERY, etc)
+  
+  AsyncWebServer_STM32 is a library for the STM32 with LAN8720 or built-in LAN8742A Ethernet WebServer
   
   Based on and modified from ESPAsyncWebServer (https://github.com/me-no-dev/ESPAsyncWebServer)
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
-  
-  Version: 1.2.6
+ 
+  Version: 1.3.0
   
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -18,7 +18,20 @@
   1.2.4   K Hoang      05/09/2020 Add back MD5/SHA1 authentication feature.
   1.2.5   K Hoang      28/12/2020 Suppress all possible compiler warnings. Add examples.
   1.2.6   K Hoang      22/03/2021 Fix dependency on STM32AsyncTCP Library
+  1.3.0   K Hoang      14/04/2021 Add support to LAN8720 using STM32F4 or STM32F7
  *****************************************************************************************************************************/
+/*
+   Currently support
+   1) STM32 boards with built-in Ethernet (to use USE_BUILTIN_ETHERNET = true) such as :
+      - Nucleo-144 (F429ZI, F767ZI)
+      - Discovery (STM32F746G-DISCOVERY)
+      - STM32 boards (STM32F/L/H/G/WB/MP1) with 32K+ Flash, with Built-in Ethernet, 
+      - See How To Use Built-in Ethernet at (https://github.com/khoih-prog/EthernetWebServer_STM32/issues/1)
+   2) STM32F/L/H/G/WB/MP1 boards (with 64+K Flash) running ENC28J60 shields (to use USE_BUILTIN_ETHERNET = false)
+   3) STM32F/L/H/G/WB/MP1 boards (with 64+K Flash) running W5x00 shields
+   4) STM32F4 and STM32F7 boards (with 64+K Flash) running LAN8720 shields
+*/
+
 /*
   Basic MQTT example (without SSL!)
   This sketch demonstrates the basic capabilities of the library.
@@ -69,7 +82,7 @@ String subTopic = MQTT_PREFIX_TOPIC + String("12345678") + MQTT_BLE_TOPIC;
 
 const char* MQTT_SERVER = "broker.emqx.io";        // Broker address
 
-const char*  ID         = "MQTTClient_SSL-Client";  // Name of our device, must be unique
+const char*  ID         = "MQTT_ThingStream";  // Name of our device, must be unique
 String      topic       = "STM32_Pub";              // Topic to subcribe to
 String      subTopic    = "STM32_Sub";              // Topic to subcribe to
 
@@ -88,6 +101,9 @@ unsigned long lastMsg = 0;
 EthernetClient    ethClient;
 
 PubSubClient client(MQTT_SERVER, MQTT_PORT, mqtt_receive_callback, ethClient);
+
+String data         = "Hello from MQTT_ThingStream on " + String(BOARD_NAME) + " with " + String(SHIELD_TYPE);
+const char *pubData = data.c_str();
 
 /*
    Called whenever a payload is received from a subscribed MQTT topic
@@ -127,8 +143,6 @@ void reconnect()
       Serial.println("...connected");
       
       // Once connected, publish an announcement...
-      String data = "Hello from MQTTClient_SSL on " + String(BOARD_NAME);
-
       client.publish(topic.c_str(), data.c_str());
 
       Serial.println("Published connection message successfully!");
@@ -163,7 +177,8 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.printf("\nStarting MQTT_ThingStream on %s with %s\n", BOARD_NAME, SHIELD_TYPE);
+  Serial.print("\nStart MQTT_ThingStream on "); Serial.print(BOARD_NAME);
+  Serial.print(" with "); Serial.println(SHIELD_TYPE);
   Serial.println(ASYNC_WEBSERVER_STM32_VERSION);
 
   // start the ethernet connection and the server
@@ -189,9 +204,6 @@ void setup()
 }
 
 #define MQTT_PUBLISH_INTERVAL_MS      5000L
-
-String data         = "Hello from MQTT_ThingStream on " + String(BOARD_NAME) + " with " + String(SHIELD_TYPE);
-const char *pubData = data.c_str();
 
 void loop() 
 {
