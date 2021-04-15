@@ -121,7 +121,7 @@
   * [3. MQTTClient_Auth on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#3-mqttclient_auth-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
   * [4. MQTTClient_Basic on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#4-mqttclient_basic-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
   * [5. MQTT_ThingStream on NUCLEO_F767ZI using Built-in LAN8742A Ethernet and STM32Ethernet Library](#5-mqtt_thingstream-on-nucleo_f767zi-using-built-in-lan8742a-ethernet-and-stm32ethernet-library)
-  * [6.  MQTTClient_Auth_LAN8720 on BLACK_F407VE using LAN8720 Ethernet and STM32Ethernet Library](#6-mqttclient_auth-on-black_f407ve-using-lan8720-ethernet-and-stm32ethernet-library)
+  * [6.  MQTTClient_Auth_LAN8720 on BLACK_F407VE using LAN8720 Ethernet and STM32Ethernet Library](#6-mqttclient_auth_lan8720-on-black_f407ve-using-lan8720-ethernet-and-stm32ethernet-library)
   * [7. Async_AdvancedWebServer_LAN8720 on BLACK_F407VE using LAN8720 Ethernet and STM32Ethernet Library](#7-async_advancedwebserver_lan8720-on-black_f407ve-using-lan8720-ethernet-and-stm32ethernet-library)
   * [8. AsyncMultiWebServer_STM32_LAN8720 on BLACK_F407VE using LAN8720 Ethernet and STM32Ethernet Library](#8-asyncmultiwebserver_stm32_lan8720-on-black_f407ve-using-lan8720-ethernet-and-stm32ethernet-library)
 * [Debug](#debug)
