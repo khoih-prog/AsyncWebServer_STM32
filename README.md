@@ -2109,6 +2109,9 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
  3. Add debugging features.
  4. Add AsyncUDP_STM32 to support Async UDP on STM32
  5. Add Authentication support (MD5, SHA1).
+ 6. Add support to **Ethernet LAN8720** using [STM32Ethernet library](https://github.com/stm32duino/STM32Ethernet), for boards such as **Nucleo-144 (F429ZI, NUCLEO_F746NG, NUCLEO_F746ZG, NUCLEO_F756ZG), Discovery (DISCO_F746NG)** and **STM32F4 boards (BLACK_F407VE, BLACK_F407VG, BLACK_F407ZE, BLACK_F407ZG, BLACK_F407VE_Mini, DIYMORE_F407VGT, FK407M1)**. Tested on **STM32F4 BLACK_F407VE**.
+ 7. Add Table-of-Contents and Version String
+ 
 
 ---
 ---
@@ -2120,6 +2123,7 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
 1. Add support to **LAN8720** Ethernet for many **STM32F4** (F407xx, NUCLEO_F429ZI) and **STM32F7** (DISCO_F746NG, NUCLEO_F746ZG, NUCLEO_F756ZG) boards.
 2. Add LAN8720 examples
 3. Add Packages' Patches for STM32 to use LAN8720 with STM32Ethernet and LwIP libraries
+4. Reduce compiled code size.
 
 ### Releases v1.2.6
 
