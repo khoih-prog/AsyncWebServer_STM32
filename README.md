@@ -16,12 +16,7 @@
   * [Features](#features)
   * [Why Async is better](#why-async-is-better)
   * [Currently supported Boards](#currently-supported-boards)
-* [Changelog](#changelog)
-  * [Releases v1.3.0](#releases-v130)
-  * [Releases v1.2.6](#releases-v126)
-  * [Releases v1.2.5](#releases-v125)
-  * [Releases v1.2.4](#releases-v124)
-  * [Releases v1.2.3](#releases-v123)
+* [Changelog](changelog.md)
 * [Prerequisites](#prerequisites)
 * [Installation](#installation)
   * [Use Arduino Library Manager](#use-arduino-library-manager)
@@ -126,7 +121,6 @@
   * [8. AsyncMultiWebServer_STM32_LAN8720 on BLACK_F407VE using LAN8720 Ethernet and STM32Ethernet Library](#8-asyncmultiwebserver_stm32_lan8720-on-black_f407ve-using-lan8720-ethernet-and-stm32ethernet-library)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
-* [Releases](#releases)
 * [Issues](#issues)
 * [TO DO](#to-do)
 * [DONE](#done)
@@ -185,47 +179,12 @@ to apply the better and faster **asynchronous** feature of the **powerful** [ESP
 ---
 ---
 
-## Changelog
-
-### Releases v1.3.0
-
-1. Add support to **LAN8720** Ethernet for many **STM32F4** (F407xx, NUCLEO_F429ZI) and **STM32F7** (DISCO_F746NG, NUCLEO_F746ZG, NUCLEO_F756ZG) boards.
-2. Add LAN8720 examples
-3. Add Packages' Patches for STM32 to use LAN8720 with STM32Ethernet and LwIP libraries
-4. Reduce compiled code size.
-
-### Releases v1.2.6
-
-1. Fix dependency on unpublished [**STM32AsyncTCP Library**](https://github.com/philbowles/STM32AsyncTCP). Check [Compilation broken due to error in STM32AsyncTCP dependency](https://github.com/khoih-prog/AsyncWebServer_STM32/issues/4) and [how to run one of the examples?](https://github.com/khoih-prog/AsyncWebServer_STM32/issues/2).
-
-### Releases v1.2.5
-
-1. Clean-up all compiler warnings possible.
-2. Update Table of Contents
-3. Add examples
-4. Add Version String 
-
-### Releases v1.2.4
-
-1. Add back MD5/SHA1 authentication feature.
-2. Add example, update README.md, clean up.
-
-#### Releases v1.2.3
-
-1. Initial coding to port [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer) to STM32 boards using builtin LAN8742A Ethernet. More supports will be added gradually later, such as AsyncUDP, other Ethernet / WiFi shields.
-2. Add more examples.
-3. Add debugging features.
-4. Bump up to v1.2.3 to sync with [ESPAsyncWebServer v1.2.3](https://github.com/me-no-dev/ESPAsyncWebServer).
-
----
----
-
 ## Prerequisites
 
- 1. [`Arduino IDE 1.8.13+` for Arduino](https://www.arduino.cc/en/Main/Software)
- 2. [`Arduino Core for STM32 1.9.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32 (Use Arduino Board Manager)
- 3. [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in Ethernet on (Nucleo-144, Discovery)
- 4. [`LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP) for built-in Ethernet on (Nucleo-144, Discovery)
+ 1. [`Arduino IDE 1.8.16+` for Arduino](https://www.arduino.cc/en/Main/Software)
+ 2. [`Arduino Core for STM32 v2.1.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32 boards. [![GitHub release](https://img.shields.io/github/release/stm32duino/Arduino_Core_STM32.svg)](https://github.com/stm32duino/Arduino_Core_STM32/releases/latest)
+ 3. [`STM32Ethernet library v1.2.0+`](https://github.com/stm32duino/STM32Ethernet) for built-in LAN8742A Ethernet on (Nucleo-144, Discovery). [![GitHub release](https://img.shields.io/github/release/stm32duino/STM32Ethernet.svg)](https://github.com/stm32duino/STM32Ethernet/releases/latest)
+ 4. [`LwIP library v2.1.2+`](https://github.com/stm32duino/LwIP) for built-in LAN8742A Ethernet on (Nucleo-144, Discovery). [![GitHub release](https://img.shields.io/github/release/stm32duino/LwIP.svg)](https://github.com/stm32duino/LwIP/releases/latest)
  5. [`STM32AsyncTCP library v1.0.1+`](https://github.com/khoih-prog/STM32AsyncTCP) for built-in Ethernet on (Nucleo-144, Discovery). To install manually for Arduino IDE.
 
 ---
@@ -263,12 +222,12 @@ To use LAN8720 on some STM32 boards
 - **Discovery (DISCO_F746NG)**
 - **STM32F4 boards (BLACK_F407VE, BLACK_F407VG, BLACK_F407ZE, BLACK_F407ZG, BLACK_F407VE_Mini, DIYMORE_F407VGT, FK407M1)**
 
-you have to copy the files [stm32f4xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/1.9.0/system/STM32F4xx) and [stm32f7xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/1.9.0/system/STM32F7xx) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/1.9.0/system) to overwrite the old files.
+you have to copy the files [stm32f4xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.1.0/system/STM32F4xx) and [stm32f7xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.1.0/system/STM32F7xx) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/2.1.0/system) to overwrite the old files.
 
-Supposing the STM32 stm32 core version is 1.9.0. These files must be copied into the directory:
+Supposing the STM32 stm32 core version is 2.1.0. These files must be copied into the directory:
 
-- `~/.arduino15/packages/STM32/hardware/stm32/1.9.0/system/STM32F4xx/stm32f4xx_hal_conf_default.h` for STM32F4.
-- `~/.arduino15/packages/STM32/hardware/stm32/1.9.0/system/STM32F7xx/stm32f7xx_hal_conf_default.h` for Nucleo-144 STM32F7.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.1.0/system/STM32F4xx/stm32f4xx_hal_conf_default.h` for STM32F4.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.1.0/system/STM32F7xx/stm32f7xx_hal_conf_default.h` for Nucleo-144 STM32F7.
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
 theses files must be copied into the corresponding directory:
@@ -279,18 +238,18 @@ theses files must be copied into the corresponding directory:
 
 #### 2. For STM32 boards to use Serial1
 
-**To use Serial1 on some STM32 boards without Serial1 definition (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.) boards**, you have to copy the files [STM32 variant.h](Packages_Patches/STM32/hardware/stm32/1.9.0) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/1.9.0). You have to modify the files corresponding to your boards, this is just an illustration how to do.
+**To use Serial1 on some STM32 boards without Serial1 definition (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.) boards**, you have to copy the files [STM32 variant.h](Packages_Patches/STM32/hardware/stm32/2.1.0) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/2.1.0). You have to modify the files corresponding to your boards, this is just an illustration how to do.
 
-Supposing the STM32 stm32 core version is 1.9.0. These files must be copied into the directory:
+Supposing the STM32 stm32 core version is 2.1.0. These files must be copied into the directory:
 
-- `~/.arduino15/packages/STM32/hardware/stm32/1.9.0/variants/NUCLEO_F767ZI/variant.h` for Nucleo-144 NUCLEO_F767ZI.
-- `~/.arduino15/packages/STM32/hardware/stm32/1.9.0/variants/NUCLEO_L053R8/variant.h` for Nucleo-64 NUCLEO_L053R8.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.1.0/variants/STM32F7xx/F765Z(G-I)T_F767Z(G-I)T_F777ZIT/NUCLEO_F767ZI/variant.h` for Nucleo-144 NUCLEO_F767ZI.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.1.0/variants/STM32L0xx/L052R(6-8)T_L053R(6-8)T_L063R8T/NUCLEO_L053R8/variant.h` for Nucleo-64 NUCLEO_L053R8.
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
 theses files must be copied into the corresponding directory:
 
-- `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/NUCLEO_F767ZI/variant.h`
-- `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/NUCLEO_L053R8/variant.h`
+- `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/STM32F7xx/F765Z(G-I)T_F767Z(G-I)T_F777ZIT/NUCLEO_F767ZI/variant.h`
+- `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/STM32L0xx/L052R(6-8)T_L053R(6-8)T_L063R8T/NUCLEO_L053R8/variant.h`
 
 ---
 ---
@@ -1818,7 +1777,7 @@ Following are debug terminal output and screen shots when running example [Async
 
 ```
 Starting AsyncMultiWebServer_STM32 on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.3.0
+AsyncWebServer_STM32 v1.3.1
 
 Connected to network. IP = 192.168.2.141
 Initialize multiServer OK, serverIndex = 0, port = 8080
@@ -1851,7 +1810,7 @@ Following is debug terminal output when running example [WebClient](examples/Web
 
 ```
 Starting WebClient on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.3.0
+AsyncWebServer_STM32 v1.3.1
 You're connected to the network, IP = 192.168.2.71
 
 Starting connection to server...
@@ -1920,7 +1879,7 @@ Following is debug terminal output when running example [MQTTClient_Auth](exampl
 
 ```
 Starting MQTTClient_Auth on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.3.0
+AsyncWebServer_STM32 v1.3.1
 
 Connected to network. IP = 192.168.2.71
 Attempting MQTT connection to broker.emqx.io...connected
@@ -1938,7 +1897,7 @@ Following is debug terminal output when running example [MQTTClient_Basic](examp
 
 ```
 Starting MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.3.0
+AsyncWebServer_STM32 v1.3.1
 
 Connected to network. IP = 192.168.2.71
 Attempting MQTT connection to broker.shiftr.io...connected
@@ -1964,7 +1923,7 @@ Following is debug terminal output when running example [MQTT_ThingStream](examp
 
 ```
 Starting MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.3.0
+AsyncWebServer_STM32 v1.3.1
 
 Connected to network. IP = 192.168.2.71
 ***************************************
@@ -1994,7 +1953,7 @@ Following is debug terminal output when running example [MQTTClient_Auth_LAN8720
 
 ```
 Start MQTTClient_Auth_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
-AsyncWebServer_STM32 v1.3.0
+AsyncWebServer_STM32 v1.3.1
 
 Connected to network. IP = 192.168.2.150
 Attempting MQTT connection to broker.emqx.io...connected
@@ -2033,7 +1992,7 @@ Following are debug terminal output and screen shots when running example [Async
 
 ```
 Start AsyncMultiWebServer_STM32_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
-AsyncWebServer_STM32 v1.3.0
+AsyncWebServer_STM32 v1.3.1
 
 Connected to network. IP = 192.168.2.150
 Initialize multiServer OK, serverIndex = 0, port = 8080
@@ -2116,55 +2075,6 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
 ---
 ---
 
-## Releases
-
-### Releases v1.3.0
-
-1. Add support to **LAN8720** Ethernet for many **STM32F4** (F407xx, NUCLEO_F429ZI) and **STM32F7** (DISCO_F746NG, NUCLEO_F746ZG, NUCLEO_F756ZG) boards.
-2. Add LAN8720 examples
-3. Add Packages' Patches for STM32 to use LAN8720 with STM32Ethernet and LwIP libraries
-4. Reduce compiled code size.
-
-### Releases v1.2.6
-
-1. Fix dependency on unpublished [**STM32AsyncTCP Library**](https://github.com/philbowles/STM32AsyncTCP). Check [Compilation broken due to error in STM32AsyncTCP dependency](https://github.com/khoih-prog/AsyncWebServer_STM32/issues/4) and [how to run one of the examples?](https://github.com/khoih-prog/AsyncWebServer_STM32/issues/2)
-
-### Releases v1.2.5
-
-1. Clean-up all compiler warnings possible.
-2. Update Table of Contents
-3. Add examples
-4. Add Version String 
-
-### Releases v1.2.4
-
-1. Add back MD5/SHA1 authentication feature.
-2. Add example, update README.md, clean up.
-
-#### Initial Releases v1.2.3
-
-1. Initial coding to port [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer) to STM32 boards using builtin LAN8742A Ethernet. More supports will be added gradually later, such as AsyncUDP, other Ethernet / WiFi shields.
-2. Add more examples.
-3. Add debugging features.
-4. Bump up to v1.2.3 to sync with [ESPAsyncWebServer v1.2.3](https://github.com/me-no-dev/ESPAsyncWebServer).
-
-#### Currently Supported Boards
-
-1. Nucleo-144 (F429ZI, F746ZG, F756ZG, F767ZI)
-2. Discovery STM32F746G-DISCOVERY
-3. Any STM32 boards with enough flash/memory and already configured to run LAN8742A Ethernet.
-
-
----
-
-This library is based on, modified from:
-
-1. [Hristo Gochkov's ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer)
-
-to apply the better and faster **asynchronous** feature of the **great** [ESPAsyncWebServer Library](https://github.com/me-no-dev/ESPAsyncWebServer) into STM32 boards using builtin LAN8742A Ethernet.
-
----
----
 
 ### Contributions and Thanks
 

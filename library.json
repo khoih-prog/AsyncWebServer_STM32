@@ -1,6 +1,6 @@
 {
   "name":"AsyncWebServer_STM32",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description":"Asynchronous HTTP and WebSocket Server Library for STM32F/L/H/G/WB/MP1 using LAN8720 or built-in LAN8742A Ethernet",
   "keywords":"http, async, websocket, webserver, stm32, stm32f, stm32l, stm32h, stm32g, stm32wb, stm32mp1, ethernet, lan8742a, lan8720, bluepill, blackpill, f407ve, f767zi, nucleo, nucleo-144",
   "authors": 
