@@ -1,16 +1,16 @@
 /****************************************************************************************************************************
   AsyncWebServer_STM32.cpp - Dead simple AsyncWebServer for STM32 LAN8720 or built-in LAN8742A Ethernet
-  
+
   For STM32 with LAN8720 (STM32F4/F7) or built-in LAN8742A Ethernet (Nucleo-144, DISCOVERY, etc)
-  
+
   AsyncWebServer_STM32 is a library for the STM32 with LAN8720 or built-in LAN8742A Ethernet WebServer
-  
+
   Based on and modified from ESPAsyncWebServer (https://github.com/me-no-dev/ESPAsyncWebServer)
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
- 
+
   Version: 1.3.0
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.2.3   K Hoang      02/09/2020 Initial coding for STM32 for built-in Ethernet (Nucleo-144, DISCOVERY, etc).
@@ -127,9 +127,9 @@ void AsyncWebServer::_handleDisconnect(AsyncWebServerRequest *request)
 
 void AsyncWebServer::_rewriteRequest(AsyncWebServerRequest *request)
 {
-  for (const auto& r : _rewrites) 
+  for (const auto& r : _rewrites)
   {
-    if (r->match(request)) 
+    if (r->match(request))
     {
       request->_url = r->toUrl();
       request->_addGetParams(r->params());
@@ -137,11 +137,11 @@ void AsyncWebServer::_rewriteRequest(AsyncWebServerRequest *request)
   }
 }
 
-void AsyncWebServer::_attachHandler(AsyncWebServerRequest *request) 
+void AsyncWebServer::_attachHandler(AsyncWebServerRequest *request)
 {
-  for (const auto& h : _handlers) 
+  for (const auto& h : _handlers)
   {
-    if (h->filter(request) && h->canHandle(request)) 
+    if (h->filter(request) && h->canHandle(request))
     {
       request->setHandler(h);
       return;
@@ -153,22 +153,22 @@ void AsyncWebServer::_attachHandler(AsyncWebServerRequest *request)
 }
 
 
-AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, 
-                                            ArUploadHandlerFunction onUpload, ArBodyHandlerFunction onBody) 
+AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest,
+                                            ArUploadHandlerFunction onUpload, ArBodyHandlerFunction onBody)
 {
   AsyncCallbackWebHandler* handler = new AsyncCallbackWebHandler();
-  
+
   handler->setUri(uri);
   handler->setMethod(method);
   handler->onRequest(onRequest);
   handler->onUpload(onUpload);
   handler->onBody(onBody);
   addHandler(handler);
-  
+
   return *handler;
 }
 
-AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArUploadHandlerFunction onUpload) 
+AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArUploadHandlerFunction onUpload)
 {
   AsyncCallbackWebHandler* handler = new AsyncCallbackWebHandler();
   handler->setUri(uri);
@@ -176,51 +176,50 @@ AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, WebRequestMethodCom
   handler->onRequest(onRequest);
   handler->onUpload(onUpload);
   addHandler(handler);
-  
+
   return *handler;
 }
 
-AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest) 
+AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest)
 {
   AsyncCallbackWebHandler* handler = new AsyncCallbackWebHandler();
   handler->setUri(uri);
   handler->setMethod(method);
   handler->onRequest(onRequest);
   addHandler(handler);
-  
+
   return *handler;
 }
 
-AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, ArRequestHandlerFunction onRequest) 
+AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, ArRequestHandlerFunction onRequest)
 {
   AsyncCallbackWebHandler* handler = new AsyncCallbackWebHandler();
   handler->setUri(uri);
   handler->onRequest(onRequest);
   addHandler(handler);
-  
+
   return *handler;
 }
 
-void AsyncWebServer::onNotFound(ArRequestHandlerFunction fn) 
+void AsyncWebServer::onNotFound(ArRequestHandlerFunction fn)
 {
   _catchAllHandler->onRequest(fn);
 }
 
-void AsyncWebServer::onRequestBody(ArBodyHandlerFunction fn) 
+void AsyncWebServer::onRequestBody(ArBodyHandlerFunction fn)
 {
   _catchAllHandler->onBody(fn);
 }
 
-void AsyncWebServer::reset() 
+void AsyncWebServer::reset()
 {
   _rewrites.free();
   _handlers.free();
 
-  if (_catchAllHandler != NULL) 
+  if (_catchAllHandler != NULL)
   {
     _catchAllHandler->onRequest(NULL);
     _catchAllHandler->onUpload(NULL);
     _catchAllHandler->onBody(NULL);
   }
 }
-

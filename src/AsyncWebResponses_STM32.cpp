@@ -1,16 +1,16 @@
 /****************************************************************************************************************************
   AsyncWebResponses_STM32.cpp - Dead simple AsyncWebServer for STM32 LAN8720 or built-in LAN8742A Ethernet
-  
+
   For STM32 with LAN8720 (STM32F4/F7) or built-in LAN8742A Ethernet (Nucleo-144, DISCOVERY, etc)
-  
+
   AsyncWebServer_STM32 is a library for the STM32 with LAN8720 or built-in LAN8742A Ethernet WebServer
-  
+
   Based on and modified from ESPAsyncWebServer (https://github.com/me-no-dev/ESPAsyncWebServer)
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
- 
+
   Version: 1.3.0
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.2.3   K Hoang      02/09/2020 Initial coding for STM32 for built-in Ethernet (Nucleo-144, DISCOVERY, etc).
@@ -310,6 +310,7 @@ size_t AsyncBasicResponse::_ack(AsyncWebServerRequest *request, size_t len, uint
     if (_ackedLength >= _writtenLength)
     {
       _state = RESPONSE_END;
+      request->client()->close(true);  /* Might it be required? */
     }
   }
 
@@ -673,23 +674,23 @@ AsyncCallbackResponse::AsyncCallbackResponse(const String& contentType, size_t l
   _code = 200;
   _content = callback;
   _contentLength = len;
-  
+
   if (!len)
     _sendContentLength = false;
-    
+
   _contentType = contentType;
   _filledLength = 0;
 }
 
-size_t AsyncCallbackResponse::_fillBuffer(uint8_t *data, size_t len) 
+size_t AsyncCallbackResponse::_fillBuffer(uint8_t *data, size_t len)
 {
   size_t ret = _content(data, len, _filledLength);
-  
-  if (ret != RESPONSE_TRY_AGAIN) 
+
+  if (ret != RESPONSE_TRY_AGAIN)
   {
     _filledLength += ret;
   }
-  
+
   return ret;
 }
 
@@ -697,7 +698,7 @@ size_t AsyncCallbackResponse::_fillBuffer(uint8_t *data, size_t len)
    Chunked Response
  * */
 
-AsyncChunkedResponse::AsyncChunkedResponse(const String& contentType, AwsResponseFiller callback, AwsTemplateProcessor processorCallback): AsyncAbstractResponse(processorCallback) 
+AsyncChunkedResponse::AsyncChunkedResponse(const String& contentType, AwsResponseFiller callback, AwsTemplateProcessor processorCallback): AsyncAbstractResponse(processorCallback)
 {
   _code = 200;
   _content = callback;
@@ -708,23 +709,46 @@ AsyncChunkedResponse::AsyncChunkedResponse(const String& contentType, AwsRespons
   _filledLength = 0;
 }
 
-size_t AsyncChunkedResponse::_fillBuffer(uint8_t *data, size_t len) 
+size_t AsyncChunkedResponse::_fillBuffer(uint8_t *data, size_t len)
 {
   size_t ret = _content(data, len, _filledLength);
-  
-  if (ret != RESPONSE_TRY_AGAIN) 
+
+  if (ret != RESPONSE_TRY_AGAIN)
   {
     _filledLength += ret;
   }
-  
+
   return ret;
+}
+
+/*
+ * Progmem Response
+ * */
+AsyncProgmemResponse::AsyncProgmemResponse(int code, const String& contentType, const uint8_t * content, size_t len, AwsTemplateProcessor callback): AsyncAbstractResponse(callback) {
+  _code = code;
+  _content = content;
+  _contentType = contentType;
+  _contentLength = len;
+  _readLength = 0;
+}
+
+size_t AsyncProgmemResponse::_fillBuffer(uint8_t *data, size_t len){
+  size_t left = _contentLength - _readLength;
+  if (left > len) {
+    memcpy_P(data, _content + _readLength, len);
+    _readLength += len;
+    return len;
+  }
+  memcpy_P(data, _content + _readLength, left);
+  _readLength += left;
+  return left;
 }
 
 /*
    Response Stream (You can print/write/printf to it, up to the contentLen bytes)
  * */
 
-AsyncResponseStream::AsyncResponseStream(const String& contentType, size_t bufferSize) 
+AsyncResponseStream::AsyncResponseStream(const String& contentType, size_t bufferSize)
 {
   _code = 200;
   _contentLength = 0;
@@ -732,34 +756,34 @@ AsyncResponseStream::AsyncResponseStream(const String& contentType, size_t buffe
   _content = new cbuf(bufferSize);
 }
 
-AsyncResponseStream::~AsyncResponseStream() 
+AsyncResponseStream::~AsyncResponseStream()
 {
   delete _content;
 }
 
-size_t AsyncResponseStream::_fillBuffer(uint8_t *buf, size_t maxLen) 
+size_t AsyncResponseStream::_fillBuffer(uint8_t *buf, size_t maxLen)
 {
   return _content->read((char*)buf, maxLen);
 }
 
-size_t AsyncResponseStream::write(const uint8_t *data, size_t len) 
+size_t AsyncResponseStream::write(const uint8_t *data, size_t len)
 {
   if (_started())
     return 0;
 
-  if (len > _content->room()) 
+  if (len > _content->room())
   {
     size_t needed = len - _content->room();
     _content->resizeAdd(needed);
   }
-  
+
   size_t written = _content->write((const char*)data, len);
   _contentLength += written;
-  
+
   return written;
 }
 
-size_t AsyncResponseStream::write(uint8_t data) 
+size_t AsyncResponseStream::write(uint8_t data)
 {
   return write(&data, 1);
 }

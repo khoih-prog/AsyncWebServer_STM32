@@ -1,16 +1,16 @@
 /****************************************************************************************************************************
   AsyncWebRequest_STM32.cpp - Dead simple AsyncWebServer for STM32 LAN8720 or built-in LAN8742A Ethernet
-  
+
   For STM32 with LAN8720 (STM32F4/F7) or built-in LAN8742A Ethernet (Nucleo-144, DISCOVERY, etc)
-  
+
   AsyncWebServer_STM32 is a library for the STM32 with LAN8720 or built-in LAN8742A Ethernet WebServer
-  
+
   Based on and modified from ESPAsyncWebServer (https://github.com/me-no-dev/ESPAsyncWebServer)
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
- 
+
   Version: 1.3.0
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.2.3   K Hoang      02/09/2020 Initial coding for STM32 for built-in Ethernet (Nucleo-144, DISCOVERY, etc).
@@ -1007,6 +1007,14 @@ void AsyncWebServerRequest::send(AsyncWebServerResponse *response)
   }
 }
 
+AsyncWebServerResponse * AsyncWebServerRequest::beginResponse_P(int code, const String& contentType, const uint8_t * content, size_t len, AwsTemplateProcessor callback){
+  return new AsyncProgmemResponse(code, contentType, content, len, callback);
+}
+
+AsyncWebServerResponse * AsyncWebServerRequest::beginResponse_P(int code, const String& contentType, PGM_P content, AwsTemplateProcessor callback){
+  return beginResponse_P(code, contentType, (const uint8_t *)content, strlen_P(content), callback);
+}
+
 AsyncWebServerResponse * AsyncWebServerRequest::beginResponse(int code, const String& contentType, const String& content)
 {
   return new AsyncBasicResponse(code, contentType, content);
@@ -1063,31 +1071,31 @@ void AsyncWebServerRequest::redirect(const String& url)
 }
 
 bool AsyncWebServerRequest::authenticate(const char * username, const char * password, const char * realm, bool passwordIsHash)
-{ 
+{
   LOGDEBUG1("AsyncWebServerRequest::authenticate: auth-len =", _authorization.length());
-  
+
   if (_authorization.length())
-  {   
+  {
     if (_isDigest)
     {
       LOGDEBUG("AsyncWebServerRequest::authenticate: _isDigest");
-      
+
       return checkDigestAuthentication(_authorization.c_str(), methodToString(), username, password, realm, passwordIsHash, NULL, NULL, NULL);
     }
     else if (!passwordIsHash)
     {
       LOGDEBUG("AsyncWebServerRequest::authenticate: !passwordIsHash");
-      
+
       return checkBasicAuthentication(_authorization.c_str(), username, password);
     }
     else
     {
       LOGDEBUG("AsyncWebServerRequest::authenticate: Using password _authorization.equals");
-      
+
       return _authorization.equals(password);
     }
   }
-  
+
   LOGDEBUG("AsyncWebServerRequest::authenticate: failed, len = 0");
 
   return false;
@@ -1293,12 +1301,12 @@ bool AsyncWebServerRequest::isExpectedRequestedConnType(RequestedConnectionType 
 
   if ((erct1 != RCT_NOT_USED) && (erct1 == _reqconntype))
     res = true;
-    
+
   if ((erct2 != RCT_NOT_USED) && (erct2 == _reqconntype))
     res = true;
-    
+
   if ((erct3 != RCT_NOT_USED) && (erct3 == _reqconntype))
     res = true;
-    
+
   return res;
 }
