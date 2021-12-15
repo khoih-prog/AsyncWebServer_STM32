@@ -2093,6 +2093,8 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
     <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b>tcpipchip</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/jcw"><img src="https://github.com/jcw.png" width="100px;" alt="jcw"/><br /><sub><b>Jean-Claude</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/chris007de"><img src="https://github.com/chris007de.png" width="100px;" alt="chris007de"/><br /><sub><b>chris007de</b></sub></a><br /></td>
+  </tr>
+  <tr>
     <td align="center"><a href="https://github.com/tothtechnika"><img src="https://github.com/tothtechnika.png" width="100px;" alt="tothtechnika"/><br /><sub><b>tothtechnika</b></sub></a><br /></td>
   </tr> 
 </table>
