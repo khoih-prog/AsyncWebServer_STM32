@@ -1,16 +1,16 @@
 /****************************************************************************************************************************
   AsyncWebSocket_STM32.cpp - Dead simple AsyncWebServer for STM32 LAN8720 or built-in LAN8742A Ethernet
-  
+
   For STM32 with LAN8720 (STM32F4/F7) or built-in LAN8742A Ethernet (Nucleo-144, DISCOVERY, etc)
-  
+
   AsyncWebServer_STM32 is a library for the STM32 with LAN8720 or built-in LAN8742A Ethernet WebServer
-  
+
   Based on and modified from ESPAsyncWebServer (https://github.com/me-no-dev/ESPAsyncWebServer)
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
- 
+
   Version: 1.3.0
-  
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.2.3   K Hoang      02/09/2020 Initial coding for STM32 for built-in Ethernet (Nucleo-144, DISCOVERY, etc).
@@ -36,6 +36,67 @@
 #include "Crypto/Hash.h"
 
 #define MAX_PRINTF_LEN 64
+
+char *ltrim(char *s) {
+    while(isspace(*s)) s++;
+    return s;
+}
+
+char *rtrim(char *s) {
+    char* back = s + strlen(s);
+    while(isspace(*--back));
+    *(back+1) = '\0';
+    return s;
+}
+
+char *trim(char *s) {
+    return rtrim(ltrim(s));
+}
+
+size_t b64_encoded_size(size_t inlen){
+  size_t ret;
+  ret = inlen;
+  if (inlen % 3 != 0)
+    ret += 3 - (inlen % 3);
+  ret /= 3;
+  ret *= 4;
+
+  return ret;
+}
+
+char * b64_encode(const unsigned char *in, size_t len, char * out){
+  //char   *out;
+  const char b64chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  size_t  elen;  size_t  i;  size_t  j;  size_t  v;
+
+  if (in == NULL || len == 0)
+    return NULL;
+
+  elen = b64_encoded_size(len);
+  //out  = malloc(elen+1);
+  out[elen] = '\0';
+
+  for (i=0, j=0; i<len; i+=3, j+=4) {
+    v = in[i];
+    v = i+1 < len ? v << 8 | in[i+1] : v << 8;
+    v = i+2 < len ? v << 8 | in[i+2] : v << 8;
+
+    out[j]   = b64chars[(v >> 18) & 0x3F];
+    out[j+1] = b64chars[(v >> 12) & 0x3F];
+    if (i+1 < len) {
+      out[j+2] = b64chars[(v >> 6) & 0x3F];
+    } else {
+      out[j+2] = '=';
+    }
+    if (i+2 < len) {
+      out[j+3] = b64chars[v & 0x3F];
+    } else {
+      out[j+3] = '=';
+    }
+  }
+
+  return out;
+}
 
 size_t webSocketSendFrameWindow(AsyncClient *client)
 {
@@ -1488,7 +1549,19 @@ AsyncWebSocket::AsyncWebSocketClientLinkedList AsyncWebSocket::getClients() cons
    Response to Web Socket request - sends the authorization and detaches the TCP Client from the web server
    Authentication code from https://github.com/Links2004/arduinoWebSockets/blob/master/src/WebSockets.cpp#L480
 */
-
+/*static */
+/*void acceptKey(char * skey, char * ckey) {
+    char sha1HashBin[22] = { 0 };
+    //String key = base64_encode(sha1HashBin, 20);
+    __disable_irq();
+    char buf[256];
+    sprintf(buf, "%s258EAFA5-E914-47DA-95CA-C5AB0DC85B11", skey);
+    SHA1(sha1HashBin, (const char *)buf, strlen(buf));
+    b64_encode((const unsigned char *)sha1HashBin, 20, buf);
+    sprintf(ckey, "%s", trim(buf));
+    __enable_irq();
+}
+*/
 AsyncWebSocketResponse::AsyncWebSocketResponse(const String & key, AsyncWebSocket * server)
 {
   _server = server;
@@ -1512,24 +1585,23 @@ AsyncWebSocketResponse::AsyncWebSocketResponse(const String & key, AsyncWebSocke
     return;
   }
 
+  Serial.printf("key: %s", key.c_str());
   // KH, for STM32
   sha1_context _ctx;
-  
+
   (String&) key += WS_STR_UUID;
 
   sha1_starts(&_ctx);
   sha1_update(&_ctx, (const unsigned char*) key.c_str(), key.length());
   sha1_finish(&_ctx, hash);
-  //////
- 
-  base64_encodestate _state;
-  base64_init_encodestate(&_state);
-  int len = base64_encode_block((const char *) hash, HASH_BUFFER_SIZE, buffer, &_state);
-  len = base64_encode_blockend((buffer + len), &_state);
+  //////  Mod by: TothTechnika!
+  char buf[256];
+  b64_encode((const unsigned char *)hash, 20, buffer);
+  sprintf(buffer, "%s", trim(buffer));
 
   addHeader(WS_STR_CONNECTION, WS_STR_UPGRADE);
   addHeader(WS_STR_UPGRADE, "websocket");
-  addHeader(WS_STR_ACCEPT, buffer);
+  addHeader(WS_STR_ACCEPT, (String)buffer);
 
   free(buffer);
   free(hash);
