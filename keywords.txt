@@ -41,6 +41,7 @@ AsyncAbstractResponse	KEYWORD1
 AsyncStreamResponse	KEYWORD1
 AsyncCallbackResponse	KEYWORD1
 AsyncChunkedResponse	KEYWORD1
+AsyncProgmemResponse  KEYWORD1
 AsyncResponseStream	KEYWORD1
 
 AsyncWebLock	KEYWORD1
@@ -349,6 +350,12 @@ _sourceValid  KEYWORD2
 _fillBuffer  KEYWORD2
 
 ##############################
+# AsyncProgmemResponse
+##############################
+
+_fillBuffer  KEYWORD2
+
+##############################
 # AsyncResponseStream
 ##############################
 
@@ -496,6 +503,13 @@ memchr	KEYWORD2
 webSocketSendFrameWindow	KEYWORD2
 webSocketSendFrame	KEYWORD2
 generateEventMessage	KEYWORD2
+
+ltrim KEYWORD2
+rtrim KEYWORD2
+trim  KEYWORD2
+b64_encoded_size  KEYWORD2
+b64_encode  KEYWORD2
+
 
 #######################################
 # Constants (LITERAL1)

@@ -31,7 +31,7 @@ Arduino IDE version: 1.8.16
 STM32 Core Version 2.1.0
 Nucleo-144 STM32F7 NUCLEO_F767ZI
 OS: Ubuntu 20.04 LTS
-Linux xy-Inspiron-3593 5.4.0-86-generic #97-Ubuntu SMP Fri Sep 17 19:19:40 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+Linux xy-Inspiron-3593 5.4.0-91-generic #102-Ubuntu SMP Fri Nov 5 16:31:28 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
 
 Context:
 I encountered an endless loop while trying to connect to Local WiFi.

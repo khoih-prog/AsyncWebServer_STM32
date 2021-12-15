@@ -1777,7 +1777,7 @@ Following are debug terminal output and screen shots when running example [Async
 
 ```
 Starting AsyncMultiWebServer_STM32 on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.3.1
+AsyncWebServer_STM32 v1.4.0
 
 Connected to network. IP = 192.168.2.141
 Initialize multiServer OK, serverIndex = 0, port = 8080
@@ -1810,7 +1810,7 @@ Following is debug terminal output when running example [WebClient](examples/Web
 
 ```
 Starting WebClient on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.3.1
+AsyncWebServer_STM32 v1.4.0
 You're connected to the network, IP = 192.168.2.71
 
 Starting connection to server...
@@ -1879,7 +1879,7 @@ Following is debug terminal output when running example [MQTTClient_Auth](exampl
 
 ```
 Starting MQTTClient_Auth on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.3.1
+AsyncWebServer_STM32 v1.4.0
 
 Connected to network. IP = 192.168.2.71
 Attempting MQTT connection to broker.emqx.io...connected
@@ -1897,7 +1897,7 @@ Following is debug terminal output when running example [MQTTClient_Basic](examp
 
 ```
 Starting MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.3.1
+AsyncWebServer_STM32 v1.4.0
 
 Connected to network. IP = 192.168.2.71
 Attempting MQTT connection to broker.shiftr.io...connected
@@ -1923,7 +1923,7 @@ Following is debug terminal output when running example [MQTT_ThingStream](examp
 
 ```
 Starting MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.3.1
+AsyncWebServer_STM32 v1.4.0
 
 Connected to network. IP = 192.168.2.71
 ***************************************
@@ -1953,7 +1953,7 @@ Following is debug terminal output when running example [MQTTClient_Auth_LAN8720
 
 ```
 Start MQTTClient_Auth_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
-AsyncWebServer_STM32 v1.3.1
+AsyncWebServer_STM32 v1.4.0
 
 Connected to network. IP = 192.168.2.150
 Attempting MQTT connection to broker.emqx.io...connected
@@ -1992,7 +1992,7 @@ Following are debug terminal output and screen shots when running example [Async
 
 ```
 Start AsyncMultiWebServer_STM32_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
-AsyncWebServer_STM32 v1.3.1
+AsyncWebServer_STM32 v1.4.0
 
 Connected to network. IP = 192.168.2.150
 Initialize multiServer OK, serverIndex = 0, port = 8080
@@ -2083,7 +2083,7 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
 3. Relied on [PhilBowles' STM32 AsyncTCP Library](https://github.com/philbowles/STM32AsyncTCP).
 4. Thanks to good work of [Miguel Wisintainer](https://github.com/tcpipchip) for working with, developing, debugging and testing.
 5. Thanks to [Jean-Claude](https://github.com/jcw) and [chris007de](https://github.com/chris007de) to help locate the dependency issue, discuss solution leading to release v1.2.6. Check [Compilation broken due to error in STM32AsyncTCP dependency](https://github.com/khoih-prog/AsyncWebServer_STM32/issues/4) and [how to run one of the examples?](https://github.com/khoih-prog/AsyncWebServer_STM32/issues/2).
-
+6. Thanks to [tothtechnika](https://github.com/tothtechnika) to create the PR [Fix base64 encoding of websocket client key and progmem support for webserver #7](https://github.com/khoih-prog/AsyncWebServer_STM32/pull/7) leading to new release v1.4.0
 
 <table>
   <tr>
@@ -2093,6 +2093,7 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
     <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b>tcpipchip</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/jcw"><img src="https://github.com/jcw.png" width="100px;" alt="jcw"/><br /><sub><b>Jean-Claude</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/chris007de"><img src="https://github.com/chris007de.png" width="100px;" alt="chris007de"/><br /><sub><b>chris007de</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/tothtechnika"><img src="https://github.com/tothtechnika.png" width="100px;" alt="tothtechnika"/><br /><sub><b>tothtechnika</b></sub></a><br /></td>
   </tr> 
 </table>
 

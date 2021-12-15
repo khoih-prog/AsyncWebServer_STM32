@@ -9,7 +9,7 @@
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
 
-  Version: 1.3.0
+  Version: 1.4.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -19,12 +19,14 @@
   1.2.5   K Hoang      28/12/2020 Suppress all possible compiler warnings. Add examples.
   1.2.6   K Hoang      22/03/2021 Fix dependency on STM32AsyncTCP Library
   1.3.0   K Hoang      14/04/2021 Add support to LAN8720 using STM32F4 or STM32F7
+  1.3.1   K Hoang      09/10/2021 Update `platform.ini` and `library.json`
+  1.4.0   K Hoang      14/12/2021 Fix base64 encoding of websocket client key and add WebServer progmem support
  *****************************************************************************************************************************/
 
 #ifndef _AsyncWebServer_STM32_H_
 #define _AsyncWebServer_STM32_H_
 
-#define ASYNC_WEBSERVER_STM32_VERSION      "AsyncWebServer_STM32 v1.3.0"
+#define ASYNC_WEBSERVER_STM32_VERSION      "AsyncWebServer_STM32 v1.4.0"
 
 #ifndef AWS_STM32_UNUSED
   #define AWS_STM32_UNUSED(x) (void)(x)
@@ -332,11 +334,14 @@ class AsyncWebServerRequest
 
     AsyncWebServerResponse *beginResponse(int code, const String& contentType = String(), const String& content = String());
     AsyncWebServerResponse *beginResponse(Stream &stream, const String& contentType, size_t len, AwsTemplateProcessor callback = nullptr);
-    AsyncWebServerResponse *beginResponse(const String& contentType, size_t len, AwsResponseFiller callback, AwsTemplateProcessor templateCallback = nullptr);
-    AsyncWebServerResponse *beginResponse_P(int code, const String& contentType, const uint8_t * content, size_t len, AwsTemplateProcessor callback=nullptr);
+    AsyncWebServerResponse *beginResponse(const String& contentType, size_t len, AwsResponseFiller callback, 
+                                          AwsTemplateProcessor templateCallback = nullptr);
+    AsyncWebServerResponse *beginResponse_P(int code, const String& contentType, const uint8_t * content, 
+                                            size_t len, AwsTemplateProcessor callback=nullptr);
     AsyncWebServerResponse *beginResponse_P(int code, const String& contentType, PGM_P content, AwsTemplateProcessor callback=nullptr);
 
-    AsyncWebServerResponse *beginChunkedResponse(const String& contentType, AwsResponseFiller callback, AwsTemplateProcessor templateCallback = nullptr);
+    AsyncWebServerResponse *beginChunkedResponse(const String& contentType, AwsResponseFiller callback, 
+                                                  AwsTemplateProcessor templateCallback = nullptr);
     AsyncResponseStream *beginResponseStream(const String& contentType, size_t bufferSize = 1460);
 
     size_t headers() const;                     // get header count

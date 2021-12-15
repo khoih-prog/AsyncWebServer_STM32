@@ -9,7 +9,7 @@
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
 
-  Version: 1.3.0
+  Version: 1.4.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -19,6 +19,8 @@
   1.2.5   K Hoang      28/12/2020 Suppress all possible compiler warnings. Add examples.
   1.2.6   K Hoang      22/03/2021 Fix dependency on STM32AsyncTCP Library
   1.3.0   K Hoang      14/04/2021 Add support to LAN8720 using STM32F4 or STM32F7
+  1.3.1   K Hoang      09/10/2021 Update `platform.ini` and `library.json`
+  1.4.0   K Hoang      14/12/2021 Fix base64 encoding of websocket client key and add WebServer progmem support
  *****************************************************************************************************************************/
 
 #define _ASYNCWEBSERVER_STM32_LOGLEVEL_     1
@@ -724,7 +726,9 @@ size_t AsyncChunkedResponse::_fillBuffer(uint8_t *data, size_t len)
 /*
  * Progmem Response
  * */
-AsyncProgmemResponse::AsyncProgmemResponse(int code, const String& contentType, const uint8_t * content, size_t len, AwsTemplateProcessor callback): AsyncAbstractResponse(callback) {
+AsyncProgmemResponse::AsyncProgmemResponse(int code, const String& contentType, const uint8_t * content, 
+                                          size_t len, AwsTemplateProcessor callback): AsyncAbstractResponse(callback) 
+{
   _code = code;
   _content = content;
   _contentType = contentType;
@@ -732,15 +736,21 @@ AsyncProgmemResponse::AsyncProgmemResponse(int code, const String& contentType, 
   _readLength = 0;
 }
 
-size_t AsyncProgmemResponse::_fillBuffer(uint8_t *data, size_t len){
+size_t AsyncProgmemResponse::_fillBuffer(uint8_t *data, size_t len) 
+{
   size_t left = _contentLength - _readLength;
-  if (left > len) {
+  
+  if (left > len) 
+  {
     memcpy_P(data, _content + _readLength, len);
     _readLength += len;
+    
     return len;
   }
+  
   memcpy_P(data, _content + _readLength, left);
   _readLength += left;
+  
   return left;
 }
 

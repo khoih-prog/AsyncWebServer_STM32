@@ -13,6 +13,7 @@
 
 * [Table of contents](#table-of-contents)
 * [Changelog](#changelog)
+  * [Releases v1.4.0](#releases-v140)
   * [Releases v1.3.1](#releases-v131)
   * [Releases v1.3.0](#releases-v130)
   * [Releases v1.2.6](#releases-v126)
@@ -24,6 +25,11 @@
 ---
 
 ## Changelog
+
+### Releases v1.4.0
+
+1. Fix base64 encoding of websocket client key and add WebServer progmem support. Check PR [Fix base64 encoding of websocket client key and progmem support for webserver #7](https://github.com/khoih-prog/AsyncWebServer_STM32/pull/7)
+
 
 ### Releases v1.3.1
 
