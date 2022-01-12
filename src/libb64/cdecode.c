@@ -12,7 +12,7 @@
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
  
-  Version: 1.4.0
+  Version: 1.4.1
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -24,23 +24,27 @@
   1.3.0   K Hoang      14/04/2021 Add support to LAN8720 using STM32F4 or STM32F7
   1.3.1   K Hoang      09/10/2021 Update `platform.ini` and `library.json`
   1.4.0   K Hoang      14/12/2021 Fix base64 encoding of websocket client key and add WebServer progmem support
+  1.4.1   K Hoang      12/01/2022 Fix authenticate issue caused by libb64
  *****************************************************************************************************************************/
 
 #include "cdecode.h"
 
-int base64_decode_value(char value_in)
+int base64_decode_value(int value_in)
 {
-  static const char decoding[] = {62, -1, -1, -1, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -2, -1, -1, -1, 0, 1, 2,
-                                  3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1,
-                                  -1, -1, -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46,
-                                  47, 48, 49, 50, 51
-                                 };
-  static const char decoding_size = sizeof(decoding);
+  static const char decoding[] =
+  { 62, -1, -1, -1, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -2, -1, -1, -1, 0, 1, 2,
+    3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1,
+    -1, -1, -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46,
+    47, 48, 49, 50, 51
+  };
 
-  int newValue = (int) value_in - 43;
-  //value_in -= 43;
-  if (newValue < 0 || newValue > decoding_size) return -1;
-  return decoding[newValue];
+  static const char decoding_size = sizeof(decoding);
+  value_in -= 43;
+
+  if (value_in < 0 || value_in > decoding_size)
+    return -1;
+
+  return decoding[(int)value_in];
 }
 
 void base64_init_decodestate(base64_decodestate* state_in)
@@ -49,12 +53,10 @@ void base64_init_decodestate(base64_decodestate* state_in)
   state_in->plainchar = 0;
 }
 
-
 int base64_decode_block(const char* code_in, const int length_in, char* plaintext_out, base64_decodestate* state_in)
 {
   const char* codechar = code_in;
   char* plainchar = plaintext_out;
-  //char fragment;
   int fragment;
 
   *plainchar = state_in->plainchar;
@@ -77,8 +79,8 @@ int base64_decode_block(const char* code_in, const int length_in, char* plaintex
         } while (fragment < 0);
 
         *plainchar    = (fragment & 0x03f) << 2;
-
-        break;
+        
+        // fall through
 
       case step_b:
         do
@@ -95,8 +97,8 @@ int base64_decode_block(const char* code_in, const int length_in, char* plaintex
 
         *plainchar++ |= (fragment & 0x030) >> 4;
         *plainchar    = (fragment & 0x00f) << 4;
-
-        break;
+        
+        // fall through
 
       case step_c:
         do
@@ -113,8 +115,8 @@ int base64_decode_block(const char* code_in, const int length_in, char* plaintex
 
         *plainchar++ |= (fragment & 0x03c) >> 2;
         *plainchar    = (fragment & 0x003) << 6;
-
-        break;
+        
+        // fall through
 
       case step_d:
         do
@@ -130,18 +132,17 @@ int base64_decode_block(const char* code_in, const int length_in, char* plaintex
         } while (fragment < 0);
 
         *plainchar++   |= (fragment & 0x03f);
-
-        break;
+        
+        // fall through
       }
-
   }
 
   /* control should not reach here */
   return plainchar - plaintext_out;
 }
 
-int base64_decode_chars(const char* code_in, const int length_in, char* plaintext_out)
-{
+int base64_decode_chars(const char* code_in, const int length_in, char* plaintext_out) {
+
   base64_decodestate _state;
   base64_init_decodestate(&_state);
   int len = base64_decode_block(code_in, length_in, plaintext_out, &_state);

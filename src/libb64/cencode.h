@@ -12,7 +12,7 @@
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
   Licensed under MIT license
  
-  Version: 1.4.0
+  Version: 1.4.1
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -24,6 +24,7 @@
   1.3.0   K Hoang      14/04/2021 Add support to LAN8720 using STM32F4 or STM32F7
   1.3.1   K Hoang      09/10/2021 Update `platform.ini` and `library.json`
   1.4.0   K Hoang      14/12/2021 Fix base64 encoding of websocket client key and add WebServer progmem support
+  1.4.1   K Hoang      12/01/2022 Fix authenticate issue caused by libb64
  *****************************************************************************************************************************/
 
 #pragma once
@@ -39,11 +40,13 @@
 extern "C" {
 #endif
 
-typedef enum {
+typedef enum 
+{
   step_A, step_B, step_C
 } base64_encodestep;
 
-typedef struct {
+typedef struct 
+{
   base64_encodestep step;
   char result;
   int stepcount;

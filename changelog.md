@@ -13,6 +13,7 @@
 
 * [Table of contents](#table-of-contents)
 * [Changelog](#changelog)
+  * [Releases v1.4.1](#releases-v141)
   * [Releases v1.4.0](#releases-v140)
   * [Releases v1.3.1](#releases-v131)
   * [Releases v1.3.0](#releases-v130)
@@ -25,6 +26,10 @@
 ---
 
 ## Changelog
+
+### Releases v1.4.1
+
+1. Fix authenticate issue caused by libb64
 
 ### Releases v1.4.0
 
