@@ -34,6 +34,8 @@
   #error This code is designed to run on STM32F/L/H/G/WB/MP1 platform! Please check your Tools->Board setting.
 #endif
 
+#define _ASYNCWEBSERVER_STM32_LOGLEVEL_       4
+
 #if defined(STM32F0)
   #warning STM32F0 board selected
   #define BOARD_TYPE  "STM32F0"
@@ -137,6 +139,12 @@ void setup()
   Serial.print("\nStart Async_SimpleWebServer_STM32 on "); Serial.print(BOARD_NAME);
   Serial.print(" with "); Serial.println(SHIELD_TYPE);
   Serial.println(ASYNC_WEBSERVER_STM32_VERSION);
+
+#if (_ASYNCWEBSERVER_STM32_LOGLEVEL_ > 2)
+  Serial.print("STM32 Core version v"); Serial.print(STM32_CORE_VERSION_MAJOR);
+  Serial.print("."); Serial.print(STM32_CORE_VERSION_MINOR); 
+  Serial.print("."); Serial.println(STM32_CORE_VERSION_PATCH);
+#endif
 
   // start the ethernet connection and the server
   // Use random mac

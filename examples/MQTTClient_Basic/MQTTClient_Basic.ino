@@ -43,9 +43,7 @@
 #include <PubSubClient.h>
 
 // Update these with values suitable for your network.
-//const char* mqttServer = "broker.example";        // Broker address
-//const char* mqttServer = "broker.emqx.io";        // Broker address
-const char* mqttServer = "broker.shiftr.io";        // Broker address
+const char* mqttServer = "broker.emqx.io";        // Broker address
 
 const char *ID        = "MQTTClient_SSL-Client";  // Name of our device, must be unique
 const char *TOPIC     = "MQTT_Pub";               // Topic to subcribe to
@@ -118,6 +116,12 @@ void setup()
   Serial.print("\nStart MQTTClient_Basic on "); Serial.print(BOARD_NAME);
   Serial.print(" with "); Serial.println(SHIELD_TYPE);
   Serial.println(ASYNC_WEBSERVER_STM32_VERSION);
+
+#if (_ASYNCWEBSERVER_STM32_LOGLEVEL_ > 2)
+  Serial.print("STM32 Core version v"); Serial.print(STM32_CORE_VERSION_MAJOR);
+  Serial.print("."); Serial.print(STM32_CORE_VERSION_MINOR); 
+  Serial.print("."); Serial.println(STM32_CORE_VERSION_PATCH);
+#endif
 
   // start the ethernet connection and the server
   // Use random mac

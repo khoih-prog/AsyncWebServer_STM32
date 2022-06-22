@@ -32,6 +32,8 @@
   #error This code is designed to run on STM32F/L/H/G/WB/MP1 platform! Please check your Tools->Board setting.
 #endif
 
+#define _ASYNCWEBSERVER_STM32_LOGLEVEL_       4
+
 #if defined(STM32F0)
   #warning STM32F0 board selected
   #define BOARD_TYPE  "STM32F0"

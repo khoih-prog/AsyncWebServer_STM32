@@ -240,6 +240,12 @@ void setup()
   Serial.printf("\nStarting AsyncFSBrowser_STM32 on %s with %s\n", BOARD_NAME, SHIELD_TYPE);
   Serial.println(ASYNC_WEBSERVER_STM32_VERSION);
 
+#if (_ASYNCWEBSERVER_STM32_LOGLEVEL_ > 2)
+  Serial.print("STM32 Core version v"); Serial.print(STM32_CORE_VERSION_MAJOR);
+  Serial.print("."); Serial.print(STM32_CORE_VERSION_MINOR); 
+  Serial.print("."); Serial.println(STM32_CORE_VERSION_PATCH);
+#endif
+
   // start the ethernet connection and the server
   // Use random mac
   uint16_t index = millis() % NUMBER_OF_MAC;
