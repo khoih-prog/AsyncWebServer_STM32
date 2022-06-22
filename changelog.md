@@ -13,6 +13,7 @@
 
 * [Table of contents](#table-of-contents)
 * [Changelog](#changelog)
+  * [Releases v1.5.0](#releases-v150)
   * [Releases v1.4.1](#releases-v141)
   * [Releases v1.4.0](#releases-v140)
   * [Releases v1.3.1](#releases-v131)
@@ -26,6 +27,11 @@
 ---
 
 ## Changelog
+
+### Releases v1.5.0
+
+1. Update examples for new STM32 core v2.3.0 
+2. Update `Packages' Patches`
 
 ### Releases v1.4.1
 
