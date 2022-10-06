@@ -31,10 +31,10 @@ Arduino IDE version: 1.8.19
 STM32 Core Version 2.3.0
 Nucleo-144 STM32F7 NUCLEO_F767ZI
 OS: Ubuntu 20.04 LTS
-Linux xy-Inspiron-3593 5.13.0-51-generic #58~20.04.1-Ubuntu SMP Tue Jun 14 11:29:12 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+Linux xy-Inspiron-3593 5.15.0-48-generic #54~20.04.1-Ubuntu SMP Thu Sep 1 16:17:26 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
 
 Context:
-I encountered an endless loop while trying to connect to Local WiFi.
+I encountered a crash while using this library
 
 Steps to reproduce:
 1. ...

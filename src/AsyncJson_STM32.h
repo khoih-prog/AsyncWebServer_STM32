@@ -7,9 +7,17 @@
   
   Based on and modified from ESPAsyncWebServer (https://github.com/me-no-dev/ESPAsyncWebServer)
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
-  Licensed under MIT license
- 
-  Version: 1.5.0
+  
+  Copyright (c) 2016 Hristo Gochkov. All rights reserved.
+  This file is part of the esp8266 core for Arduino environment.
+  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License 
+  as published bythe Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+  You should have received a copy of the GNU General Public License along with this program.
+  If not, see <https://www.gnu.org/licenses/>
+
+  Version: 1.6.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -23,6 +31,7 @@
   1.4.0   K Hoang      14/12/2021 Fix base64 encoding of websocket client key and add WebServer progmem support
   1.4.1   K Hoang      12/01/2022 Fix authenticate issue caused by libb64
   1.5.0   K Hoang      22/06/2022 Update for STM32 core v2.3.0
+  1.6.0   K Hoang      06/10/2022 Option to use non-destroyed cString instead of String to save Heap
  *****************************************************************************************************************************/
 /*
   Async Response to use with ArduinoJson and AsyncWebServer
@@ -67,13 +76,18 @@
 #include <AsyncWebServer_STM32.h>
 #include <Print.h>
 
+/////////////////////////////////////////////////////////
+
 #if ARDUINOJSON_VERSION_MAJOR == 5
-#define ARDUINOJSON_5_COMPATIBILITY
+  #define ARDUINOJSON_5_COMPATIBILITY
 #else
-#define DYNAMIC_JSON_DOCUMENT_SIZE  1024
+  #define DYNAMIC_JSON_DOCUMENT_SIZE  1024
 #endif
 
 constexpr const char* JSON_MIMETYPE = "application/json";
+
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 
 /*
    Json Response
@@ -92,6 +106,8 @@ class ChunkPrint : public Print
       : _destination(destination), _to_skip(from), _to_write(len), _pos{0} {}
 
     virtual ~ChunkPrint() {}
+
+    /////////////////////////////////////////////////
 
     size_t write(uint8_t c)
     {
@@ -112,11 +128,15 @@ class ChunkPrint : public Print
       return 0;
     }
 
-    size_t write(const uint8_t *buffer, size_t size)
+    /////////////////////////////////////////////////
+
+    inline size_t write(const uint8_t *buffer, size_t size)
     {
       return this->Print::write(buffer, size);
     }
 };
+
+/////////////////////////////////////////////////
 
 class AsyncJsonResponse: public AsyncAbstractResponse
 {
@@ -132,6 +152,8 @@ class AsyncJsonResponse: public AsyncAbstractResponse
     bool _isValid;
 
   public:
+
+    /////////////////////////////////////////////////
 
 #ifdef ARDUINOJSON_5_COMPATIBILITY
     AsyncJsonResponse(bool isArray = false): _isValid {false} 
@@ -157,17 +179,25 @@ class AsyncJsonResponse: public AsyncAbstractResponse
     }
 #endif
 
+    /////////////////////////////////////////////////
+
     ~AsyncJsonResponse() {}
+
+    /////////////////////////////////////////////////
     
-    JsonVariant & getRoot() 
+    inline JsonVariant & getRoot() 
     {
       return _root;
     }
+
+    /////////////////////////////////////////////////
     
-    bool _sourceValid() const 
+    inline bool _sourceValid() const 
     {
       return _isValid;
     }
+
+    /////////////////////////////////////////////////
     
     size_t setLength() 
     {
@@ -186,10 +216,14 @@ class AsyncJsonResponse: public AsyncAbstractResponse
       return _contentLength;
     }
 
-    size_t getSize() 
+    /////////////////////////////////////////////////
+
+    inline size_t getSize() 
     {
       return _jsonBuffer.size();
     }
+
+    /////////////////////////////////////////////////
 
     size_t _fillBuffer(uint8_t *data, size_t len) 
     {
@@ -202,7 +236,13 @@ class AsyncJsonResponse: public AsyncAbstractResponse
 #endif
       return len;
     }
+
+    /////////////////////////////////////////////////
+    
 };
+
+/////////////////////////////////////////////////
+/////////////////////////////////////////////////
 
 class PrettyAsyncJsonResponse: public AsyncJsonResponse 
 {
@@ -212,6 +252,8 @@ class PrettyAsyncJsonResponse: public AsyncJsonResponse
 #else
     PrettyAsyncJsonResponse (bool isArray = false, size_t maxJsonBufferSize = DYNAMIC_JSON_DOCUMENT_SIZE) : AsyncJsonResponse {isArray, maxJsonBufferSize} {}
 #endif
+
+    /////////////////////////////////////////////////
 
     size_t setLength () 
     {
@@ -228,6 +270,8 @@ class PrettyAsyncJsonResponse: public AsyncJsonResponse
       
       return _contentLength;
     }
+
+    /////////////////////////////////////////////////
     
     size_t _fillBuffer (uint8_t *data, size_t len) 
     {
@@ -243,7 +287,12 @@ class PrettyAsyncJsonResponse: public AsyncJsonResponse
     }
 };
 
+/////////////////////////////////////////////////
+
 typedef std::function<void(AsyncWebServerRequest *request, JsonVariant &json)> ArJsonRequestHandlerFunction;
+
+/////////////////////////////////////////////////
+/////////////////////////////////////////////////
 
 class AsyncCallbackJsonWebHandler: public AsyncWebHandler 
 {
@@ -261,6 +310,8 @@ class AsyncCallbackJsonWebHandler: public AsyncWebHandler
     size_t _maxContentLength;
     
   public:
+
+    /////////////////////////////////////////////////
   
 #ifdef ARDUINOJSON_5_COMPATIBILITY
     AsyncCallbackJsonWebHandler(const String& uri, ArJsonRequestHandlerFunction onRequest)
@@ -270,20 +321,28 @@ class AsyncCallbackJsonWebHandler: public AsyncWebHandler
       : _uri(uri), _method(HTTP_POST | HTTP_PUT | HTTP_PATCH), _onRequest(onRequest), maxJsonBufferSize(maxJsonBufferSize), _maxContentLength(16384) {}
 #endif
 
-    void setMethod(WebRequestMethodComposite method) 
+    /////////////////////////////////////////////////
+
+    inline void setMethod(WebRequestMethodComposite method) 
     {
       _method = method;
     }
+
+    /////////////////////////////////////////////////
     
-    void setMaxContentLength(int maxContentLength) 
+    inline void setMaxContentLength(int maxContentLength) 
     {
       _maxContentLength = maxContentLength;
     }
+
+    /////////////////////////////////////////////////
     
-    void onRequest(ArJsonRequestHandlerFunction fn) 
+    inline void onRequest(ArJsonRequestHandlerFunction fn) 
     {
       _onRequest = fn;
     }
+
+    /////////////////////////////////////////////////
 
     virtual bool canHandle(AsyncWebServerRequest *request) override final 
     {
@@ -303,6 +362,8 @@ class AsyncCallbackJsonWebHandler: public AsyncWebHandler
       
       return true;
     }
+
+    /////////////////////////////////////////////////
 
     virtual void handleRequest(AsyncWebServerRequest *request) override final 
     {
@@ -339,10 +400,14 @@ class AsyncCallbackJsonWebHandler: public AsyncWebHandler
         request->send(500);
       }
     }
+
+    /////////////////////////////////////////////////
     
     virtual void handleUpload(AsyncWebServerRequest *request, const String& filename, size_t index, uint8_t *data, size_t len, bool final) override final 
     {
     }
+
+    /////////////////////////////////////////////////
     
     virtual void handleBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) override final 
     {
@@ -361,6 +426,8 @@ class AsyncCallbackJsonWebHandler: public AsyncWebHandler
         }
       }
     }
+
+    /////////////////////////////////////////////////
     
     virtual bool isRequestHandlerTrivial() override final 
     {

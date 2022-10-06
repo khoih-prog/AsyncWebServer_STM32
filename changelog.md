@@ -2,7 +2,6 @@
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/AsyncWebServer_STM32.svg?)](https://www.ardu-badge.com/AsyncWebServer_STM32)
 [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncWebServer_STM32.svg)](https://github.com/khoih-prog/AsyncWebServer_STM32/releases)
-[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/LICENSE)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/AsyncWebServer_STM32.svg)](http://github.com/khoih-prog/AsyncWebServer_STM32/issues)
 
@@ -13,6 +12,7 @@
 
 * [Table of contents](#table-of-contents)
 * [Changelog](#changelog)
+  * [Releases v1.6.0](#releases-v160)
   * [Releases v1.5.0](#releases-v150)
   * [Releases v1.4.1](#releases-v141)
   * [Releases v1.4.0](#releases-v140)
@@ -27,6 +27,15 @@
 ---
 
 ## Changelog
+
+### Releases v1.6.0
+
+1. Support using `CString` to save heap to send `very large data`. Check [request->send(200, textPlainStr, jsonChartDataCharStr); - Without using String Class - to save heap #8](https://github.com/khoih-prog/Portenta_H7_AsyncWebServer/pull/8)
+2. Add functions and example `Async_AdvancedWebServer_favicon` to support `favicon.ico`
+3. Add multiple examples to demo the new feature
+4. Fix issue with slow browsers or network
+5. Change license from `MIT` to `GPLv3` to match with original [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer) license
+
 
 ### Releases v1.5.0
 

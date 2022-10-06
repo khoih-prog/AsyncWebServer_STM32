@@ -2,14 +2,22 @@
   AsyncWebServer_STM32.cpp - Dead simple AsyncWebServer for STM32 LAN8720 or built-in LAN8742A Ethernet
 
   For STM32 with LAN8720 (STM32F4/F7) or built-in LAN8742A Ethernet (Nucleo-144, DISCOVERY, etc)
-
+  
   AsyncWebServer_STM32 is a library for the STM32 with LAN8720 or built-in LAN8742A Ethernet WebServer
-
+  
   Based on and modified from ESPAsyncWebServer (https://github.com/me-no-dev/ESPAsyncWebServer)
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
-  Licensed under MIT license
+  
+  Copyright (c) 2016 Hristo Gochkov. All rights reserved.
+  This file is part of the esp8266 core for Arduino environment.
+  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License 
+  as published bythe Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+  You should have received a copy of the GNU General Public License along with this program.
+  If not, see <https://www.gnu.org/licenses/>
 
-  Version: 1.5.0
+  Version: 1.6.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -23,14 +31,19 @@
   1.4.0   K Hoang      14/12/2021 Fix base64 encoding of websocket client key and add WebServer progmem support
   1.4.1   K Hoang      12/01/2022 Fix authenticate issue caused by libb64
   1.5.0   K Hoang      22/06/2022 Update for STM32 core v2.3.0
+  1.6.0   K Hoang      06/10/2022 Option to use non-destroyed cString instead of String to save Heap
  *****************************************************************************************************************************/
 
-#define _ASYNCWEBSERVER_STM32_LOGLEVEL_     1
+#if !defined(_ASYNCWEBSERVER_STM32_LOGLEVEL_)
+  #define _ASYNCWEBSERVER_STM32_LOGLEVEL_     1
+#endif
 
 #include "AsyncWebServer_Debug_STM32.h"
 
 #include "AsyncWebServer_STM32.h"
 #include "AsyncWebHandlerImpl_STM32.h"
+
+/////////////////////////////////////////////////
 
 AsyncWebServer::AsyncWebServer(uint16_t port)
   : _server(port), _rewrites(LinkedList<AsyncWebRewrite * >([](AsyncWebRewrite * r)
@@ -52,7 +65,11 @@ AsyncWebServer::AsyncWebServer(uint16_t port)
     if (c == NULL)
       return;
 
-    c->setRxTimeout(3);
+    // KH set no RxTimeout for slower Firefox / network
+    //c->setRxTimeout(3);
+    c->setRxTimeout(0);
+    //////
+    
     AsyncWebServerRequest *r = new AsyncWebServerRequest((AsyncWebServer*)s, c);
 
     if (r == NULL)
@@ -64,6 +81,8 @@ AsyncWebServer::AsyncWebServer(uint16_t port)
   }, this);
 }
 
+/////////////////////////////////////////////////
+
 AsyncWebServer::~AsyncWebServer()
 {
   reset();
@@ -73,6 +92,8 @@ AsyncWebServer::~AsyncWebServer()
     delete _catchAllHandler;
 }
 
+/////////////////////////////////////////////////
+
 AsyncWebRewrite& AsyncWebServer::addRewrite(AsyncWebRewrite* rewrite)
 {
   _rewrites.add(rewrite);
@@ -80,15 +101,21 @@ AsyncWebRewrite& AsyncWebServer::addRewrite(AsyncWebRewrite* rewrite)
   return *rewrite;
 }
 
+/////////////////////////////////////////////////
+
 bool AsyncWebServer::removeRewrite(AsyncWebRewrite *rewrite)
 {
   return _rewrites.remove(rewrite);
 }
 
+/////////////////////////////////////////////////
+
 AsyncWebRewrite& AsyncWebServer::rewrite(const char* from, const char* to)
 {
   return addRewrite(new AsyncWebRewrite(from, to));
 }
+
+/////////////////////////////////////////////////
 
 AsyncWebHandler& AsyncWebServer::addHandler(AsyncWebHandler* handler)
 {
@@ -96,10 +123,14 @@ AsyncWebHandler& AsyncWebServer::addHandler(AsyncWebHandler* handler)
   return *handler;
 }
 
+/////////////////////////////////////////////////
+
 bool AsyncWebServer::removeHandler(AsyncWebHandler *handler)
 {
   return _handlers.remove(handler);
 }
+
+/////////////////////////////////////////////////
 
 void AsyncWebServer::begin()
 {
@@ -107,10 +138,14 @@ void AsyncWebServer::begin()
   _server.begin();
 }
 
+/////////////////////////////////////////////////
+
 void AsyncWebServer::end()
 {
   _server.end();
 }
+
+/////////////////////////////////////////////////
 
 #if ASYNC_TCP_SSL_ENABLED
 void AsyncWebServer::onSslFileRequest(AcSSlFileHandler cb, void* arg)
@@ -118,16 +153,22 @@ void AsyncWebServer::onSslFileRequest(AcSSlFileHandler cb, void* arg)
   _server.onSslFileRequest(cb, arg);
 }
 
+/////////////////////////////////////////////////
+
 void AsyncWebServer::beginSecure(const char *cert, const char *key, const char *password)
 {
   _server.beginSecure(cert, key, password);
 }
 #endif
 
+/////////////////////////////////////////////////
+
 void AsyncWebServer::_handleDisconnect(AsyncWebServerRequest *request)
 {
   delete request;
 }
+
+/////////////////////////////////////////////////
 
 void AsyncWebServer::_rewriteRequest(AsyncWebServerRequest *request)
 {
@@ -140,6 +181,8 @@ void AsyncWebServer::_rewriteRequest(AsyncWebServerRequest *request)
     }
   }
 }
+
+/////////////////////////////////////////////////
 
 void AsyncWebServer::_attachHandler(AsyncWebServerRequest *request)
 {
@@ -156,6 +199,7 @@ void AsyncWebServer::_attachHandler(AsyncWebServerRequest *request)
   request->setHandler(_catchAllHandler);
 }
 
+/////////////////////////////////////////////////
 
 AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest,
                                             ArUploadHandlerFunction onUpload, ArBodyHandlerFunction onBody)
@@ -172,7 +216,10 @@ AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, WebRequestMethodCom
   return *handler;
 }
 
-AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest, ArUploadHandlerFunction onUpload)
+/////////////////////////////////////////////////
+
+AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest,
+                                            ArUploadHandlerFunction onUpload)
 {
   AsyncCallbackWebHandler* handler = new AsyncCallbackWebHandler();
   handler->setUri(uri);
@@ -183,6 +230,8 @@ AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, WebRequestMethodCom
 
   return *handler;
 }
+
+/////////////////////////////////////////////////
 
 AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, WebRequestMethodComposite method, ArRequestHandlerFunction onRequest)
 {
@@ -195,6 +244,8 @@ AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, WebRequestMethodCom
   return *handler;
 }
 
+/////////////////////////////////////////////////
+
 AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, ArRequestHandlerFunction onRequest)
 {
   AsyncCallbackWebHandler* handler = new AsyncCallbackWebHandler();
@@ -205,15 +256,21 @@ AsyncCallbackWebHandler& AsyncWebServer::on(const char* uri, ArRequestHandlerFun
   return *handler;
 }
 
+/////////////////////////////////////////////////
+
 void AsyncWebServer::onNotFound(ArRequestHandlerFunction fn)
 {
   _catchAllHandler->onRequest(fn);
 }
 
+/////////////////////////////////////////////////
+
 void AsyncWebServer::onRequestBody(ArBodyHandlerFunction fn)
 {
   _catchAllHandler->onBody(fn);
 }
+
+/////////////////////////////////////////////////
 
 void AsyncWebServer::reset()
 {
@@ -227,3 +284,5 @@ void AsyncWebServer::reset()
     _catchAllHandler->onBody(NULL);
   }
 }
+
+/////////////////////////////////////////////////

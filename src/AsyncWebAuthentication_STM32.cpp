@@ -7,9 +7,17 @@
   
   Based on and modified from ESPAsyncWebServer (https://github.com/me-no-dev/ESPAsyncWebServer)
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
-  Licensed under MIT license
- 
-  Version: 1.5.0
+  
+  Copyright (c) 2016 Hristo Gochkov. All rights reserved.
+  This file is part of the esp8266 core for Arduino environment.
+  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License 
+  as published bythe Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+  You should have received a copy of the GNU General Public License along with this program.
+  If not, see <https://www.gnu.org/licenses/>
+
+  Version: 1.6.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -23,9 +31,12 @@
   1.4.0   K Hoang      14/12/2021 Fix base64 encoding of websocket client key and add WebServer progmem support
   1.4.1   K Hoang      12/01/2022 Fix authenticate issue caused by libb64
   1.5.0   K Hoang      22/06/2022 Update for STM32 core v2.3.0
+  1.6.0   K Hoang      06/10/2022 Option to use non-destroyed cString instead of String to save Heap
  *****************************************************************************************************************************/
 
-#define _ASYNCWEBSERVER_STM32_LOGLEVEL_     1
+#if !defined(_ASYNCWEBSERVER_STM32_LOGLEVEL_)
+  #define _ASYNCWEBSERVER_STM32_LOGLEVEL_     1
+#endif
 
 #include "AsyncWebServer_Debug_STM32.h"
 
@@ -36,6 +47,8 @@
 #include "Crypto/md5.h"
 #include "Crypto/bearssl_hash.h"
 #include "Crypto/Hash.h"
+
+/////////////////////////////////////////////////
 
 // Basic Auth hash = base64("username:password")
 
@@ -73,6 +86,7 @@ bool checkBasicAuthentication(const char * hash, const char * username, const ch
     LOGDEBUG("checkBasicAuthentication: NULL encoded");
   
     delete[] toencode;
+    
     return false;
   }
   
@@ -84,6 +98,7 @@ bool checkBasicAuthentication(const char * hash, const char * username, const ch
     
     delete[] toencode;
     delete[] encoded;
+    
     return true;
   }
   
@@ -91,14 +106,17 @@ bool checkBasicAuthentication(const char * hash, const char * username, const ch
   
   delete[] toencode;
   delete[] encoded;
+  
   return false;
 }
+
+/////////////////////////////////////////////////
 
 static bool getMD5(uint8_t * data, uint16_t len, char * output) 
 { 
   //33 bytes or more
 
-  // For STM32
+  // For Teensy41
   md5_context _ctx;
 
   uint8_t i;
@@ -113,7 +131,7 @@ static bool getMD5(uint8_t * data, uint16_t len, char * output)
     
   memset(_buf, 0x00, 16);
 
-  // For STM32
+  // For Teensy41
   md5_starts(&_ctx);
   md5_update(&_ctx, data, len);
   md5_finish(&_ctx, _buf);
@@ -130,9 +148,11 @@ static bool getMD5(uint8_t * data, uint16_t len, char * output)
   return true;
 }
 
+/////////////////////////////////////////////////
+
 static String genRandomMD5() 
 {
-  // For STM32
+  // For Teensy41
   uint32_t r = rand();
 
   char * out = (char*) malloc(33);
@@ -148,6 +168,8 @@ static String genRandomMD5()
   return res;
 }
 
+/////////////////////////////////////////////////
+
 static String stringMD5(const String& in) 
 {
   char * out = (char*) malloc(33);
@@ -162,6 +184,8 @@ static String stringMD5(const String& in)
   
   return res;
 }
+
+/////////////////////////////////////////////////
 
 String generateDigestHash(const char * username, const char * password, const char * realm) 
 {
@@ -192,6 +216,8 @@ String generateDigestHash(const char * username, const char * password, const ch
   return res;
 }
 
+/////////////////////////////////////////////////
+
 String requestDigestAuthentication(const char * realm) 
 {
   String header = "realm=\"";
@@ -211,6 +237,8 @@ String requestDigestAuthentication(const char * realm)
   
   return header;
 }
+
+/////////////////////////////////////////////////
 
 bool checkDigestAuthentication(const char * header, const char * method, const char * username, const char * password, 
                                 const char * realm, bool passwordIsHash, const char * nonce, const char * opaque, const char * uri) 

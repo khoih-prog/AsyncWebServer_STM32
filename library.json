@@ -1,8 +1,8 @@
 {
   "name":"AsyncWebServer_STM32",
-  "version": "1.5.0",
-  "description":"Asynchronous HTTP and WebSocket Server Library for STM32F/L/H/G/WB/MP1 using LAN8720 or built-in LAN8742A Ethernet",
-  "keywords":"http, async, websocket, webserver, stm32, stm32f, stm32l, stm32h, stm32g, stm32wb, stm32mp1, ethernet, lan8742a, lan8720, bluepill, blackpill, f407ve, f767zi, nucleo, nucleo-144",
+  "version": "1.6.0",
+  "keywords":"http, async, websocket, webserver, stm32, stm32f, stm32l, stm32h, stm32g, stm32wb, stm32mp1, ethernet, lan8742a, lan8720, bluepill, blackpill, f407ve, f767zi, nucleo, nucleo-144",  
+  "description":"Asynchronous HTTP and WebSocket Server Library for STM32F/L/H/G/WB/MP1 using LAN8720 or built-in LAN8742A Ethernet. Now support using CString to save heap to send very large data",
   "authors": 
   [
     {
@@ -21,8 +21,14 @@
     "type": "git",
     "url": "https://github.com/khoih-prog/AsyncWebServer_STM32"
   },
-  "license": "MIT",
-  "frameworks": "arduino",
+  "homepage": "https://github.com/khoih-prog/AsyncWebServer_STM32",
+  "export": {
+    "exclude": [
+      "linux",
+      "extras",
+      "tests"
+    ]
+  },
   "dependencies": 
   [
     {
@@ -42,6 +48,8 @@
       "version": "https://github.com/khoih-prog/STM32AsyncTCP"
     }
   ],
+  "license": "LGPL-3.0",
+  "frameworks": "arduino",
   "platforms": ["ststm32"],
   "examples": "examples/*/*/*.ino",
   "headers": ["AsyncWebServer_STM32.h"]

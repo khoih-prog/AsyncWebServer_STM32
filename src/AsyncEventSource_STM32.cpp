@@ -7,9 +7,17 @@
   
   Based on and modified from ESPAsyncWebServer (https://github.com/me-no-dev/ESPAsyncWebServer)
   Built by Khoi Hoang https://github.com/khoih-prog/AsyncWebServer_STM32
-  Licensed under MIT license
- 
-  Version: 1.5.0
+  
+  Copyright (c) 2016 Hristo Gochkov. All rights reserved.
+  This file is part of the esp8266 core for Arduino environment.
+  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License 
+  as published bythe Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+  You should have received a copy of the GNU General Public License along with this program.
+  If not, see <https://www.gnu.org/licenses/>
+
+  Version: 1.6.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -22,14 +30,19 @@
   1.3.1   K Hoang      09/10/2021 Update `platform.ini` and `library.json`
   1.4.0   K Hoang      14/12/2021 Fix base64 encoding of websocket client key and add WebServer progmem support
   1.4.1   K Hoang      12/01/2022 Fix authenticate issue caused by libb64
-  1.5.0   K Hoang      22/06/2022 Update for STM32 core v2.3.0 *****************************************************************************************************************************/
+  1.5.0   K Hoang      22/06/2022 Update for STM32 core v2.3.0
+  1.6.0   K Hoang      06/10/2022 Option to use non-destroyed cString instead of String to save Heap *****************************************************************************************************************************/
 
-#define _ASYNCWEBSERVER_STM32_LOGLEVEL_     1
+#if !defined(_ASYNCWEBSERVER_STM32_LOGLEVEL_)
+  #define _ASYNCWEBSERVER_STM32_LOGLEVEL_     1
+#endif
 
 #include "AsyncWebServer_Debug_STM32.h"
 
 #include "Arduino.h"
 #include "AsyncEventSource_STM32.h"
+
+/////////////////////////////////////////////////////////
 
 static String generateEventMessage(const char *message, const char *event, uint32_t id, uint32_t reconnect)
 {
@@ -145,6 +158,9 @@ static String generateEventMessage(const char *message, const char *event, uint3
   return ev;
 }
 
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+
 // Message
 
 AsyncEventSourceMessage::AsyncEventSourceMessage(const char * data, size_t len)
@@ -163,15 +179,19 @@ AsyncEventSourceMessage::AsyncEventSourceMessage(const char * data, size_t len)
   }
 }
 
+/////////////////////////////////////////////////////////
+
 AsyncEventSourceMessage::~AsyncEventSourceMessage()
 {
   if (_data != NULL)
     free(_data);
 }
 
+/////////////////////////////////////////////////////////
+
 size_t AsyncEventSourceMessage::ack(size_t len, uint32_t time)
 {
-  (void)time;
+  AWS_STM32_UNUSED(time);
 
   // If the whole message is now acked...
   if (_acked + len > _len)
@@ -188,6 +208,8 @@ size_t AsyncEventSourceMessage::ack(size_t len, uint32_t time)
 
   return 0;
 }
+
+/////////////////////////////////////////////////////////
 
 size_t AsyncEventSourceMessage::send(AsyncClient *client)
 {
@@ -208,6 +230,9 @@ size_t AsyncEventSourceMessage::send(AsyncClient *client)
   return sent;
 }
 
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+
 // Client
 
 AsyncEventSourceClient::AsyncEventSourceClient(AsyncWebServerRequest *request, AsyncEventSource *server)
@@ -227,13 +252,13 @@ AsyncEventSourceClient::AsyncEventSourceClient(AsyncWebServerRequest *request, A
   _client->onError(NULL, NULL);
   _client->onAck([](void *r, AsyncClient * c, size_t len, uint32_t time)
   {
-    (void)c;
+    AWS_STM32_UNUSED(c);
     ((AsyncEventSourceClient*)(r))->_onAck(len, time);
   }, this);
 
   _client->onPoll([](void *r, AsyncClient * c)
   {
-    (void)c;
+    AWS_STM32_UNUSED(c);
     ((AsyncEventSourceClient*)(r))->_onPoll();
   }, this);
 
@@ -255,11 +280,15 @@ AsyncEventSourceClient::AsyncEventSourceClient(AsyncWebServerRequest *request, A
   delete request;
 }
 
+/////////////////////////////////////////////////////////
+
 AsyncEventSourceClient::~AsyncEventSourceClient()
 {
   _messageQueue.free();
   close();
 }
+
+/////////////////////////////////////////////////////////
 
 void AsyncEventSourceClient::_queueMessage(AsyncEventSourceMessage *dataMessage)
 {
@@ -286,6 +315,8 @@ void AsyncEventSourceClient::_queueMessage(AsyncEventSourceMessage *dataMessage)
     _runQueue();
 }
 
+/////////////////////////////////////////////////////////
+
 void AsyncEventSourceClient::_onAck(size_t len, uint32_t time)
 {
   while (len && !_messageQueue.isEmpty())
@@ -299,6 +330,8 @@ void AsyncEventSourceClient::_onAck(size_t len, uint32_t time)
   _runQueue();
 }
 
+/////////////////////////////////////////////////////////
+
 void AsyncEventSourceClient::_onPoll()
 {
   if (!_messageQueue.isEmpty())
@@ -307,11 +340,14 @@ void AsyncEventSourceClient::_onPoll()
   }
 }
 
+/////////////////////////////////////////////////////////
 
 void AsyncEventSourceClient::_onTimeout(uint32_t time __attribute__((unused)))
 {
   _client->close(true);
 }
+
+/////////////////////////////////////////////////////////
 
 void AsyncEventSourceClient::_onDisconnect()
 {
@@ -319,16 +355,22 @@ void AsyncEventSourceClient::_onDisconnect()
   _server->_handleDisconnect(this);
 }
 
+/////////////////////////////////////////////////////////
+
 void AsyncEventSourceClient::close()
 {
   if (_client != NULL)
     _client->close();
 }
 
+/////////////////////////////////////////////////////////
+
 void AsyncEventSourceClient::write(const char * message, size_t len)
 {
   _queueMessage(new AsyncEventSourceMessage(message, len));
 }
+
+/////////////////////////////////////////////////////////
 
 void AsyncEventSourceClient::send(const char *message, const char *event, uint32_t id, uint32_t reconnect)
 {
@@ -336,7 +378,10 @@ void AsyncEventSourceClient::send(const char *message, const char *event, uint32
   _queueMessage(new AsyncEventSourceMessage(ev.c_str(), ev.length()));
 }
 
-void AsyncEventSourceClient::_runQueue() {
+/////////////////////////////////////////////////////////
+
+void AsyncEventSourceClient::_runQueue() 
+{
   while (!_messageQueue.isEmpty() && _messageQueue.front()->finished())
   {
     _messageQueue.remove(_messageQueue.front());
@@ -349,6 +394,8 @@ void AsyncEventSourceClient::_runQueue() {
   }
 }
 
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 
 // Handler
 
@@ -361,41 +408,38 @@ AsyncEventSource::AsyncEventSource(const String& url)
 , _connectcb(NULL)
 {}
 
+/////////////////////////////////////////////////////////
+
 AsyncEventSource::~AsyncEventSource()
 {
   close();
 }
+
+/////////////////////////////////////////////////////////
 
 void AsyncEventSource::onConnect(ArEventHandlerFunction cb)
 {
   _connectcb = cb;
 }
 
+/////////////////////////////////////////////////////////
+
 void AsyncEventSource::_addClient(AsyncEventSourceClient * client)
 {
-  /*char * temp = (char *)malloc(2054);
-    if(temp != NULL){
-    memset(temp+1,' ',2048);
-    temp[0] = ':';
-    temp[2049] = '\r';
-    temp[2050] = '\n';
-    temp[2051] = '\r';
-    temp[2052] = '\n';
-    temp[2053] = 0;
-    client->write((const char *)temp, 2053);
-    free(temp);
-    }*/
-
   _clients.add(client);
 
   if (_connectcb)
     _connectcb(client);
 }
 
+/////////////////////////////////////////////////////////
+
 void AsyncEventSource::_handleDisconnect(AsyncEventSourceClient * client)
 {
   _clients.remove(client);
 }
+
+/////////////////////////////////////////////////////////
 
 void AsyncEventSource::close()
 {
@@ -405,6 +449,8 @@ void AsyncEventSource::close()
       c->close();
   }
 }
+
+/////////////////////////////////////////////////////////
 
 // pmb fix
 size_t AsyncEventSource::avgPacketsWaiting() const
@@ -417,7 +463,8 @@ size_t AsyncEventSource::avgPacketsWaiting() const
 
   for (const auto &c : _clients)
   {
-    if (c->connected()) {
+    if (c->connected()) 
+    {
       aql += c->packetsWaiting();
       ++nConnectedClients;
     }
@@ -426,6 +473,8 @@ size_t AsyncEventSource::avgPacketsWaiting() const
   //  return aql / nConnectedClients;
   return ((aql) + (nConnectedClients / 2)) / (nConnectedClients); // round up
 }
+
+/////////////////////////////////////////////////////////
 
 void AsyncEventSource::send(const char *message, const char *event, uint32_t id, uint32_t reconnect)
 {
@@ -440,6 +489,8 @@ void AsyncEventSource::send(const char *message, const char *event, uint32_t id,
   }
 }
 
+/////////////////////////////////////////////////////////
+
 size_t AsyncEventSource::count() const
 {
   return _clients.count_if([](AsyncEventSourceClient * c)
@@ -447,6 +498,8 @@ size_t AsyncEventSource::count() const
     return c->connected();
   });
 }
+
+/////////////////////////////////////////////////////////
 
 bool AsyncEventSource::canHandle(AsyncWebServerRequest *request) 
 {
@@ -460,6 +513,8 @@ bool AsyncEventSource::canHandle(AsyncWebServerRequest *request)
   return true;
 }
 
+/////////////////////////////////////////////////////////
+
 void AsyncEventSource::handleRequest(AsyncWebServerRequest *request)
 {
   if ((_username != "" && _password != "") && !request->authenticate(_username.c_str(), _password.c_str()))
@@ -467,6 +522,9 @@ void AsyncEventSource::handleRequest(AsyncWebServerRequest *request)
 
   request->send(new AsyncEventSourceResponse(this));
 }
+
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 
 // Response
 
@@ -480,12 +538,16 @@ AsyncEventSourceResponse::AsyncEventSourceResponse(AsyncEventSource *server)
   addHeader("Connection", "keep-alive");
 }
 
+/////////////////////////////////////////////////////////
+
 void AsyncEventSourceResponse::_respond(AsyncWebServerRequest *request) 
 {
   String out = _assembleHead(request->version());
   request->client()->write(out.c_str(), _headLength);
   _state = RESPONSE_WAIT_ACK;
 }
+
+/////////////////////////////////////////////////////////
 
 size_t AsyncEventSourceResponse::_ack(AsyncWebServerRequest *request, size_t len, uint32_t time __attribute__((unused))) 
 {
@@ -496,5 +558,7 @@ size_t AsyncEventSourceResponse::_ack(AsyncWebServerRequest *request, size_t len
   
   return 0;
 }
+
+/////////////////////////////////////////////////////////
 
 
