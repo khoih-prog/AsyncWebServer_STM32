@@ -422,7 +422,7 @@ class AsyncWebServerRequest
 
     void send(AsyncWebServerResponse *response);
     void send(int code, const String& contentType = String(), const String& content = String());
-    void send(int code, const String& contentType, const char *content, bool nonCopyingSend = true);    // RSMOD
+    void send(int code, const String& contentType, const char *content, bool copyingSend = true);    // RSMOD
 
     void send(Stream &stream, const String& contentType, size_t len, AwsTemplateProcessor callback = nullptr);
     void send(const String& contentType, size_t len, AwsResponseFiller callback, AwsTemplateProcessor templateCallback = nullptr);
