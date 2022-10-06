@@ -2,7 +2,6 @@
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/AsyncWebServer_STM32.svg?)](https://www.ardu-badge.com/AsyncWebServer_STM32)
 [![GitHub release](https://img.shields.io/github/release/khoih-prog/AsyncWebServer_STM32.svg)](https://github.com/khoih-prog/AsyncWebServer_STM32/releases)
-[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/LICENSE)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/AsyncWebServer_STM32.svg)](http://github.com/khoih-prog/AsyncWebServer_STM32/issues)
 
@@ -10,13 +9,13 @@
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
 
-
 ---
 ---
 
 ## Table of contents
 
 * [Important Change from v1.5.0](#Important-Change-from-v150)
+* [Important Note from v1.6.0](#Important-Note-from-v160)
 * [Table of contents](#table-of-contents)
 * [Why do we need this AsyncWebServer_STM32 library](#why-do-we-need-this-asyncwebserver_stm32-library)
   * [Features](#features)
@@ -101,6 +100,9 @@
     * [12. **MQTT_ThingStream**](examples/MQTT_ThingStream)
     * [13. WebClient](examples/WebClient) 
     * [14. WebClientRepeating](examples/WebClientRepeating)
+    * [15. Async_AdvancedWebServer_favicon](examples/Async_AdvancedWebServer_favicon) **New**
+    * [16. Async_AdvancedWebServer_MemoryIssues_SendArduinoString](examples/Async_AdvancedWebServer_MemoryIssues_SendArduinoString) **New**
+    * [17. Async_AdvancedWebServer_MemoryIssues_Send_CString](examples/Async_AdvancedWebServer_MemoryIssues_Send_CString) **New**
   * [2. For LAN8720](#2-for-lan8720)
     * [ 1. Async_AdvancedWebServer_LAN8720](examples/STM32_LAN8720/Async_AdvancedWebServer_LAN8720)
     * [ 2. AsyncFSBrowser_STM32_LAN8720](examples/STM32_LAN8720/AsyncFSBrowser_STM32_LAN8720)
@@ -126,6 +128,8 @@
   * [6.  MQTTClient_Auth_LAN8720 on BLACK_F407VE using LAN8720 Ethernet and STM32Ethernet Library](#6-mqttclient_auth_lan8720-on-black_f407ve-using-lan8720-ethernet-and-stm32ethernet-library)
   * [7. Async_AdvancedWebServer_LAN8720 on BLACK_F407VE using LAN8720 Ethernet and STM32Ethernet Library](#7-async_advancedwebserver_lan8720-on-black_f407ve-using-lan8720-ethernet-and-stm32ethernet-library)
   * [8. AsyncMultiWebServer_STM32_LAN8720 on BLACK_F407VE using LAN8720 Ethernet and STM32Ethernet Library](#8-asyncmultiwebserver_stm32_lan8720-on-black_f407ve-using-lan8720-ethernet-and-stm32ethernet-library)
+  * [9. Async_AdvancedWebServer_favicon on NUCLEO_F767ZI with LAN8742A built-in Ethernet](#9-Async_AdvancedWebServer_favicon-on-NUCLEO_F767ZI-with-LAN8742A-built-in-Ethernet)
+  * [10. Async_AdvancedWebServer_MemoryIssues_Send_CString on NUCLEO_F767ZI with LAN8742A built-in Ethernet](#10-Async_AdvancedWebServer_MemoryIssues_Send_CString-on-NUCLEO_F767ZI-with-LAN8742A-built-in-Ethernet)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
@@ -146,6 +150,80 @@ For `Generic STM32F4 series` boards, such as STM32F407VE, using LAN8720, please 
 
 ---
 ---
+
+### Important Note from v1.6.0
+
+The new `v1.6.0+` has added a new and powerful feature to permit using `CString` to save heap to send `very large data`.
+
+Check the `marvelleous` PRs of **@salasidis** in [Portenta_H7_AsyncWebServer library](https://github.com/khoih-prog/Portenta_H7_AsyncWebServer)
+- [request->send(200, textPlainStr, jsonChartDataCharStr); - Without using String Class - to save heap #8](https://github.com/khoih-prog/Portenta_H7_AsyncWebServer/pull/8)
+- [All memmove() removed - string no longer destroyed #11](https://github.com/khoih-prog/Portenta_H7_AsyncWebServer/pull/11)
+
+and these new examples
+
+1. [Async_AdvancedWebServer_MemoryIssues_Send_CString](https://github.com/khoih-prog/AsyncWebServer_STM32/tree/master/examples/Async_AdvancedWebServer_MemoryIssues_Send_CString)
+2. [Async_AdvancedWebServer_MemoryIssues_SendArduinoString](https://github.com/khoih-prog/AsyncWebServer_STM32/tree/master/examples/Async_AdvancedWebServer_MemoryIssues_SendArduinoString)
+
+If using Arduino String, to send a buffer around 5,5 KBytes, the used `Max Heap` is around **48,716 bytes**
+
+If using CString in regular memory, with the much larger 31 KBytes, the used `Max Heap` is around **42,952 bytes**
+
+This is very critical in use-cases where sending `very large data` is necessary, without `heap-allocation-error`.
+
+
+1. The traditional function used to send `Arduino String` is
+
+https://github.com/khoih-prog/AsyncWebServer_STM32/blob/9f07bf58ba355b869d57c0d4adfe3da64d500a97/src/AsyncWebServer_STM32.h#L424
+
+```cpp
+void send(int code, const String& contentType = String(), const String& content = String());
+```
+
+such as
+
+```cpp
+request->send(200, textPlainStr, ArduinoStr);
+```
+The required additional HEAP is about **2 times of the String size**
+
+
+2. To use `CString` with copying while sending. Use function
+
+https://github.com/khoih-prog/AsyncWebServer_STM32/blob/9f07bf58ba355b869d57c0d4adfe3da64d500a97/src/AsyncWebServer_STM32.h#L425
+
+```cpp
+void send(int code, const String& contentType, const char *content, bool nonCopyingSend = true);    // RSMOD
+```
+
+such as 
+
+```cpp
+request->send(200, textPlainStr, cStr);
+```
+
+The required additional HEAP is also about **2 times of the CString size** because of `unnecessary copies` of the CString in HEAP. Avoid this `unefficient` way.
+
+
+3. To use `CString` without copying while sending. Use function
+
+https://github.com/khoih-prog/AsyncWebServer_STM32/blob/9f07bf58ba355b869d57c0d4adfe3da64d500a97/src/AsyncWebServer_STM32.h#L425
+
+```cpp
+void send(int code, const String& contentType, const char *content, bool nonCopyingSend = true);    // RSMOD
+```
+
+such as 
+
+```cpp
+request->send(200, textPlainStr, cStr, false);
+```
+
+The required additional HEAP is about **1 times of the CString size**. This way is the best and **most efficient way** to use by avoiding of `unnecessary copies` of the CString in HEAP
+
+
+---
+---
+
 
 ### Why do we need this [AsyncWebServer_STM32 library](https://github.com/khoih-prog/AsyncWebServer_STM32)
 
@@ -273,7 +351,7 @@ theses files must be copied into the corresponding directory:
 ## Important things to remember
 
 - This is fully asynchronous server and as such does not run on the loop thread.
-- You can not use yield() or delay() or any function that uses them inside the callbacks
+- You can not use `yield()` or `delay()` or any function that uses them inside the callbacks
 - The server is smart enough to know when to close the connection and free resources
 - You can not send more than one response to a single request
 
@@ -284,54 +362,54 @@ theses files must be copied into the corresponding directory:
 ### The Async Web server
 
 - Listens for connections
-- Wraps the new clients into ```Request```
+- Wraps the new clients into `Request`
 - Keeps track of clients and cleans memory
-- Manages ```Rewrites``` and apply them on the request url
-- Manages ```Handlers``` and attaches them to Requests
+- Manages `Rewrites` and apply them on the request url
+- Manages `Handlers` and attaches them to Requests
 
 ### Request Life Cycle
 
 - TCP connection is received by the server
-- The connection is wrapped inside ```Request``` object
+- The connection is wrapped inside `Request` object
 - When the request head is received (type, url, get params, http version and host),
-  the server goes through all ```Rewrites``` (in the order they were added) to rewrite the url and inject query parameters,
-  next, it goes through all attached ```Handlers```(in the order they were added) trying to find one
-  that ```canHandle``` the given request. If none are found, the default(catch-all) handler is attached.
-- The rest of the request is received, calling the ```handleUpload``` or ```handleBody``` methods of the ```Handler``` if they are needed (POST+File/Body)
-- When the whole request is parsed, the result is given to the ```handleRequest``` method of the ```Handler``` and is ready to be responded to
-- In the ```handleRequest``` method, to the ```Request``` is attached a ```Response``` object (see below) that will serve the response data back to the client
-- When the ```Response``` is sent, the client is closed and freed from the memory
+  the server goes through all `Rewrites` (in the order they were added) to rewrite the url and inject query parameters,
+  next, it goes through all attached `Handlers` (in the order they were added) trying to find one
+  that `canHandle` the given request. If none are found, the default(catch-all) handler is attached.
+- The rest of the request is received, calling the `handleUpload` or `handleBody` methods of the `Handler` if they are needed (POST+File/Body)
+- When the whole request is parsed, the result is given to the `handleRequest` method of the `Handler` and is ready to be responded to
+- In the `handleRequest` method, to the `Request` is attached a `Response` object (see below) that will serve the response data back to the client
+- When the `Response` is sent, the client is closed and freed from the memory
 
 ### Rewrites and how do they work
 
-- The ```Rewrites``` are used to rewrite the request url and/or inject get parameters for a specific request url path.
-- All ```Rewrites``` are evaluated on the request in the order they have been added to the server.
-- The ```Rewrite``` will change the request url only if the request url (excluding get parameters) is fully match
-  the rewrite url, and when the optional ```Filter``` callback return true.
-- Setting a ```Filter``` to the ```Rewrite``` enables to control when to apply the rewrite, decision can be based on
+- The `Rewrites` are used to rewrite the request url and/or inject get parameters for a specific request url path.
+- All `Rewrites` are evaluated on the request in the order they have been added to the server.
+- The `Rewrite` will change the request url only if the request url (excluding get parameters) is fully match
+  the rewrite url, and when the optional `Filter` callback return true.
+- Setting a `Filter` to the `Rewrite` enables to control when to apply the rewrite, decision can be based on
   request url, http version, request host/port/target host, get parameters or the request client's localIP or remoteIP.
-- The ```Rewrite``` can specify a target url with optional get parameters, e.g. ```/to-url?with=params```
+- The `Rewrite` can specify a target url with optional get parameters, e.g. `/to-url?with=params`
 
 ### Handlers and how do they work
 
-- The ```Handlers``` are used for executing specific actions to particular requests
-- One ```Handler``` instance can be attached to any request and lives together with the server
-- Setting a ```Filter``` to the ```Handler``` enables to control when to apply the handler, decision can be based on
+- The `Handlers` are used for executing specific actions to particular requests
+- One `Handler` instance can be attached to any request and lives together with the server
+- Setting a `Filter` to the `Handler` enables to control when to apply the handler, decision can be based on
   request url, http version, request host/port/target host, get parameters or the request client's localIP or remoteIP.
-- The ```canHandle``` method is used for handler specific control on whether the requests can be handled
-  and for declaring any interesting headers that the ```Request``` should parse. Decision can be based on request
+- The `canHandle` method is used for handler specific control on whether the requests can be handled
+  and for declaring any interesting headers that the `Request` should parse. Decision can be based on request
   method, request url, http version, request host/port/target host and get parameters
-- Once a ```Handler``` is attached to given ```Request``` (```canHandle``` returned true)
-  that ```Handler``` takes care to receive any file/data upload and attach a ```Response```
-  once the ```Request``` has been fully parsed
-- ```Handlers``` are evaluated in the order they are attached to the server. The ```canHandle``` is called only
-  if the ```Filter``` that was set to the ```Handler``` return true.
-- The first ```Handler``` that can handle the request is selected, not further ```Filter``` and ```canHandle``` are called.
+- Once a `Handler` is attached to given `Request` (`canHandle` returned true)
+  that `Handler` takes care to receive any file/data upload and attach a `Response`
+  once the `Request` has been fully parsed
+- `Handlers` are evaluated in the order they are attached to the server. The `canHandle` is called only
+  if the `Filter` that was set to the `Handler` return true.
+- The first `Handler` that can handle the request is selected, not further `Filter` and `canHandle` are called.
 
 ### Responses and how do they work
 
-- The ```Response``` objects are used to send the response data back to the client
-- The ```Response``` object lives with the ```Request``` and is freed on end or disconnect
+- The `Response` objects are used to send the response data back to the client
+- The `Response` object lives with the `Request` and is freed on end or disconnect
 - Different techniques are used depending on the response type to send the data in packets
   returning back almost immediately and sending the next packet when this one is received.
   Any time in between is spent to run the user loop and handle other network packets
@@ -340,10 +418,10 @@ theses files must be copied into the corresponding directory:
 
 ### Template processing
 
-- AsyncWebserver_STM32 contains simple template processing engine.
+- AsyncWebServer_Ethernet contains simple template processing engine.
 - Template processing can be added to most response types.
 - Currently it supports only replacing template placeholders with actual values. No conditional processing, cycles, etc.
-- Placeholders are delimited with ```%``` symbols. Like this: ```%TEMPLATE_PLACEHOLDER%```.
+- Placeholders are delimited with `%` symbols. Like this: `%TEMPLATE_PLACEHOLDER%`.
 - It works by extracting placeholder name from response text and passing it to user provided function which should return actual value to be used instead of placeholder.
 - Since it's user provided function, it is possible for library users to implement conditional processing and cycles themselves.
 - Since it's impossible to know the actual response size after template processing step in advance (and, therefore, to include it in response headers), the response becomes [chunked](#chunked-response).
@@ -624,6 +702,7 @@ String processor(const String& var)
 {
   if(var == "HELLO_FROM_TEMPLATE")
     return F("Hello world!");
+    
   return String();
 }
 
@@ -804,11 +883,13 @@ Rewrite for example "/radio/{frequence}" -> "/radio?f={frequence}"
 class OneParamRewrite : public AsyncWebRewrite
 {
   protected:
+  
     String _urlPrefix;
     int _paramIndex;
     String _paramsBackup;
 
   public:
+  
   OneParamRewrite(const char* from, const char* to)
     : AsyncWebRewrite(from, to) 
     {
@@ -975,9 +1056,11 @@ void onEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventTyp
       } 
       else 
       {
-        for(size_t i=0; i < len; i++){
+        for(size_t i=0; i < len; i++)
+        {
           Serial.printf("%02x ", data[i]);
         }
+        
         Serial.printf("\n");
       }
 
@@ -1072,10 +1155,11 @@ void sendDataWs(AsyncWebSocketClient * client)
 
 ### Limiting the number of web socket clients
 
-Browsers sometimes do not correctly close the websocket connection, even when the close() function is called in javascript.  This will eventually exhaust the web server's resources and will cause the server to crash.  Periodically calling the cleanClients() function from the main loop() function limits the number of clients by closing the oldest client when the maximum number of clients has been exceeded.  This can called be every cycle, however, if you wish to use less power, then calling as infrequently as once per second is sufficient.
+Browsers sometimes do not correctly close the websocket connection, even when the `close()` function is called in javascript.  This will eventually exhaust the web server's resources and will cause the server to crash.  Periodically calling the `cleanClients()` function from the main `loop()` function limits the number of clients by closing the oldest client when the maximum number of clients has been exceeded.  This can called be every cycle, however, if you wish to use less power, then calling as infrequently as once per second is sufficient.
 
 ```cpp
-void loop(){
+void loop()
+{
   ws.cleanupClients();
 }
 ```
@@ -1084,8 +1168,8 @@ void loop(){
 
 ## Async Event Source Plugin
 
-The server includes EventSource (Server-Sent Events) plugin which can be used to send short text events to the browser.
-Difference between EventSource and WebSockets is that EventSource is single direction, text-only protocol.
+The server includes `EventSource` (Server-Sent Events) plugin which can be used to send short text events to the browser.
+Difference between `EventSource` and `WebSockets` is that `EventSource` is single direction, text-only protocol.
 
 ### Setup Event Source on the server
 
@@ -1116,7 +1200,9 @@ void setup()
 
 void loop()
 {
-  if(eventTriggered){ // your logic here
+  if(eventTriggered)
+  { 
+    // your logic here
     //send event "myevent"
     events.send("my event content","myevent",millis());
   }
@@ -1161,9 +1247,10 @@ if (!!window.EventSource)
 Server goes through handlers in same order as they were added. You can't simple add handler with same path to override them.
 To remove handler:
 
-```arduino
+```cpp
 // save callback for particular URL path
-auto handler = server.on("/some/path", [](AsyncWebServerRequest *request){
+auto handler = server.on("/some/path", [](AsyncWebServerRequest *request)
+{
   //do something useful
 });
 
@@ -1173,7 +1260,8 @@ server.removeHandler(&handler);
 // same with rewrites
 server.removeRewrite(&someRewrite);
 
-server.onNotFound([](AsyncWebServerRequest *request){
+server.onNotFound([](AsyncWebServerRequest *request)
+{
   request->send(404);
 });
 
@@ -1218,6 +1306,7 @@ byte mac[][NUMBER_OF_MAC] =
   { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x13 },
   { 0xDE, 0xAD, 0xBE, 0xEF, 0x32, 0x14 },
 };
+
 // Select the IP address according to your local network
 IPAddress ip(192, 168, 2, 232);
 
@@ -1261,6 +1350,8 @@ void setup(void)
   digitalWrite(led, 0);
 
   Serial.begin(115200);
+  while (!Serial && millis() < 5000);
+  
   Serial.println("\nStart Async_HelloServer on " + String(BOARD_NAME));
 
   // start the ethernet connection and the server
@@ -1294,6 +1385,7 @@ void loop(void)
 {
 }
 ```
+
 ---
 
 ### Setup global and class functions as request handlers
@@ -1363,9 +1455,9 @@ void loop()
 
 ### Adding Default Headers
 
-In some cases, such as when working with CORS, or with some sort of custom authentication system, 
+In some cases, such as when working with `CORS`, or with some sort of custom authentication system, 
 you might need to define a header that should get added to all responses (including static, websocket and EventSource).
-The DefaultHeaders singleton allows you to do this.
+The `DefaultHeaders` singleton allows you to do this.
 
 Example:
 
@@ -1374,7 +1466,7 @@ DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
 webServer.begin();
 ```
 
-*NOTE*: You will still need to respond to the OPTIONS method for CORS pre-flight in most cases. (unless you are only using GET)
+*NOTE*: You will still need to respond to the OPTIONS method for `CORS` pre-flight in most cases. (unless you are only using GET)
 
 This is one option:
 
@@ -1391,8 +1483,8 @@ webServer.onNotFound([](AsyncWebServerRequest *request)
 
 ### Path variable
 
-With path variable you can create a custom regex rule for a specific parameter in a route. 
-For example we want a `sensorId` parameter in a route rule to match only a integer.
+With path variable you can create a custom `regex` rule for a specific parameter in a route. 
+For example we want a `sensorId` parameter in a route rule to match only an integer.
 
 ```cpp
   server.on("^\\/sensor\\/([0-9]+)$", HTTP_GET, [] (AsyncWebServerRequest *request) 
@@ -1400,6 +1492,7 @@ For example we want a `sensorId` parameter in a route rule to match only a integ
       String sensorId = request->pathArg(0);
   });
 ```
+
 *NOTE*: All regex patterns starts with `^` and ends with `$`
 
 To enable the `Path variable` support, you have to define the buildflag `-DASYNCWEBSERVER_REGEX`.
@@ -1412,11 +1505,13 @@ For Arduino IDE create/update `platform.local.txt`:
 `Linux`: ~/.arduino15/packages/`{espxxxx}`/hardware/`{espxxxx}`/`{version}`/platform.local.txt
 
 Add/Update the following line:
+
 ```
   compiler.cpp.extra_flags=-DDASYNCWEBSERVER_REGEX
 ```
 
 For platformio modify `platformio.ini`:
+
 ```ini
 [env:myboard]
 build_flags = 
@@ -1507,6 +1602,9 @@ Connect FDTI (USB to Serial) as follows:
 12. [**MQTT_ThingStream**](examples/MQTT_ThingStream)
 13. [WebClient](examples/WebClient)
 14. [WebClientRepeating](examples/WebClientRepeating)
+15. [Async_AdvancedWebServer_favicon](examples/Async_AdvancedWebServer_favicon) **New**
+16. [Async_AdvancedWebServer_MemoryIssues_SendArduinoString](examples/Async_AdvancedWebServer_MemoryIssues_SendArduinoString) **New**
+17. [Async_AdvancedWebServer_MemoryIssues_Send_CString](examples/Async_AdvancedWebServer_MemoryIssues_Send_CString) **New**
 
 #### 2. For LAN8720
 
@@ -1530,7 +1628,7 @@ Connect FDTI (USB to Serial) as follows:
 
 ### Example [Async_AdvancedWebServer](examples/Async_AdvancedWebServer)
 
-https://github.com/khoih-prog/AsyncWebServer_STM32/blob/a575e698fc7d1fe4c3abbc7c24e64e832449a4cd/examples/Async_AdvancedWebServer/Async_AdvancedWebServer.ino#L52-L287
+https://github.com/khoih-prog/AsyncWebServer_STM32/blob/ea343162ac474adcc10ad35108db7a0a48b66adb/examples/Async_AdvancedWebServer/Async_AdvancedWebServer.ino#L52-L287
 
 ---
 
@@ -1552,7 +1650,7 @@ Following are debug terminal output and screen shots when running example [Async
 
 ```
 Starting AsyncMultiWebServer_STM32 on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.5.0
+AsyncWebServer_STM32 v1.6.0
 
 Connected to network. IP = 192.168.2.141
 Initialize multiServer OK, serverIndex = 0, port = 8080
@@ -1585,7 +1683,7 @@ Following is debug terminal output when running example [WebClient](examples/Web
 
 ```
 Starting WebClient on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.5.0
+AsyncWebServer_STM32 v1.6.0
 You're connected to the network, IP = 192.168.2.71
 
 Starting connection to server...
@@ -1654,7 +1752,7 @@ Following is debug terminal output when running example [MQTTClient_Auth](exampl
 
 ```
 Starting MQTTClient_Auth on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.5.0
+AsyncWebServer_STM32 v1.6.0
 
 Connected to network. IP = 192.168.2.71
 Attempting MQTT connection to broker.emqx.io...connected
@@ -1672,7 +1770,7 @@ Following is debug terminal output when running example [MQTTClient_Basic](examp
 
 ```
 Starting MQTTClient_Basic on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.5.0
+AsyncWebServer_STM32 v1.6.0
 
 Connected to network. IP = 192.168.2.71
 Attempting MQTT connection to broker.shiftr.io...connected
@@ -1698,7 +1796,7 @@ Following is debug terminal output when running example [MQTT_ThingStream](examp
 
 ```
 Starting MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
-AsyncWebServer_STM32 v1.5.0
+AsyncWebServer_STM32 v1.6.0
 
 Connected to network. IP = 192.168.2.71
 ***************************************
@@ -1728,7 +1826,7 @@ Following is debug terminal output when running example [MQTTClient_Auth_LAN8720
 
 ```
 Start MQTTClient_Auth_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
-AsyncWebServer_STM32 v1.5.0
+AsyncWebServer_STM32 v1.6.0
 
 Connected to network. IP = 192.168.2.150
 Attempting MQTT connection to broker.emqx.io...connected
@@ -1767,7 +1865,7 @@ Following are debug terminal output and screen shots when running example [Async
 
 ```
 Start AsyncMultiWebServer_STM32_LAN8720 on BLACK_F407VE with LAN8720 Ethernet
-AsyncWebServer_STM32 v1.5.0
+AsyncWebServer_STM32 v1.6.0
 
 Connected to network. IP = 192.168.2.150
 Initialize multiServer OK, serverIndex = 0, port = 8080
@@ -1792,8 +1890,102 @@ You can access the Async Advanced WebServers @ the server IP and corresponding p
     <img src="https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/pics/AsyncMultiWebServer_STM32_LAN8720_SVR3.png">
 </p>
 
+---
+
+#### 9. Async_AdvancedWebServer_favicon on RASPBERRY_PI_PICO_W using CYW43439 WiFi
+
+Following is the debug terminal when running example [Async_AdvancedWebServer_favicon](examples/Async_AdvancedWebServer_favicon) on NUCLEO_F767ZI, with LAN8742A built-in Ethernet, to demonstrate the operation of AsyncWebServer_STM32, to display `favicon.ico`, which many browsers support.
 
 
+```
+Start Async_AdvancedWebServer_favicon on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+AsyncWebServer_STM32 v1.6.0
+STM32 Core version v2.2.0
+HTTP EthernetWebServer is @ IP : 192.168.2.69
+
+```
+
+You can see the `favicon.ico` at the upper left corner
+
+
+##### On Firefox
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/pics/Async_AdvancedWebServer_favicon.png">
+</p>
+
+---
+
+
+#### 10. Async_AdvancedWebServer_MemoryIssues_Send_CString on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+
+Following is the debug terminal and screen shot when running example [Async_AdvancedWebServer_MemoryIssues_Send_CString](examples/Async_AdvancedWebServer_MemoryIssues_Send_CString) on NUCLEO_F767ZI, with LAN8742A built-in Ethernet, to demonstrate the new and powerful `HEAP-saving` feature
+
+
+##### Using CString  ===> small heap (42,952 bytes) for ~31 KBytes data length
+
+```
+Start Async_AdvancedWebServer_MemoryIssues_Send_CString on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+AsyncWebServer_STM32 v1.6.0
+
+HEAP DATA - Start =>  Free RAM: 479908  Used heap: 260
+STM32 Core version v2.2.0
+HTTP EthernetWebServer is @ IP : 192.168.2.72
+
+HEAP DATA - Pre Create Arduino String  Free RAM: 439116  Used heap: 41052
+.
+HEAP DATA - Pre Send  Free RAM: 437380  Used heap: 42788
+
+HEAP DATA - Post Send  Free RAM: 437216  Used heap: 42952
+......
+Out String Length=31248
+... ....
+Out String Length=31194
+...... .
+Out String Length=31223
+.......
+Out String Length=31244
+.. .....
+```
+
+While using Arduino String, the HEAP usage is very large, even with smaller data. Unfortunately, we currently can't use Arduino String larger than 5,5 KBytes now.
+
+
+#### Async_AdvancedWebServer_MemoryIssues_SendArduinoString  ===> very large heap (48,716 bytes) for 5,592 bytes data
+
+
+```
+Start Async_AdvancedWebServer_MemoryIssues_SendArduinoString on NUCLEO_F767ZI with LAN8742A built-in Ethernet
+AsyncWebServer_STM32 v1.6.0
+
+HEAP DATA - Start =>  Free RAM: 479908  Used heap: 260
+STM32 Core version v2.2.0
+HTTP EthernetWebServer is @ IP : 192.168.2.72
+
+HEAP DATA - Pre Create Arduino String  Free RAM: 479124  Used heap: 1044
+.
+HEAP DATA - Pre Send  Free RAM: 437172  Used heap: 42996
+
+HEAP DATA - Post Send  Free RAM: 431452  Used heap: 48716
+......
+Out String Length=5580
+... ....
+Out String Length=5583
+...... .
+Out String Length=5584
+......
+Out String Length=5585
+... ....
+Out String Length=5592
+...
+```
+
+
+You can access the Async Advanced WebServers at the displayed server IP, e.g. `192.168.2.72`
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/pics/Async_AdvancedWebServer_MemoryIssues_Send_CString.png">
+</p>
 
 
 ---
@@ -1817,8 +2009,6 @@ If you get compilation errors, more often than not, you may need to install a ne
 
 Sometimes, the library will only work if you update the `STM32` core to the latest version because I'm always using the latest cores /libraries.
 
-If you connect to the created configuration Access Point but the ConfigPortal does not show up, just open a browser and type in the IP of the web portal, by default `192.168.4.1`.
-
 ---
 
 ### Issues ###
@@ -1833,7 +2023,10 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
  1. Fix bug. Add enhancement
  2. Add support to more Ethernet / WiFi shield
  3. Add support to more STM32 boards.
- 4. Add support to File using STM32-SD or STM32-FS.
+ 4. Add support to File using STM32-SD or STM32-FS
+ 5. Fix issue with slow browsers or network
+ 6. Add functions and example `Async_AdvancedWebServer_favicon` to support `favicon.ico`
+ 7. Support using `CString` to save heap to send `very large data`. Check [request->send(200, textPlainStr, jsonChartDataCharStr); - Without using String Class - to save heap #8](https://github.com/khoih-prog/Portenta_H7_AsyncWebServer/pull/8)
 
 
 ## DONE
@@ -1859,6 +2052,9 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
 4. Thanks to good work of [Miguel Wisintainer](https://github.com/tcpipchip) for working with, developing, debugging and testing.
 5. Thanks to [Jean-Claude](https://github.com/jcw) and [chris007de](https://github.com/chris007de) to help locate the dependency issue, discuss solution leading to release v1.2.6. Check [Compilation broken due to error in STM32AsyncTCP dependency](https://github.com/khoih-prog/AsyncWebServer_STM32/issues/4) and [how to run one of the examples?](https://github.com/khoih-prog/AsyncWebServer_STM32/issues/2).
 6. Thanks to [tothtechnika](https://github.com/tothtechnika) to create the PR [Fix base64 encoding of websocket client key and progmem support for webserver #7](https://github.com/khoih-prog/AsyncWebServer_STM32/pull/7) leading to new release v1.4.0
+7. Thanks to [salasidis](https://github.com/salasidis) aka [rs77can](https://forum.arduino.cc/u/rs77can) to discuss and make the following `marvellous` PRs in [Portenta_H7_AsyncWebServer library](https://github.com/khoih-prog/Portenta_H7_AsyncWebServer)
+- [request->send(200, textPlainStr, jsonChartDataCharStr); - Without using String Class - to save heap #8](https://github.com/khoih-prog/Portenta_H7_AsyncWebServer/pull/8)
+- [All memmove() removed - string no longer destroyed #11](https://github.com/khoih-prog/Portenta_H7_AsyncWebServer/pull/11), leading to `v1.6.0` to support using `CString` to save heap to send `very large data`
 
 <table>
   <tr>
@@ -1871,6 +2067,7 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/tothtechnika"><img src="https://github.com/tothtechnika.png" width="100px;" alt="tothtechnika"/><br /><sub><b>tothtechnika</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/salasidis"><img src="https://github.com/salasidis.png" width="100px;" alt="salasidis"/><br /><sub><b>⭐️ salasidis</b></sub></a><br /></td>
   </tr> 
 </table>
 
@@ -1888,7 +2085,7 @@ If you want to contribute to this project:
 
 ### License
 
-- The library is licensed under [MIT](https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/LICENSE)
+- The library is licensed under [GPLv3](https://github.com/khoih-prog/AsyncWebServer_STM32/blob/master/LICENSE)
 
 ---
 
