@@ -173,7 +173,7 @@ This is very critical in use-cases where sending `very large data` is necessary,
 
 1. The traditional function used to send `Arduino String` is
 
-https://github.com/khoih-prog/AsyncWebServer_STM32/blob/9f07bf58ba355b869d57c0d4adfe3da64d500a97/src/AsyncWebServer_STM32.h#L424
+https://github.com/khoih-prog/AsyncWebServer_STM32/blob/c14f228c37fefaaa6516c09eebad1b1ab90c8069/src/AsyncWebServer_STM32.h#L424
 
 ```cpp
 void send(int code, const String& contentType = String(), const String& content = String());
@@ -189,10 +189,10 @@ The required additional HEAP is about **2 times of the String size**
 
 2. To use `CString` with copying while sending. Use function
 
-https://github.com/khoih-prog/AsyncWebServer_STM32/blob/9f07bf58ba355b869d57c0d4adfe3da64d500a97/src/AsyncWebServer_STM32.h#L425
+https://github.com/khoih-prog/AsyncWebServer_STM32/blob/c14f228c37fefaaa6516c09eebad1b1ab90c8069/src/AsyncWebServer_STM32.h#L425
 
 ```cpp
-void send(int code, const String& contentType, const char *content, bool nonCopyingSend = true);    // RSMOD
+void send(int code, const String& contentType, const char *content, bool copyingSend = true);    // RSMOD
 ```
 
 such as 
@@ -206,10 +206,10 @@ The required additional HEAP is also about **2 times of the CString size** becau
 
 3. To use `CString` without copying while sending. Use function
 
-https://github.com/khoih-prog/AsyncWebServer_STM32/blob/9f07bf58ba355b869d57c0d4adfe3da64d500a97/src/AsyncWebServer_STM32.h#L425
+https://github.com/khoih-prog/AsyncWebServer_STM32/blob/c14f228c37fefaaa6516c09eebad1b1ab90c8069/src/AsyncWebServer_STM32.h#L425
 
 ```cpp
-void send(int code, const String& contentType, const char *content, bool nonCopyingSend = true);    // RSMOD
+void send(int code, const String& contentType, const char *content, bool copyingSend = true);    // RSMOD
 ```
 
 such as 
