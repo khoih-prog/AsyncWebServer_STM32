@@ -1892,7 +1892,7 @@ You can access the Async Advanced WebServers @ the server IP and corresponding p
 
 ---
 
-#### 9. Async_AdvancedWebServer_favicon on RASPBERRY_PI_PICO_W using CYW43439 WiFi
+#### 9. Async_AdvancedWebServer_favicon on NUCLEO_F767ZI with LAN8742A built-in Ethernet
 
 Following is the debug terminal when running example [Async_AdvancedWebServer_favicon](examples/Async_AdvancedWebServer_favicon) on NUCLEO_F767ZI, with LAN8742A built-in Ethernet, to demonstrate the operation of AsyncWebServer_STM32, to display `favicon.ico`, which many browsers support.
 
@@ -1948,7 +1948,7 @@ Out String Length=31244
 .. .....
 ```
 
-While using Arduino String, the HEAP usage is very large, even with smaller data. Unfortunately, we currently can't use Arduino String larger than 5,5 KBytes now.
+While using Arduino String, the HEAP usage is very large, even with smaller data. Unfortunately, we currently can't use `Arduino String` larger than **5,5 KBytes** now.
 
 
 #### Async_AdvancedWebServer_MemoryIssues_SendArduinoString  ===> very large heap (48,716 bytes) for 5,592 bytes data
