@@ -1,8 +1,8 @@
 {
   "name":"AsyncWebServer_STM32",
-  "version": "1.6.0",
-  "keywords":"http, async, websocket, webserver, stm32, stm32f, stm32l, stm32h, stm32g, stm32wb, stm32mp1, ethernet, lan8742a, lan8720, bluepill, blackpill, f407ve, f767zi, nucleo, nucleo-144",  
-  "description":"Asynchronous HTTP and WebSocket Server Library for STM32F/L/H/G/WB/MP1 using LAN8720 or built-in LAN8742A Ethernet. Now support using CString to save heap to send very large data",
+  "version": "1.6.1",
+  "keywords":"http, async, websocket, webserver, async-webserver, async-tcp, async-udp, async-websocket, async-http, ssl, tls, stm32, stm32f, stm32l, stm32h, stm32g, stm32wb, stm32mp1, ethernet, lan8742a, lan8720, bluepill, blackpill, f407ve, f767zi, nucleo, nucleo-144",  
+  "description":"Asynchronous HTTP and WebSocket Server Library for STM32F/L/H/G/WB/MP1 using LAN8720 or built-in LAN8742A Ethernet. Now support using CString to save heap to send very large data and examples to demo how to use beginChunkedResponse() to send large html in chunks",
   "authors": 
   [
     {
