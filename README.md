@@ -892,58 +892,58 @@ Rewrite for example "/radio/{frequence}" -> "/radio?f={frequence}"
 class OneParamRewrite : public AsyncWebRewrite
 {
   protected:
-  
+
     String _urlPrefix;
     int _paramIndex;
     String _paramsBackup;
 
   public:
-  
-  OneParamRewrite(const char* from, const char* to)
-    : AsyncWebRewrite(from, to) 
+
+    OneParamRewrite(const char* from, const char* to)
+      : AsyncWebRewrite(from, to)
     {
 
-			_paramIndex = _from.indexOf('{');
+      _paramIndex = _from.indexOf('{');
 
-			if ( _paramIndex >=0 && _from.endsWith("}")) 
-			{
-				_urlPrefix = _from.substring(0, _paramIndex);
-				int index = _params.indexOf('{');
-				
-				if (index >= 0) 
-				{
-					_params = _params.substring(0, index);
-				}
-			} 
-			else 
-			{
-				_urlPrefix = _from;
-			}
-
-			_paramsBackup = _params;
-  }
-
-  bool match(AsyncWebServerRequest *request) override 
-  {
-    if (request->url().startsWith(_urlPrefix)) 
-    {
-      if (_paramIndex >= 0) 
+      if ( _paramIndex >= 0 && _from.endsWith("}"))
       {
-        _params = _paramsBackup + request->url().substring(_paramIndex);
-      } 
-      else 
-      {
-        _params = _paramsBackup;
+        _urlPrefix = _from.substring(0, _paramIndex);
+        int index = _params.indexOf('{');
+
+        if (index >= 0)
+        {
+          _params = _params.substring(0, index);
+        }
       }
-      
-      return true;
+      else
+      {
+        _urlPrefix = _from;
+      }
 
-    } 
-    else 
-    {
-      return false;
+      _paramsBackup = _params;
     }
-  }
+
+    bool match(AsyncWebServerRequest *request) override
+    {
+      if (request->url().startsWith(_urlPrefix))
+      {
+        if (_paramIndex >= 0)
+        {
+          _params = _paramsBackup + request->url().substring(_paramIndex);
+        }
+        else
+        {
+          _params = _paramsBackup;
+        }
+
+        return true;
+
+      }
+      else
+      {
+        return false;
+      }
+    }
 };
 ```
 
@@ -2054,7 +2054,7 @@ AsyncWebServer is @ IP : 192.168.2.124
 You can access the Async_AdvancedWebServer_SendChunked at the displayed server IP, e.g. `192.168.2.123`
 
 <p align="center">
-    <img src="https://github.com/khoih-prog/AsyncWebServer_STM32/raw/main/pics/AsyncWebServer_SendChunked.png">
+    <img src="https://github.com/khoih-prog/AsyncWebServer_STM32/raw/master/pics/AsyncWebServer_SendChunked.png">
 </p>
 
 
@@ -2145,7 +2145,7 @@ Submit issues to: [AsyncWebServer_STM32 issues](https://github.com/khoih-prog/As
  8. Fix issue with slow browsers or network
  9. Add functions and example `Async_AdvancedWebServer_favicon` to support `favicon.ico`
 10. Support using `CString` to save heap to send `very large data`. Check [request->send(200, textPlainStr, jsonChartDataCharStr); - Without using String Class - to save heap #8](https://github.com/khoih-prog/Portenta_H7_AsyncWebServer/pull/8)
-11. Add examples [Async_AdvancedWebServer_SendChunked](https://github.com/khoih-prog/AsyncWebServer_STM32/tree/main/examples/Async_AdvancedWebServer_SendChunked) and [AsyncWebServer_SendChunked](https://github.com/khoih-prog/AsyncWebServer_STM32/tree/main/examples/AsyncWebServer_SendChunked) to demo how to use `beginChunkedResponse()` to send large `html` in chunks
+11. Add examples [Async_AdvancedWebServer_SendChunked](https://github.com/khoih-prog/AsyncWebServer_STM32/tree/master/examples/Async_AdvancedWebServer_SendChunked) and [AsyncWebServer_SendChunked](https://github.com/khoih-prog/AsyncWebServer_STM32/tree/master/examples/AsyncWebServer_SendChunked) to demo how to use `beginChunkedResponse()` to send large `html` in chunks
 12. Use `allman astyle` and add `utils`
  
  
