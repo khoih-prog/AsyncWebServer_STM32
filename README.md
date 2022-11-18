@@ -329,7 +329,7 @@ Supposing the STM32 stm32 core version is 2.3.0. These files must be copied into
 - `~/.arduino15/packages/STM32/hardware/stm32/2.3.0/system/STM32F7xx/stm32f7xx_hal_conf_default.h` for Nucleo-144 STM32F7.
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
-theses files must be copied into the corresponding directory:
+these files must be copied into the corresponding directory:
 
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/system/STM32F4xx/stm32f4xx_hal_conf_default.h`
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/system/STM32F7xx/stm32f7xx_hal_conf_default.h
@@ -345,7 +345,7 @@ Supposing the STM32 stm32 core version is 2.3.0. These files must be copied into
 - `~/.arduino15/packages/STM32/hardware/stm32/2.3.0/variants/NUCLEO_L053R8/variant.h` for Nucleo-64 NUCLEO_L053R8.
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
-theses files must be copied into the corresponding directory:
+these files must be copied into the corresponding directory:
 
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/NUCLEO_F767ZI/variant.h`
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/NUCLEO_L053R8/variant.h`
@@ -443,8 +443,8 @@ request->version();       // uint8_t: 0 = HTTP/1.0, 1 = HTTP/1.1
 request->method();        // enum:    HTTP_GET, HTTP_POST, HTTP_DELETE, HTTP_PUT, HTTP_PATCH, HTTP_HEAD, HTTP_OPTIONS
 request->url();           // String:  URL of the request (not including host, port or GET parameters)
 request->host();          // String:  The requested host (can be used for virtual hosting)
-request->contentType();   // String:  ContentType of the request (not avaiable in Handler::canHandle)
-request->contentLength(); // size_t:  ContentLength of the request (not avaiable in Handler::canHandle)
+request->contentType();   // String:  ContentType of the request (not available in Handler::canHandle)
+request->contentLength(); // size_t:  ContentLength of the request (not available in Handler::canHandle)
 request->multipart();     // bool:    True if the request has content type "multipart"
 ```
 
@@ -1829,7 +1829,7 @@ STM32_Pub
 Attempting MQTT connection to broker.emqx.io
 ...connected
 Published connection message successfully!
-Subcribed to: STM32_Sub
+Subscribed to: STM32_Sub
 MQTT Message Send : STM32_Pub => Hello from MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
 MQTT Message receive [STM32_Pub] Hello from MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
 MQTT Message Send : STM32_Pub => Hello from MQTT_ThingStream on NUCLEO_F767ZI with LAN8742A built-in Ethernet
